@@ -124,7 +124,7 @@ public class SlackNotificationPayloadContent {
         HashSet<String> failureTestNames = new HashSet<String>();
         HashSet<String> failureMessages = new HashSet<String>();
         for (BuildProblemData reason : failureReasons) {
-            if (reason.getType() == BuildProblemData.TC_FAILED_TESTS_TYPE) {
+            if (reason.getType().equals(BuildProblemData.TC_FAILED_TESTS_TYPE)) {
                 List<TestInfo> failedTestMessages = sRunningBuild.getTestMessages(0, 2000);
                 if (!failedTestMessages.isEmpty()) {
                     for (TestInfo failedTest : failedTestMessages) {
