@@ -10,18 +10,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class PayloadContentCommits {
+class PayloadContentCommits {
     private List<Commit> commits;
 
-    public PayloadContentCommits() {
+    PayloadContentCommits() {
         commits = new ArrayList<Commit>();
     }
 
-    public void populateCommits(SRunningBuild sRunningBuild) {
+    void populateCommits(SRunningBuild sRunningBuild) {
         List<SVcsModification> changes = sRunningBuild.getContainingChanges();
-        if (changes == null) {
-            return;
-        }
 
         for (SVcsModification change : changes) {
             Collection<SUser> committers = change.getCommitters();
@@ -35,11 +32,11 @@ public class PayloadContentCommits {
         }
     }
 
-    public List<Commit> getCommits() {
+    List<Commit> getCommits() {
         return commits;
     }
 
-    public void setCommits(List<Commit> commits) {
+    void setCommits(List<Commit> commits) {
         this.commits = commits;
     }
 }
