@@ -2,7 +2,7 @@ package slacknotifications;
 
 import com.google.gson.Gson;
 import jetbrains.buildServer.util.StringUtil;
-import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -13,11 +13,10 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.apache.http.HttpHost;
 import slacknotifications.teamcity.BuildState;
 import slacknotifications.teamcity.Loggers;
 import slacknotifications.teamcity.payload.content.Commit;
@@ -25,7 +24,6 @@ import slacknotifications.teamcity.payload.content.PostMessageResponse;
 import slacknotifications.teamcity.payload.content.SlackNotificationPayloadContent;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.*;
@@ -160,19 +158,26 @@ public class SlackNotificationImpl implements SlackNotification {
             if (this.teamName == null) {
                 this.teamName = "";
             }
-            String url = String.format("https://slack.com/api/chat.postMessage?token=%s&link_names=1&as_user=0&username=%s&icon_url=%s&channel=%s&text=%s&pretty=1",
+            String url = String.format("https://slack.com/api/chat.postMessage" +
+                            "?token=%s" +
+                            "&link_names=1" +
+                            "&as_user=0" +
+                            "&username=%s" +
+                            "&icon_url=%s" +
+                            "&channel=%s" +
+                            "&text=%s" +
+                            "&pretty=1",
                     this.token,
                     this.botName == null ? "" : URLEncoder.encode(this.botName, UTF8),
                     this.iconUrl == null ? "" : URLEncoder.encode(this.iconUrl, UTF8),
                     this.channel == null ? "" : URLEncoder.encode(this.channel, UTF8),
-                    this.payload == null ? "" : URLEncoder.encode(payload.getBuildDescriptionWithLinkSyntax(), UTF8),
-                    "");
+                    this.payload == null ? "" : URLEncoder.encode(payload.getBuildDescriptionWithLinkSyntax(), UTF8));
 
             HttpPost httppost = new HttpPost(url);
 
             Loggers.SERVER.info("SlackNotificationListener :: Preparing message for URL " + url + " using proxy " + this.proxyHost + ":" + this.proxyPort);
             if (this.filename.length() > 0) {
-                File file = new File(this.filename);
+//                File file = new File(this.filename);
                 throw new NotImplementedException();
             }
             if (this.payload != null) {
@@ -207,7 +212,7 @@ public class SlackNotificationImpl implements SlackNotification {
                 this.teamName = "";
             }
 
-            String url = "";
+            String url;
             if (this.token != null && this.token.startsWith("http")) {
                 url = this.token;
             } else {
@@ -245,7 +250,7 @@ public class SlackNotificationImpl implements SlackNotification {
 
                 if (this.resultCode != HttpStatus.SC_OK) {
                     String error = EntityUtils.toString(response.getEntity());
-                    resp.setOk(error == "ok");
+                    resp.setOk(error.equals("ok"));
                     resp.setError(error);
                 } else {
                     resp.setOk(true);
@@ -275,7 +280,7 @@ public class SlackNotificationImpl implements SlackNotification {
 
         attachment.addField(this.payload.getBuildName(), StringUtil.join(firstDetailLines, "\n"), false);
 
-        if (showFailureReason && this.payload.getBuildResult() == SlackNotificationPayloadContent.BUILD_STATUS_FAILURE) {
+        if (showFailureReason && this.payload.getBuildResult().equals(SlackNotificationPayloadContent.BUILD_STATUS_FAILURE)) {
             if (this.payload.getFailedBuildMessages().size() > 0) {
                 attachment.addField("Reason", StringUtil.join(", ", payload.getFailedBuildMessages()), false);
             }
@@ -284,7 +289,7 @@ public class SlackNotificationImpl implements SlackNotification {
                 String truncated = "";
                 if (failedTestNames.size() > 10) {
                     failedTestNames = new ArrayList<String>(failedTestNames.subList(0, 9));
-                    truncated = " (+ " + Integer.toString(payload.getFailedBuildMessages().size() - 10) + " more)";
+                    truncated = " (+ " + (payload.getFailedBuildMessages().size() - 10) + " more)";
                 }
                 payload.getFailedTestNames().size();
                 attachment.addField("Failed Tests", StringUtil.join(", ", failedTestNames) + truncated, false);
@@ -301,7 +306,8 @@ public class SlackNotificationImpl implements SlackNotification {
             boolean truncated = false;
             int totalCommits = commitsToDisplay.size();
             if (commitsToDisplay.size() > maxCommitsToDisplay) {
-                commitsToDisplay = commitsToDisplay.subList(0, maxCommitsToDisplay > commitsToDisplay.size() ? commitsToDisplay.size() : 5);
+                commitsToDisplay.size();
+                commitsToDisplay = commitsToDisplay.subList(0, 5);
                 truncated = true;
             }
 
@@ -418,7 +424,7 @@ public class SlackNotificationImpl implements SlackNotification {
             return icon_url;
         }
 
-        public void setIcon_url(String icon_url) {
+        void setIcon_url(String icon_url) {
             this.icon_url = icon_url;
         }
 
@@ -426,11 +432,11 @@ public class SlackNotificationImpl implements SlackNotification {
             return attachments;
         }
 
-        public void setAttachments(List<Attachment> attachments) {
+        void setAttachments(List<Attachment> attachments) {
             this.attachments = attachments;
         }
 
-        public String toJson() {
+        String toJson() {
             Gson gson = new Gson();
             return gson.toJson(this);
         }
@@ -506,15 +512,14 @@ public class SlackNotificationImpl implements SlackNotification {
     }
 
     public String parametersAsQueryString() {
-        String s = "";
-        for (Iterator<NameValuePair> i = this.params.iterator(); i.hasNext(); ) {
-            NameValuePair nv = i.next();
-            s += "&" + nv.getName() + "=" + nv.getValue();
+        StringBuilder s = new StringBuilder();
+        for (NameValuePair nv : this.params) {
+            s.append("&").append(nv.getName()).append("=").append(nv.getValue());
         }
         if (s.length() > 0) {
             return "?" + s.substring(1);
         }
-        return s;
+        return s.toString();
     }
 
     public void addParam(String key, String value) {
@@ -522,14 +527,11 @@ public class SlackNotificationImpl implements SlackNotification {
     }
 
     public void addParams(List<NameValuePair> paramsList) {
-        for (Iterator<NameValuePair> i = paramsList.iterator(); i.hasNext(); ) {
-            this.params.add(i.next());
-        }
+        this.params.addAll(paramsList);
     }
 
     public String getParam(String key) {
-        for (Iterator<NameValuePair> i = this.params.iterator(); i.hasNext(); ) {
-            NameValuePair nv = i.next();
+        for (NameValuePair nv : this.params) {
             if (nv.getName().equals(key)) {
                 return nv.getValue();
             }
@@ -558,11 +560,7 @@ public class SlackNotificationImpl implements SlackNotification {
     }
 
     public void setEnabled(String enabled) {
-        if ("true".equals(enabled.toLowerCase())) {
-            this.enabled = true;
-        } else {
-            this.enabled = false;
-        }
+        this.enabled = "true".equals(enabled.toLowerCase());
     }
 
     public Boolean isErrored() {
@@ -686,7 +684,7 @@ public class SlackNotificationImpl implements SlackNotification {
         this.mentionWhoTriggeredEnabled = mentionWhoTriggeredEnabled;
     }
 
-    public boolean getIsApiToken() {
+    boolean getIsApiToken() {
         if (this.token != null && this.token.startsWith("http")) {
             // We now accept a webhook url.
             return false;
