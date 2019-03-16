@@ -1,16 +1,20 @@
 package slacknotifications.teamcity.payload.content;
 
 import jetbrains.buildServer.BuildProblemData;
+import jetbrains.buildServer.messages.Status;
 import jetbrains.buildServer.serverSide.*;
 import jetbrains.buildServer.tests.TestInfo;
+import org.apache.commons.io.IOUtils;
 import slacknotifications.teamcity.BuildStateEnum;
 import slacknotifications.teamcity.Loggers;
 import slacknotifications.teamcity.SlackNotificator;
 import slacknotifications.teamcity.TeamCityIdResolver;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 
 public class SlackNotificationPayloadContent {
     final PayloadContentCommits payloadCommits = new PayloadContentCommits();
@@ -60,25 +64,36 @@ public class SlackNotificationPayloadContent {
     public final static String BUILD_STATUS_BROKEN    = "broken";
     public final static String BUILD_STATUS_UNKNOWN   = "unknown";*/
 
-    public final static String BUILD_STATUS_FAILURE   = "Failed";
-    public final static String BUILD_STATUS_SUCCESS   = "Succeeded";
-    public final static String BUILD_STATUS_RUNNING   = "Running";
+    public final static String BUILD_STATUS_FAILURE = "Failed";
+    public final static String BUILD_STATUS_SUCCESS = "Succeeded";
+    public final static String BUILD_STATUS_RUNNING = "Running";
     public final static String BUILD_STATUS_NO_CHANGE = "Unchanged";
-    public final static String BUILD_STATUS_FIXED     = "Fixed";
-    public final static String BUILD_STATUS_BROKEN    = "Broken";
-    public final static String BUILD_STATUS_UNKNOWN   = "Unknown";
+    public final static String BUILD_STATUS_FIXED = "Fixed";
+    public final static String BUILD_STATUS_BROKEN = "Broken";
+    public final static String BUILD_STATUS_UNKNOWN = "Unknown";
     private String buildLink;
     private String color;
     private long elapsedTime;
     private boolean isComplete;
+
+    public String getMsgFromChuckNorris() {
+        return msgFromChuckNorris;
+    }
+
+    public void setMsgFromChuckNorris(String msgFromChuckNorris) {
+        this.msgFromChuckNorris = msgFromChuckNorris;
+    }
+
+    private String msgFromChuckNorris;
     private ArrayList<String> failedBuildMessages = new ArrayList<String>();
     private ArrayList<String> failedTestNames = new ArrayList<String>();
 
-    public SlackNotificationPayloadContent(){
+    public SlackNotificationPayloadContent() {
     }
 
     /**
      * Constructor: Only called by RepsonsibilityChanged.
+     *
      * @param server
      * @param buildType
      * @param buildState
@@ -89,6 +104,7 @@ public class SlackNotificationPayloadContent {
 
     /**
      * Constructor: Called by everything except RepsonsibilityChanged.
+     *
      * @param server
      * @param sRunningBuild
      * @param previousBuild
@@ -105,24 +121,22 @@ public class SlackNotificationPayloadContent {
 
     private void populateResults(SRunningBuild sRunningBuild) {
         List<BuildProblemData> failureReasons = sRunningBuild.getFailureReasons();
-        if(failureReasons == null){
+        if (failureReasons == null) {
             return;
         }
         HashSet<String> failureTestNames = new HashSet<String>();
         HashSet<String> failureMessages = new HashSet<String>();
-        for(BuildProblemData reason : failureReasons){
-            if(reason.getType() == BuildProblemData.TC_FAILED_TESTS_TYPE){
+        for (BuildProblemData reason : failureReasons) {
+            if (reason.getType() == BuildProblemData.TC_FAILED_TESTS_TYPE) {
                 List<TestInfo> failedTestMessages = sRunningBuild.getTestMessages(0, 2000);
-                if(!failedTestMessages.isEmpty()) {
+                if (!failedTestMessages.isEmpty()) {
                     for (TestInfo failedTest : failedTestMessages) {
                         failureTestNames.add(failedTest.getName());
                     }
-                }
-                else {
+                } else {
                     failureMessages.add(reason.getDescription());
                 }
-            }
-            else {
+            } else {
                 failureMessages.add(reason.getDescription());
             }
         }
@@ -139,6 +153,7 @@ public class SlackNotificationPayloadContent {
     /**
      * Used by RepsonsiblityChanged.
      * Therefore, does not have access to a specific build instance.
+     *
      * @param server
      * @param buildType
      * @param state
@@ -175,6 +190,11 @@ public class SlackNotificationPayloadContent {
         setBuildResult(sRunningBuild, previousBuild, buildState);
         setBuildFullName(sRunningBuild.getBuildType().getFullName());
         setBuildName(sRunningBuild.getBuildType().getName());
+
+        if (buildState == BuildStateEnum.BUILD_FINISHED) {
+            setMsgFromChuckNorris(buildChuckNorrisMsg(previousBuild.getBuildStatus()));
+        }
+
         if (sRunningBuild.getTriggeredBy().getUser() != null) {
             setTriggeredBySlackUserId(sRunningBuild.getTriggeredBy().getUser().getPropertyValue(SlackNotificator.USERID_KEY));
         }
@@ -201,6 +221,29 @@ public class SlackNotificationPayloadContent {
         setBuildDescriptionWithLinkSyntax(String.format("<" + getBuildStatusUrl() + "|" + getBuildResult() + " - " + sRunningBuild.getBuildType().getFullName() + " #" + sRunningBuild.getBuildNumber() + branchSuffix + ">"));
     }
 
+    private String buildChuckNorrisMsg(Status buildResult) {
+
+        String msg = "Empty Message";
+
+        try {
+            List<String> quotes = IOUtils.readLines(
+                    getClass().getResourceAsStream("/quotes.txt"), "UTF-8"
+            );
+
+            String quote = quotes.get((new Random()).nextInt(quotes.size()));
+
+            if (buildResult == Status.FAILURE) {
+                msg = "Chuck Norris disapproves build and remember that " + quote;
+            } else {
+                msg = "Chuck Norris approves build and remember that " + quote;
+            }
+
+        } catch (IOException e) {
+            jetbrains.buildServer.log.Loggers.SERVER.error("Failed to load quotes", e);
+        }
+
+        return msg;
+    }
 
 
     private Branch getBranch() {
@@ -223,7 +266,9 @@ public class SlackNotificationPayloadContent {
         return branchIsDefault;
     }
 
-    public Boolean isMergeBranch() { return this.branchName != null && this.branchName.endsWith("/merge");}
+    public Boolean isMergeBranch() {
+        return this.branchName != null && this.branchName.endsWith("/merge");
+    }
 
     public void setBranchIsDefault(boolean branchIsDefault) {
         this.branchIsDefault = branchIsDefault;
@@ -232,6 +277,7 @@ public class SlackNotificationPayloadContent {
     /**
      * Determines a useful build result. The one from TeamCity can't be trusted because it
      * is not set until all the Notifiers have run, of which we are one.
+     *
      * @param sRunningBuild
      * @param previousBuild
      * @param buildState
@@ -239,10 +285,9 @@ public class SlackNotificationPayloadContent {
     private void setBuildResult(SRunningBuild sRunningBuild,
                                 SFinishedBuild previousBuild, BuildStateEnum buildState) {
 
-
-        if (previousBuild != null){
-            if (previousBuild.isFinished()){
-                if (previousBuild.getStatusDescriptor().isSuccessful()){
+        if (previousBuild != null) {
+            if (previousBuild.isFinished()) {
+                if (previousBuild.getStatusDescriptor().isSuccessful()) {
                     this.buildResultPrevious = BUILD_STATUS_SUCCESS;
                 } else {
                     this.buildResultPrevious = BUILD_STATUS_FAILURE;
@@ -256,11 +301,11 @@ public class SlackNotificationPayloadContent {
 
         isComplete = buildState == BuildStateEnum.BUILD_FINISHED;
 
-        if (buildState == BuildStateEnum.BEFORE_BUILD_FINISHED || buildState == BuildStateEnum.BUILD_FINISHED){
-            if (sRunningBuild.getStatusDescriptor().isSuccessful()){
+        if (buildState == BuildStateEnum.BEFORE_BUILD_FINISHED || buildState == BuildStateEnum.BUILD_FINISHED) {
+            if (sRunningBuild.getStatusDescriptor().isSuccessful()) {
                 this.buildResult = BUILD_STATUS_SUCCESS;
                 this.color = "good";
-                if (this.buildResultPrevious.equals(this.buildResult)){
+                if (this.buildResultPrevious.equals(this.buildResult)) {
                     this.buildResultDelta = BUILD_STATUS_NO_CHANGE;
                 } else {
                     this.buildResultDelta = BUILD_STATUS_FIXED;
@@ -268,7 +313,7 @@ public class SlackNotificationPayloadContent {
             } else {
                 this.buildResult = BUILD_STATUS_FAILURE;
                 this.color = "danger";
-                if (this.buildResultPrevious.equals(this.buildResult)){
+                if (this.buildResultPrevious.equals(this.buildResult)) {
                     this.buildResultDelta = BUILD_STATUS_NO_CHANGE;
                 } else {
                     this.buildResultDelta = BUILD_STATUS_BROKEN;
@@ -333,10 +378,6 @@ public class SlackNotificationPayloadContent {
     public void setBuildTypeId(String buildTypeId) {
         this.buildTypeId = buildTypeId;
     }
-
-
-
-
 
 
     public String getAgentName() {
