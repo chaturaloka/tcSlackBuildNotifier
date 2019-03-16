@@ -2,6 +2,7 @@ package slacknotifications;
 
 import com.google.gson.Gson;
 import jetbrains.buildServer.util.StringUtil;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -27,18 +28,13 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 
-
 public class SlackNotificationImpl implements SlackNotification {
-	
-	private static final String UTF8 = "UTF-8";
+
+    private static final String UTF8 = "UTF-8";
 
     private String proxyHost;
     private Integer proxyPort = 0;
@@ -73,9 +69,9 @@ public class SlackNotificationImpl implements SlackNotification {
     private boolean mentionWhoTriggeredEnabled;
     private boolean showFailureReason;
 
-/*	This is a bit mask of states that should trigger a SlackNotification.
- *  All ones (11111111) means that all states will trigger the slacknotifications
- *  We'll set that as the default, and then override if we get a more specific bit mask. */
+    /*	This is a bit mask of states that should trigger a SlackNotification.
+     *  All ones (11111111) means that all states will trigger the slacknotifications
+     *  We'll set that as the default, and then override if we get a more specific bit mask. */
     //private Integer EventListBitMask = BuildState.ALL_ENABLED;
     //private Integer EventListBitMask = Integer.parseInt("0",2);
 
@@ -133,28 +129,27 @@ public class SlackNotificationImpl implements SlackNotification {
     public void setProxy(String proxyHost, Integer proxyPort, Credentials credentials) {
         this.proxyHost = proxyHost;
         this.proxyPort = proxyPort;
-        
-		if (this.proxyHost.length() > 0 && !this.proxyPort.equals(0)) {
+
+        if (this.proxyHost.length() > 0 && !this.proxyPort.equals(0)) {
             HttpClientBuilder clientBuilder = HttpClients.custom()
-                .useSystemProperties()
-                .setProxy(new HttpHost(proxyHost, proxyPort, "http"));
-                
+                    .useSystemProperties()
+                    .setProxy(new HttpHost(proxyHost, proxyPort, "http"));
+
             if (credentials != null) {
                 CredentialsProvider credsProvider = new BasicCredentialsProvider();
                 credsProvider.setCredentials(new AuthScope(proxyHost, proxyPort), credentials);
                 clientBuilder.setDefaultCredentialsProvider(credsProvider);
                 Loggers.SERVER.debug("SlackNotification ::using proxy credentials " + credentials.getUserPrincipal().getName());
             }
-            
+
             this.client = clientBuilder.build();
-		}
+        }
     }
 
     public void post() throws IOException {
-        if(getIsApiToken()){
+        if (getIsApiToken()) {
             postViaApi();
-        }
-        else{
+        } else {
             postViaWebHook();
         }
 
@@ -213,10 +208,9 @@ public class SlackNotificationImpl implements SlackNotification {
             }
 
             String url = "";
-            if(this.token != null && this.token.startsWith("http")){
+            if (this.token != null && this.token.startsWith("http")) {
                 url = this.token;
-            }
-             else {
+            } else {
                 url = String.format("https://%s.slack.com/services/hooks/incoming-webhook?token=%s",
                         this.teamName.toLowerCase(),
                         this.token);
@@ -253,8 +247,7 @@ public class SlackNotificationImpl implements SlackNotification {
                     String error = EntityUtils.toString(response.getEntity());
                     resp.setOk(error == "ok");
                     resp.setError(error);
-                }
-                else{
+                } else {
                     resp.setOk(true);
                     this.response = resp;
                 }
@@ -272,24 +265,25 @@ public class SlackNotificationImpl implements SlackNotification {
         Attachment attachment = new Attachment(this.payload.getBuildName(), null, null, this.payload.getColor());
 
         List<String> firstDetailLines = new ArrayList<String>();
-        if(showBuildAgent == null || showBuildAgent){
-            firstDetailLines.add("Agent: " + this.payload.getAgentName());
+        if (showBuildAgent == null || showBuildAgent) {
+            firstDetailLines.add("TeamCity Agent: " + this.payload.getAgentName());
         }
-        if(this.payload.getIsComplete() && (showElapsedBuildTime == null || showElapsedBuildTime)){
-            firstDetailLines.add("Elapsed: " + formatTime(this.payload.getElapsedTime()));
+        if (this.payload.getIsComplete() && (showElapsedBuildTime == null || showElapsedBuildTime)) {
+            firstDetailLines.add("Build Elapsed: " + formatTime(this.payload.getElapsedTime()));
+            firstDetailLines.add(payload.getMsgFromChuckNorris());
         }
 
         attachment.addField(this.payload.getBuildName(), StringUtil.join(firstDetailLines, "\n"), false);
 
-        if(showFailureReason && this.payload.getBuildResult() == SlackNotificationPayloadContent.BUILD_STATUS_FAILURE){
-            if(this.payload.getFailedBuildMessages().size() > 0) {
+        if (showFailureReason && this.payload.getBuildResult() == SlackNotificationPayloadContent.BUILD_STATUS_FAILURE) {
+            if (this.payload.getFailedBuildMessages().size() > 0) {
                 attachment.addField("Reason", StringUtil.join(", ", payload.getFailedBuildMessages()), false);
             }
-            if(this.payload.getFailedTestNames().size() > 0){
+            if (this.payload.getFailedTestNames().size() > 0) {
                 ArrayList<String> failedTestNames = payload.getFailedTestNames();
                 String truncated = "";
-                if(failedTestNames.size() > 10){
-                    failedTestNames = new ArrayList<String>( failedTestNames.subList(0, 9));
+                if (failedTestNames.size() > 10) {
+                    failedTestNames = new ArrayList<String>(failedTestNames.subList(0, 9));
                     truncated = " (+ " + Integer.toString(payload.getFailedBuildMessages().size() - 10) + " more)";
                 }
                 payload.getFailedTestNames().size();
@@ -303,7 +297,7 @@ public class SlackNotificationImpl implements SlackNotification {
 
         List<Commit> commitsToDisplay = new ArrayList<Commit>(commits);
 
-        if(showCommits) {
+        if (showCommits) {
             boolean truncated = false;
             int totalCommits = commitsToDisplay.size();
             if (commitsToDisplay.size() > maxCommitsToDisplay) {
@@ -329,15 +323,15 @@ public class SlackNotificationImpl implements SlackNotification {
         List<String> slackUsers = new ArrayList<String>();
 
 
-        for(Commit commit : commits){
-            if(commit.hasSlackUserId()){
+        for (Commit commit : commits) {
+            if (commit.hasSlackUserId()) {
                 slackUsers.add("<!" + commit.getSlackUserId() + ">");
             }
         }
         HashSet<String> tempHash = new HashSet<String>(slackUsers);
         slackUsers = new ArrayList<String>(tempHash);
 
-        if(showCommitters) {
+        if (showCommitters) {
             Set<String> committers = new HashSet<String>();
             for (Commit commit : commits) {
                 committers.add(commit.getUserName());
@@ -349,8 +343,8 @@ public class SlackNotificationImpl implements SlackNotification {
                 attachment.addField("Changes By", committersString, false);
             }
         }
-        
-        if (showTriggeredBy){
+
+        if (showTriggeredBy) {
             attachment.addField("Triggered By", this.payload.getTriggeredBy(), false);
         }
 
@@ -362,13 +356,13 @@ public class SlackNotificationImpl implements SlackNotification {
                 && !slackUsers.isEmpty()));
 
         String mentionContent = ":arrow_up: ";
-        if(needMentionForFirstFailure){
+        if (needMentionForFirstFailure) {
             mentionContent += "\"" + this.payload.getBuildName() + "\" Failed ";
 
-            if(mentionChannelEnabled){
+            if (mentionChannelEnabled) {
                 mentionContent += "<!channel> ";
             }
-            if(mentionSlackUserEnabled && !slackUsers.isEmpty() && !this.payload.isMergeBranch()) {
+            if (mentionSlackUserEnabled && !slackUsers.isEmpty() && !this.payload.isMergeBranch()) {
                 mentionContent += StringUtil.join(" ", slackUsers);
             }
             if (mentionHereEnabled) {
@@ -647,7 +641,7 @@ public class SlackNotificationImpl implements SlackNotification {
     public void setShowCommits(boolean showCommits) {
         this.showCommits = showCommits;
     }
-	
+
     @Override
     public void setShowCommitters(boolean showCommitters) {
         this.showCommitters = showCommitters;
@@ -693,15 +687,15 @@ public class SlackNotificationImpl implements SlackNotification {
     }
 
     public boolean getIsApiToken() {
-        if(this.token != null && this.token.startsWith("http")){
+        if (this.token != null && this.token.startsWith("http")) {
             // We now accept a webhook url.
             return false;
         }
         return this.token == null || this.token.split("-").length > 1;
     }
 
-    private String formatTime(long seconds){
-        if(seconds < 60){
+    private String formatTime(long seconds) {
+        if (seconds < 60) {
             return seconds + "s";
         }
         return String.format("%dm:%ds",
