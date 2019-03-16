@@ -30,8 +30,8 @@ import java.util.List;
 public class SlackNotifierSettingsController extends BaseController {
 
     private static final String CONTROLLER_PATH = "/slackNotifier/adminSettings.html";
-    public static final String EDIT_PARAMETER = "edit";
-    public static final String TEST_PARAMETER = "test";
+    private static final String EDIT_PARAMETER = "edit";
+    private static final String TEST_PARAMETER = "test";
     private static final Object ACTION_ENABLE = "enable";
     private static final String ACTION_PARAMETER = "action";
     private String teamName;
@@ -58,12 +58,12 @@ public class SlackNotifierSettingsController extends BaseController {
     private SlackNotificationPayloadManager payloadManager;
     private PluginDescriptor descriptor;
 
-    public SlackNotifierSettingsController(@NotNull SBuildServer server,
-                                           @NotNull ServerPaths serverPaths,
-                                           @NotNull WebControllerManager manager,
-                                           @NotNull SlackNotificationMainConfig config,
-                                           SlackNotificationPayloadManager payloadManager,
-                                           PluginDescriptor descriptor){
+    SlackNotifierSettingsController(@NotNull SBuildServer server,
+                                    @NotNull ServerPaths serverPaths,
+                                    @NotNull WebControllerManager manager,
+                                    @NotNull SlackNotificationMainConfig config,
+                                    SlackNotificationPayloadManager payloadManager,
+                                    PluginDescriptor descriptor){
 
         this.server = server;
         this.serverPaths = serverPaths;
@@ -156,7 +156,7 @@ public class SlackNotifierSettingsController extends BaseController {
                 || botName == null || StringUtil.isEmpty(botName)
                 || iconUrl == null || StringUtil.isEmpty(iconUrl)
                 || defaultChannel == null || StringUtil.isEmpty(defaultChannel)
-                || (showBuildAgent.toLowerCase() == "false" && (maxCommitsToDisplay == null || StringUtil.isEmpty(maxCommitsToDisplay)))
+                || (showBuildAgent.toLowerCase().equals("false") && (maxCommitsToDisplay == null || StringUtil.isEmpty(maxCommitsToDisplay)))
                 || tryParseInt(maxCommitsToDisplay) == null
                 || (!isNullOrEmpty(proxyHost) && isNullOrEmpty(proxyPort))
                 || (!isNullOrEmpty(proxyUser) && isNullOrEmpty(proxyPassword))
@@ -171,11 +171,11 @@ public class SlackNotifierSettingsController extends BaseController {
         return str == null || StringUtil.isEmpty(str);
     }
 
-    public SlackNotification createMockNotification(String teamName, String defaultChannel, String botName,
-                                                    String token, String iconUrl, Integer maxCommitsToDisplay,
-                                                    Boolean showElapsedBuildTime, Boolean showBuildAgent, Boolean showCommits,
-                                                    Boolean showCommitters, Boolean showTriggeredBy, Boolean showFailureReason, String proxyHost,
-                                                    String proxyPort, String proxyUser, String proxyPassword) {
+    SlackNotification createMockNotification(String teamName, String defaultChannel, String botName,
+                                             String token, String iconUrl, Integer maxCommitsToDisplay,
+                                             Boolean showElapsedBuildTime, Boolean showBuildAgent, Boolean showCommits,
+                                             Boolean showCommitters, Boolean showTriggeredBy, Boolean showFailureReason, String proxyHost,
+                                             String proxyPort, String proxyUser, String proxyPassword) {
         SlackNotification notification = new SlackNotificationImpl(defaultChannel);
         notification.setTeamName(teamName);
         notification.setBotName(botName);
@@ -202,7 +202,7 @@ public class SlackNotifierSettingsController extends BaseController {
 
         payload.setBranchDisplayName("master");
         payload.setBranchIsDefault(true);
-        payload.setBuildDescriptionWithLinkSyntax(String.format("<http://buildserver/builds/|Failed - My Awesome Build #5>"));
+        payload.setBuildDescriptionWithLinkSyntax("<http://buildserver/builds/|Failed - My Awesome Build #5>");
         payload.setBuildFullName("The Awesome Build");
         payload.setBuildId("b123");
         payload.setBuildName("My Awesome Build");
@@ -225,7 +225,7 @@ public class SlackNotifierSettingsController extends BaseController {
         return notification;
     }
 
-    public Integer tryParseInt(String str) {
+    private Integer tryParseInt(String str) {
         Integer retVal;
         try {
             retVal = Integer.parseInt(str);
@@ -235,7 +235,7 @@ public class SlackNotifierSettingsController extends BaseController {
         return retVal;
     }
 
-    private HashMap<String, Object> handleConfigurationChange(HttpServletRequest request) throws IOException, SlackConfigValidationException {
+    private HashMap<String, Object> handleConfigurationChange(HttpServletRequest request) throws SlackConfigValidationException {
         setRequestParams(request);
         if(!isNullOrEmpty(proxyPassword)){
             proxyPassword = RSACipher.decryptWebRequestData(proxyPassword);
@@ -271,7 +271,7 @@ public class SlackNotifierSettingsController extends BaseController {
     }
 
     public class SlackConfigValidationException extends Exception {
-        public SlackConfigValidationException(String message) {
+        SlackConfigValidationException(String message) {
             super(message);
         }
     }
