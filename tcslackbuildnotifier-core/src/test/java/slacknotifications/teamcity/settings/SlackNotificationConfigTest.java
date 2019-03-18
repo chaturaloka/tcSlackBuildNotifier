@@ -15,11 +15,11 @@ public class SlackNotificationConfigTest {
 	
 	private static final String EMPTY_STRING = "";
 	private static final String CHECKED = "checked ";
-	SlackNotificationConfig slacknotificationAllEnabled;
-	SlackNotificationConfig slacknotificationAllDisabled;
-	SlackNotificationConfig slacknotificationDisabled;
-	SlackNotificationConfig slacknotificationMostEnabled;
-    SlackNotificationConfig slacknotificationCustomContent;
+	private SlackNotificationConfig slacknotificationAllEnabled;
+	private SlackNotificationConfig slacknotificationAllDisabled;
+	private SlackNotificationConfig slacknotificationDisabled;
+	private SlackNotificationConfig slacknotificationMostEnabled;
+    private SlackNotificationConfig slacknotificationCustomContent;
 
 
     @Before

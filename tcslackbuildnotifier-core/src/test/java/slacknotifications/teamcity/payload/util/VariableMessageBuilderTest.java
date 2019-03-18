@@ -14,25 +14,25 @@ import slacknotifications.teamcity.payload.content.SlackNotificationPayloadConte
 import static org.mockito.Mockito.mock;
 
 public class VariableMessageBuilderTest {
-	
-	MockSBuildType sBuildType = new MockSBuildType("Test Build", "A Test Build", "bt1");
-	MockSRunningBuild sRunningBuild = new MockSRunningBuild(sBuildType, "SubVersion", Status.NORMAL, "Running", "TestBuild01");
-	SFinishedBuild previousSuccessfulBuild = mock(SFinishedBuild.class);
-	MockSProject sProject = new MockSProject("Test Project", "A test project", "project1", "ATestProject", sBuildType);
-	SBuildServer sBuildServer;
 
-	@Before
-	public void setup(){
-		sBuildType.setProject(sProject);
-		sBuildServer = mock(SBuildServer.class);
-	}
-	
-	@Test
-	public void testBuild() {
-		SlackNotificationPayloadContent content = new SlackNotificationPayloadContent(sBuildServer, sRunningBuild, previousSuccessfulBuild, BuildStateEnum.BEFORE_BUILD_FINISHED);
-		VariableMessageBuilder builder = VariableMessageBuilder.create("This is a test ${buildFullName}", new SlackNotificationBeanUtilsVariableResolver(content));
-		System.out.println(builder.build());
-		System.out.println(content.getBuildFullName());
-	}
+    private final MockSBuildType sBuildType = new MockSBuildType("Test Build", "A Test Build", "bt1");
+    private final MockSRunningBuild sRunningBuild = new MockSRunningBuild(sBuildType, "SubVersion", Status.NORMAL, "Running", "TestBuild01");
+    private final SFinishedBuild previousSuccessfulBuild = mock(SFinishedBuild.class);
+    private final MockSProject sProject = new MockSProject("Test Project", "A test project", "project1", "ATestProject", sBuildType);
+    private SBuildServer sBuildServer;
+
+    @Before
+    public void setup() {
+        sBuildType.setProject(sProject);
+        sBuildServer = mock(SBuildServer.class);
+    }
+
+    @Test
+    public void testBuild() {
+        SlackNotificationPayloadContent content = new SlackNotificationPayloadContent(sBuildServer, sRunningBuild, previousSuccessfulBuild, BuildStateEnum.BEFORE_BUILD_FINISHED);
+        VariableMessageBuilder builder = VariableMessageBuilder.create("This is a test ${buildFullName}", new SlackNotificationBeanUtilsVariableResolver(content));
+        System.out.println(builder.build());
+        System.out.println(content.getBuildFullName());
+    }
 
 }

@@ -82,7 +82,7 @@ public class SlackNotificationAjaxEditPageControllerTest {
 
 		/* Use checkAndAddBuildStateIfEitherSet so that either one or the other need to be set, not the last one */
 		
-		checkAndAddBuildStateIfEitherSet(requestSuccessOnAndFailureOff, states, BuildStateEnum.BUILD_FINISHED, BUILD_SUCCESSFUL, BUILD_FAILED);
+		checkAndAddBuildStateIfEitherSet(requestSuccessOnAndFailureOff, states);
 		assertTrue(states.enabled(BuildStateEnum.BUILD_FINISHED));
 	}
 	
@@ -99,7 +99,7 @@ public class SlackNotificationAjaxEditPageControllerTest {
 		
 		/* Use checkAndAddBuildStateIfEitherSet so that either one or the other need to be set, not the last one */
 		
-		checkAndAddBuildStateIfEitherSet(requestSuccessOffAndFailureOn, states, BuildStateEnum.BUILD_FINISHED, BUILD_SUCCESSFUL, BUILD_FAILED);
+		checkAndAddBuildStateIfEitherSet(requestSuccessOffAndFailureOn, states);
 		assertTrue(states.enabled(BuildStateEnum.BUILD_FINISHED));
 	}
 
@@ -116,7 +116,7 @@ public class SlackNotificationAjaxEditPageControllerTest {
 		
 		/* Use checkAndAddBuildStateIfEitherSet so that either one or the other need to be set, not the last one */
 		
-		checkAndAddBuildStateIfEitherSet(requestSuccessOffAndFailureOff, states, BuildStateEnum.BUILD_FINISHED, BUILD_SUCCESSFUL, BUILD_FAILED);
+		checkAndAddBuildStateIfEitherSet(requestSuccessOffAndFailureOff, states);
 		assertFalse(states.enabled(BuildStateEnum.BUILD_FINISHED));
 	}
 	
@@ -133,7 +133,7 @@ public class SlackNotificationAjaxEditPageControllerTest {
 		
 		/* Use checkAndAddBuildStateIfEitherSet so that either one or the other need to be set, not the last one */
 		
-		checkAndAddBuildStateIfEitherSet(requestSuccessOnAndFailureOn, states, BuildStateEnum.BUILD_FINISHED, BUILD_SUCCESSFUL, BUILD_FAILED);
+		checkAndAddBuildStateIfEitherSet(requestSuccessOnAndFailureOn, states);
 		assertTrue(states.enabled(BuildStateEnum.BUILD_FINISHED));
 	}
 	

@@ -192,7 +192,7 @@ public class MockSRunningBuild implements SRunningBuild {
 
 	public List<SVcsModification> getContainingChanges() {
 		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<SVcsModification>();
 	}
 
 	public DownloadedArtifacts getDownloadedArtifacts() {
@@ -529,7 +529,7 @@ public class MockSRunningBuild implements SRunningBuild {
 	@Override
 	public List<BuildProblemData> getFailureReasons() {
 		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<BuildProblemData>();
 	}
 
 	@Override

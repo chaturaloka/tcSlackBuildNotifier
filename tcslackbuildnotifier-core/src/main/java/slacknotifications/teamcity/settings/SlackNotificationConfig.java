@@ -15,192 +15,194 @@ import static slacknotifications.teamcity.BuildStateEnum.*;
 
 
 public class SlackNotificationConfig {
-	
-	private static final String ENABLED = "enabled";
-	private static final String TOKEN = "token";
-	private static final String CHANNEL = "channel";
-	private static final String TEAM_NAME = "teamName";
-	private static final String CHANNEL_ENABLED_MESSAGE = "mention-channel-enabled";
-	private static final String SLACK_USER_ENABLED_MESSAGE = "mention-slack-user-enabled";
-	private static final String HERE_ENABLED_MESSAGE = "mention-here-enabled";
-	private static final String WHO_TRIGGERED_ENABLED_MESSAGE = "mention-who-triggered-enabled";
-	private static final String STATES = "states";
-	private static final String BUILD_TYPES = "build-types";
-	private static final String ENABLED_FOR_ALL = "enabled-for-all";
-	private static final String ENABLED_FOR_SUBPROJECTS = "enabled-for-subprojects";
-	private static final String BOT_NAME = "botName";
-	private static final String CUSTOM_TEMPLATES = "custom-templates";
-	private static final String CONTENT = "content";
-	private static final String ICON_URL = "iconUrl";
-	private static final String SHOW_BUILD_AGENT = "showBuildAgent";
-	private static final String SHOW_COMMITS = "showCommits";
-	private static final String SHOW_COMMITTERS = "showCommitters";
-	private static final String SHOW_TRIGGERED_BY = "showTriggeredBy";
-	private static final String MAX_COMMITS_TO_DISPLAY = "maxCommitsToDisplay";
-	private static final String SHOW_FAILURE_REASON = "showFailureReason";
-	
-	
-	private Boolean enabled = true;
-	private String uniqueKey = "";
-	private String apiToken;
-	private String channel;
+
+    private static final String IS_ENABLED = "enabled";
+    private static final String TOKEN = "token";
+    private static final String CHANNEL = "channel";
+    private static final String TEAM_NAME = "teamName";
+    private static final String CHANNEL_ENABLED_MESSAGE = "mention-channel-isEnabled";
+    private static final String SLACK_USER_ENABLED_MESSAGE = "mention-slack-user-isEnabled";
+    private static final String HERE_ENABLED_MESSAGE = "mention-here-isEnabled";
+    private static final String WHO_TRIGGERED_ENABLED_MESSAGE = "mention-who-triggered-isEnabled";
+    private static final String STATES = "states";
+    private static final String BUILD_TYPES = "build-types";
+    private static final String ENABLED_FOR_ALL = "isEnabled-for-all";
+    private static final String ENABLED_FOR_SUBPROJECTS = "isEnabled-for-subprojects";
+    private static final String BOT_NAME = "botName";
+    private static final String CUSTOM_TEMPLATES = "custom-templates";
+    private static final String CONTENT = "content";
+    private static final String ICON_URL = "iconUrl";
+    private static final String SHOW_BUILD_AGENT = "showBuildAgent";
+    private static final String SHOW_COMMITS = "showCommits";
+    private static final String SHOW_COMMITTERS = "showCommitters";
+    private static final String SHOW_TRIGGERED_BY = "showTriggeredBy";
+    private static final String MAX_COMMITS_TO_DISPLAY = "maxCommitsToDisplay";
+    private static final String SHOW_FAILURE_REASON = "showFailureReason";
+
+
+    private Boolean enabled = true;
+    private String uniqueKey;
+    private String apiToken;
+    private String channel;
     private String teamName;
-	private BuildState states = new BuildState();
-	private SortedMap<String, CustomMessageTemplate> templates; 
-	private Boolean allBuildTypesEnabled = true;
-	private Boolean subProjectsEnabled = true;
-	private Set<String> enabledBuildTypesSet = new HashSet<String>();
+    private BuildState states = new BuildState();
+    private SortedMap<String, CustomMessageTemplate> templates;
+    private Boolean allBuildTypesEnabled = true;
+    private Boolean subProjectsEnabled = true;
+    private Set<String> enabledBuildTypesSet = new HashSet<String>();
     private boolean mentionChannelEnabled;
-	private boolean mentionSlackUserEnabled;
-	private boolean mentionHereEnabled;
-	private boolean mentionWhoTriggeredEnabled;
+    private boolean mentionSlackUserEnabled;
+    private boolean mentionHereEnabled;
+    private boolean mentionWhoTriggeredEnabled;
     private boolean customContent;
     private SlackNotificationContentConfig content;
 
     @SuppressWarnings("unchecked")
-	public SlackNotificationConfig(Element e) {
-		this.content = new SlackNotificationContentConfig();
-		int Min = 1000000, Max = 1000000000;
-		Integer Rand = Min + (int)(Math.random() * ((Max - Min) + 1));
-		this.uniqueKey = Rand.toString();
-		this.templates = new TreeMap<String,CustomMessageTemplate>();
-		
-		if (e.getAttribute(TOKEN) != null){
-			this.setToken(e.getAttributeValue(TOKEN));
-		}
+    public SlackNotificationConfig(Element e) {
+        this.content = new SlackNotificationContentConfig();
+        int Min = 1000000, Max = 1000000000;
+        int Rand = Min + (int) (Math.random() * ((Max - Min) + 1));
+        this.uniqueKey = Integer.toString(Rand);
+        this.templates = new TreeMap<String, CustomMessageTemplate>();
 
-		if (e.getAttribute(CHANNEL) != null){
-			this.setChannel(e.getAttributeValue(CHANNEL));
-		}
+        if (e.getAttribute(TOKEN) != null) {
+            this.setToken(e.getAttributeValue(TOKEN));
+        }
 
-        if (e.getAttribute(TEAM_NAME) != null){
+        if (e.getAttribute(CHANNEL) != null) {
+            this.setChannel(e.getAttributeValue(CHANNEL));
+        }
+
+        if (e.getAttribute(TEAM_NAME) != null) {
             this.setTeamName(e.getAttributeValue(TEAM_NAME));
         }
-		
-		if (e.getAttribute(ENABLED) != null){
-			this.setEnabled(Boolean.parseBoolean(e.getAttributeValue(ENABLED)));
-		}
 
-		if (e.getAttribute("statemask") != null){
-			this.setBuildStates(SlackNotificationBuildStateConverter.convert(Integer.parseInt(e.getAttributeValue("statemask"))));
-		}
-
-		if (e.getAttribute("key") != null){
-			this.setUniqueKey(e.getAttributeValue("key"));
-		}
-
-        if (e.getAttribute(CHANNEL_ENABLED_MESSAGE) != null){
-            this.setMentionChannelEnabled(Boolean.parseBoolean(e.getAttributeValue("mention-channel-enabled")));
+        if (e.getAttribute(IS_ENABLED) != null) {
+            this.setEnabled(Boolean.parseBoolean(e.getAttributeValue(IS_ENABLED)));
         }
 
-		if (e.getAttribute(SLACK_USER_ENABLED_MESSAGE) != null){
-			this.setMentionSlackUserEnabled(Boolean.parseBoolean(e.getAttributeValue("mention-slack-user-enabled")));
-		}
+        if (e.getAttribute("statemask") != null) {
+            this.setBuildStates(SlackNotificationBuildStateConverter.convert(Integer.parseInt(e.getAttributeValue("statemask"))));
+        }
 
-		if (e.getAttribute(HERE_ENABLED_MESSAGE) != null){
-			this.setMentionHereEnabled(Boolean.parseBoolean(e.getAttributeValue("mention-here-enabled")));
-		}
+        if (e.getAttribute("key") != null) {
+            this.setUniqueKey(e.getAttributeValue("key"));
+        }
 
-		if (e.getAttribute(WHO_TRIGGERED_ENABLED_MESSAGE) != null){
-			this.setMentionWhoTriggeredEnabled(Boolean.parseBoolean(e.getAttributeValue(WHO_TRIGGERED_ENABLED_MESSAGE)));
-		}
-		
-		if(e.getChild(STATES) != null){
-			Element eStates = e.getChild(STATES);
-			List<Element> statesList = eStates.getChildren("state");
-			if (!statesList.isEmpty()){
-				for(Element eState : statesList)
-				{
-					try {
-						states.setEnabled(BuildStateEnum.findBuildState(eState.getAttributeValue("type")), 
-										  eState.getAttribute(ENABLED).getBooleanValue());
-					} catch (DataConversionException e1) {e1.printStackTrace();}
-				}
-			}
-		}
-		
-		if(e.getChild(BUILD_TYPES) != null){
-			Element eTypes = e.getChild(BUILD_TYPES);
-			if (eTypes.getAttribute(ENABLED_FOR_ALL) != null){
-				try {
-					this.enableForAllBuildsInProject(eTypes.getAttribute(ENABLED_FOR_ALL).getBooleanValue());
-				} catch (DataConversionException e1) {e1.printStackTrace();}
-			}
-			if (eTypes.getAttribute(ENABLED_FOR_SUBPROJECTS) != null){
-				try {
-					this.enableForSubProjects(eTypes.getAttribute(ENABLED_FOR_SUBPROJECTS).getBooleanValue());
-				} catch (DataConversionException e1) {e1.printStackTrace();}
-			}
-			if (!isEnabledForAllBuildsInProject()){
-				List<Element> typesList = eTypes.getChildren("build-type");
-				if (!typesList.isEmpty()){
-					for(Element eType : typesList)
-					{
-						if (eType.getAttributeValue("id")!= null){
-							enabledBuildTypesSet.add(eType.getAttributeValue("id"));
-						}
-					}
-				}
-			}
-		}
-		
+        if (e.getAttribute(CHANNEL_ENABLED_MESSAGE) != null) {
+            this.setMentionChannelEnabled(Boolean.parseBoolean(e.getAttributeValue("mention-channel-isEnabled")));
+        }
 
-		
-		if(e.getChild(CUSTOM_TEMPLATES) != null){
-			Element eParams = e.getChild(CUSTOM_TEMPLATES);
-			List<Element> templateList = eParams.getChildren("custom-template");
-			if (!templateList.isEmpty()){
-				for(Element eParam : templateList)
-				{
-					this.templates.put(
-							eParam.getAttributeValue(CustomMessageTemplate.TYPE),
-							CustomMessageTemplate.create(
-									eParam.getAttributeValue(CustomMessageTemplate.TYPE),
-									eParam.getAttributeValue(CustomMessageTemplate.TEMPLATE),
-									Boolean.parseBoolean(eParam.getAttributeValue(CustomMessageTemplate.ENABLED))
-									)
-							);
-				}
-			}
-		}
+        if (e.getAttribute(SLACK_USER_ENABLED_MESSAGE) != null) {
+            this.setMentionSlackUserEnabled(Boolean.parseBoolean(e.getAttributeValue("mention-slack-user-isEnabled")));
+        }
 
-        if(e.getChild(CONTENT) != null) {
+        if (e.getAttribute(HERE_ENABLED_MESSAGE) != null) {
+            this.setMentionHereEnabled(Boolean.parseBoolean(e.getAttributeValue("mention-here-isEnabled")));
+        }
+
+        if (e.getAttribute(WHO_TRIGGERED_ENABLED_MESSAGE) != null) {
+            this.setMentionWhoTriggeredEnabled(Boolean.parseBoolean(e.getAttributeValue(WHO_TRIGGERED_ENABLED_MESSAGE)));
+        }
+
+        if (e.getChild(STATES) != null) {
+            Element eStates = e.getChild(STATES);
+            List<Element> statesList = eStates.getChildren("state");
+            if (!statesList.isEmpty()) {
+                for (Element eState : statesList) {
+                    try {
+                        states.setEnabled(BuildStateEnum.findBuildState(eState.getAttributeValue("type")),
+                                eState.getAttribute(IS_ENABLED).getBooleanValue());
+                    } catch (DataConversionException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        if (e.getChild(BUILD_TYPES) != null) {
+            Element eTypes = e.getChild(BUILD_TYPES);
+            if (eTypes.getAttribute(ENABLED_FOR_ALL) != null) {
+                try {
+                    this.enableForAllBuildsInProject(eTypes.getAttribute(ENABLED_FOR_ALL).getBooleanValue());
+                } catch (DataConversionException e1) {
+                    e1.printStackTrace();
+                }
+            }
+            if (eTypes.getAttribute(ENABLED_FOR_SUBPROJECTS) != null) {
+                try {
+                    this.enableForSubProjects(eTypes.getAttribute(ENABLED_FOR_SUBPROJECTS).getBooleanValue());
+                } catch (DataConversionException e1) {
+                    e1.printStackTrace();
+                }
+            }
+            if (!isEnabledForAllBuildsInProject()) {
+                List<Element> typesList = eTypes.getChildren("build-type");
+                if (!typesList.isEmpty()) {
+                    for (Element eType : typesList) {
+                        if (eType.getAttributeValue("id") != null) {
+                            enabledBuildTypesSet.add(eType.getAttributeValue("id"));
+                        }
+                    }
+                }
+            }
+        }
+
+
+        if (e.getChild(CUSTOM_TEMPLATES) != null) {
+            Element eParams = e.getChild(CUSTOM_TEMPLATES);
+            List<Element> templateList = eParams.getChildren("custom-template");
+            if (!templateList.isEmpty()) {
+                for (Element eParam : templateList) {
+                    this.templates.put(
+                            eParam.getAttributeValue(CustomMessageTemplate.TYPE),
+                            CustomMessageTemplate.create(
+                                    eParam.getAttributeValue(CustomMessageTemplate.TYPE),
+                                    eParam.getAttributeValue(CustomMessageTemplate.TEMPLATE),
+                                    Boolean.parseBoolean(eParam.getAttributeValue(CustomMessageTemplate.ENABLED))
+                            )
+                    );
+                }
+            }
+        }
+
+        if (e.getChild(CONTENT) != null) {
             setHasCustomContent(true);
             Element eContent = e.getChild(CONTENT);
 
             this.content.setEnabled(true);
 
-            if (eContent.getAttribute(ICON_URL) != null){
+            if (eContent.getAttribute(ICON_URL) != null) {
                 this.content.setIconUrl(eContent.getAttributeValue(ICON_URL));
             }
-            if (eContent.getAttribute(BOT_NAME) != null){
+            if (eContent.getAttribute(BOT_NAME) != null) {
                 this.content.setBotName(eContent.getAttributeValue(BOT_NAME));
             }
-            if (eContent.getAttribute(SHOW_BUILD_AGENT) != null){
+            if (eContent.getAttribute(SHOW_BUILD_AGENT) != null) {
                 this.content.setShowBuildAgent(Boolean.parseBoolean(eContent.getAttributeValue(SHOW_BUILD_AGENT)));
             }
-            if (eContent.getAttribute("showElapsedBuildTime") != null){
+            if (eContent.getAttribute("showElapsedBuildTime") != null) {
                 this.content.setShowElapsedBuildTime(Boolean.parseBoolean(eContent.getAttributeValue("showElapsedBuildTime")));
             }
-            if (eContent.getAttribute(SHOW_COMMITS) != null){
+            if (eContent.getAttribute(SHOW_COMMITS) != null) {
                 this.content.setShowCommits(Boolean.parseBoolean(eContent.getAttributeValue(SHOW_COMMITS)));
             }
-            if (eContent.getAttribute(SHOW_COMMITTERS) != null){
+            if (eContent.getAttribute(SHOW_COMMITTERS) != null) {
                 this.content.setShowCommitters(Boolean.parseBoolean(eContent.getAttributeValue(SHOW_COMMITTERS)));
             }
-			if (eContent.getAttribute(SHOW_TRIGGERED_BY) != null){
+            if (eContent.getAttribute(SHOW_TRIGGERED_BY) != null) {
                 this.content.setShowTriggeredBy(Boolean.parseBoolean(eContent.getAttributeValue(SHOW_TRIGGERED_BY)));
             }
-            if (eContent.getAttribute(MAX_COMMITS_TO_DISPLAY) != null){
+            if (eContent.getAttribute(MAX_COMMITS_TO_DISPLAY) != null) {
                 this.content.setMaxCommitsToDisplay(Integer.parseInt(eContent.getAttributeValue(MAX_COMMITS_TO_DISPLAY)));
             }
-            if (eContent.getAttribute(SHOW_FAILURE_REASON) != null){
+            if (eContent.getAttribute(SHOW_FAILURE_REASON) != null) {
                 this.content.setShowFailureReason(Boolean.parseBoolean(eContent.getAttributeValue(SHOW_FAILURE_REASON)));
             }
         }
 
-		
-	}
+
+    }
 
     /**
      * SlackNotificationsConfig constructor. Unchecked version. Use with caution!!
@@ -208,26 +210,26 @@ public class SlackNotificationConfig {
      * It will still allow you to add the format, but the slacknotifications might not
      * fire at runtime if the payloadFormat configured is not available.
      *
-     * @param channel
-     * @param enabled
-     * @param states
+     * @param channel Slack Channel Name
+     * @param enabled If the notifications enabled
+     * @param states  List of states
      */
     public SlackNotificationConfig(String token,
-								   String channel,
-								   String teamName,
-								   Boolean enabled,
-								   BuildState states,
-								   boolean buildTypeAllEnabled,
-								   boolean buildTypeSubProjects,
-								   Set<String> enabledBuildTypes,
-								   boolean mentionChannelEnabled,
-								   boolean mentionSlackUserEnabled,
-								   boolean mentionHereEnabled,
-								   boolean mentionWhoTriggeredEnabled) {
+                                   String channel,
+                                   String teamName,
+                                   Boolean enabled,
+                                   BuildState states,
+                                   boolean buildTypeAllEnabled,
+                                   boolean buildTypeSubProjects,
+                                   Set<String> enabledBuildTypes,
+                                   boolean mentionChannelEnabled,
+                                   boolean mentionSlackUserEnabled,
+                                   boolean mentionHereEnabled,
+                                   boolean mentionWhoTriggeredEnabled) {
         this.content = new SlackNotificationContentConfig();
         int Min = 1000000, Max = 1000000000;
-        Integer Rand = Min + (int) (Math.random() * ((Max - Min) + 1));
-        this.uniqueKey = Rand.toString();
+        int Rand = Min + (int) (Math.random() * ((Max - Min) + 1));
+        this.uniqueKey = Integer.toString(Rand);
         this.templates = new TreeMap<String, CustomMessageTemplate>();
         this.setToken(token);
         this.setChannel(channel);
@@ -237,62 +239,62 @@ public class SlackNotificationConfig {
         this.subProjectsEnabled = buildTypeSubProjects;
         this.allBuildTypesEnabled = buildTypeAllEnabled;
         this.setMentionChannelEnabled(mentionChannelEnabled);
-		this.setMentionSlackUserEnabled(mentionSlackUserEnabled);
-		this.setMentionHereEnabled(mentionHereEnabled);
-		this.setMentionWhoTriggeredEnabled(mentionWhoTriggeredEnabled);
+        this.setMentionSlackUserEnabled(mentionSlackUserEnabled);
+        this.setMentionHereEnabled(mentionHereEnabled);
+        this.setMentionWhoTriggeredEnabled(mentionWhoTriggeredEnabled);
 
         if (!this.allBuildTypesEnabled) {
             this.enabledBuildTypesSet = enabledBuildTypes;
         }
     }
-	
-	public Element getAsElement(){
-		Element el = new Element("slackNotification");
-		el.setAttribute(CHANNEL, this.getChannel());
-		if(StringUtil.isNotEmpty(this.getToken())) {
-			el.setAttribute(TOKEN, this.getToken());
-		}
 
-        if(StringUtil.isNotEmpty(this.getTeamName())) {
+    Element getAsElement() {
+        Element el = new Element("slackNotification");
+        el.setAttribute(CHANNEL, this.getChannel());
+        if (StringUtil.isNotEmpty(this.getToken())) {
+            el.setAttribute(TOKEN, this.getToken());
+        }
+
+        if (StringUtil.isNotEmpty(this.getTeamName())) {
             el.setAttribute(TEAM_NAME, this.getTeamName());
         }
-		el.setAttribute(ENABLED, String.valueOf(this.enabled));
+        el.setAttribute(IS_ENABLED, String.valueOf(this.enabled));
         el.setAttribute(CHANNEL_ENABLED_MESSAGE, String.valueOf(this.getMentionChannelEnabled()));
-		el.setAttribute(SLACK_USER_ENABLED_MESSAGE, String.valueOf(this.getMentionSlackUserEnabled()));
-		el.setAttribute(HERE_ENABLED_MESSAGE, String.valueOf(this.getMentionHereEnabled()));
-		el.setAttribute(WHO_TRIGGERED_ENABLED_MESSAGE, String.valueOf(this.isMentionWhoTriggeredEnabled()));
+        el.setAttribute(SLACK_USER_ENABLED_MESSAGE, String.valueOf(this.getMentionSlackUserEnabled()));
+        el.setAttribute(HERE_ENABLED_MESSAGE, String.valueOf(this.getMentionHereEnabled()));
+        el.setAttribute(WHO_TRIGGERED_ENABLED_MESSAGE, String.valueOf(this.isMentionWhoTriggeredEnabled()));
 
-		Element statesEl = new Element(STATES);
-		for (BuildStateEnum state : states.getStateSet()){
-			Element e = new Element("state");
-			e.setAttribute("type", state.getShortName());
-			e.setAttribute(ENABLED, Boolean.toString(states.enabled(state)));
-			statesEl.addContent(e);
-		}
-		el.addContent(statesEl);
-		
-		Element buildsEl = new Element(BUILD_TYPES);
-		buildsEl.setAttribute(ENABLED_FOR_ALL, Boolean.toString(isEnabledForAllBuildsInProject()));
-		buildsEl.setAttribute(ENABLED_FOR_SUBPROJECTS, Boolean.toString(isEnabledForSubProjects()));
-		
-		if (!this.enabledBuildTypesSet.isEmpty()){
-			for (String i : enabledBuildTypesSet){
-				Element e = new Element("build-type");
-				e.setAttribute("id", i);
-				buildsEl.addContent(e);
-			}
-		}
-		el.addContent(buildsEl);
-		
-		if (this.templates.size() > 0){
-			Element templatesEl = new Element(CUSTOM_TEMPLATES);
-			for (CustomMessageTemplate t : this.templates.values()){
-				templatesEl.addContent(t.getAsElement());
-			}
-			el.addContent(templatesEl);
-		}
+        Element statesEl = new Element(STATES);
+        for (BuildStateEnum state : states.getStateSet()) {
+            Element e = new Element("state");
+            e.setAttribute("type", state.getShortName());
+            e.setAttribute(IS_ENABLED, Boolean.toString(states.enabled(state)));
+            statesEl.addContent(e);
+        }
+        el.addContent(statesEl);
 
-        if(this.hasCustomContent()){
+        Element buildsEl = new Element(BUILD_TYPES);
+        buildsEl.setAttribute(ENABLED_FOR_ALL, Boolean.toString(isEnabledForAllBuildsInProject()));
+        buildsEl.setAttribute(ENABLED_FOR_SUBPROJECTS, Boolean.toString(isEnabledForSubProjects()));
+
+        if (!this.enabledBuildTypesSet.isEmpty()) {
+            for (String i : enabledBuildTypesSet) {
+                Element e = new Element("build-type");
+                e.setAttribute("id", i);
+                buildsEl.addContent(e);
+            }
+        }
+        el.addContent(buildsEl);
+
+        if (this.templates.size() > 0) {
+            Element templatesEl = new Element(CUSTOM_TEMPLATES);
+            for (CustomMessageTemplate t : this.templates.values()) {
+                templatesEl.addContent(t.getAsElement());
+            }
+            el.addContent(templatesEl);
+        }
+
+        if (this.hasCustomContent()) {
             Element customContentEl = new Element(CONTENT);
             customContentEl.setAttribute(ICON_URL, this.content.getIconUrl());
             customContentEl.setAttribute(BOT_NAME, this.content.getBotName());
@@ -305,72 +307,72 @@ public class SlackNotificationConfig {
             customContentEl.setAttribute(SHOW_FAILURE_REASON, this.content.getShowFailureReason().toString());
             el.addContent(customContentEl);
         }
-		
-		return el;
-	}
-	
-	// Getters and Setters..
 
-	public boolean isEnabledForBuildType(SBuildType sBuildType){
-		// If allBuildTypes enabled, return true, otherwise  return whether the build is in the list of enabled buildTypes. 
-		return isEnabledForAllBuildsInProject() || enabledBuildTypesSet.contains(TeamCityIdResolver.getInternalBuildId(sBuildType));
-	}
-	
-	boolean isSpecificBuildTypeEnabled(SBuildType sBuildType){
-		// Just check if this build type is only enabled for a specific build. 
-		return enabledBuildTypesSet.contains(TeamCityIdResolver.getInternalBuildId(sBuildType));
-	}
+        return el;
+    }
 
-	public String getBuildTypeCountAsFriendlyString() {
-		if (this.allBuildTypesEnabled && !this.subProjectsEnabled) {
-			return "All builds";
-		} else if (this.allBuildTypesEnabled) {
-			return "All builds & Sub-Projects";
-		}
+    // Getters and Setters..
 
-		String subProjectsString = "";
-		if (this.subProjectsEnabled) {
-			subProjectsString = " & All Sub-Project builds";
-		}
-		int enabledBuildTypeCount = this.enabledBuildTypesSet.size();
-		if (enabledBuildTypeCount == 1) {
-			return enabledBuildTypeCount + " build" + subProjectsString;
-		}
-		return enabledBuildTypeCount + " builds" + subProjectsString;
+    public boolean isEnabledForBuildType(SBuildType sBuildType) {
+        // If allBuildTypes isEnabled, return true, otherwise  return whether the build is in the list of isEnabled buildTypes.
+        return isEnabledForAllBuildsInProject() || enabledBuildTypesSet.contains(TeamCityIdResolver.getInternalBuildId(sBuildType));
+    }
 
-	}
+    boolean isSpecificBuildTypeEnabled(SBuildType sBuildType) {
+        // Just check if this build type is only isEnabled for a specific build.
+        return enabledBuildTypesSet.contains(TeamCityIdResolver.getInternalBuildId(sBuildType));
+    }
 
-	public Boolean getEnabled() {
-		return enabled;
-	}
+    public String getBuildTypeCountAsFriendlyString() {
+        if (this.allBuildTypesEnabled && !this.subProjectsEnabled) {
+            return "All builds";
+        } else if (this.allBuildTypesEnabled) {
+            return "All builds & Sub-Projects";
+        }
 
-	public void setEnabled(Boolean enabled) {
-		this.enabled = enabled;
-	}
+        String subProjectsString = "";
+        if (this.subProjectsEnabled) {
+            subProjectsString = " & All Sub-Project builds";
+        }
+        int enabledBuildTypeCount = this.enabledBuildTypesSet.size();
+        if (enabledBuildTypeCount == 1) {
+            return enabledBuildTypeCount + " build" + subProjectsString;
+        }
+        return enabledBuildTypeCount + " builds" + subProjectsString;
 
-	public BuildState getBuildStates() {
-		return states;
-	}
+    }
 
-	public void setBuildStates(BuildState states) {
-		this.states = states;
-	}
+    public Boolean getEnabled() {
+        return enabled;
+    }
 
-	public String getToken() {
-		return apiToken;
-	}
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
 
-	public void setToken(String apiToken) {
-		this.apiToken = apiToken;
-	}
+    public BuildState getBuildStates() {
+        return states;
+    }
 
-	public String getChannel() {
-		return channel;
-	}
+    void setBuildStates(BuildState states) {
+        this.states = states;
+    }
 
-	public void setChannel(String channel) {
-		this.channel = channel;
-	}
+    public String getToken() {
+        return apiToken;
+    }
+
+    public void setToken(String apiToken) {
+        this.apiToken = apiToken;
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel;
+    }
 
     public String getTeamName() {
         return teamName;
@@ -380,165 +382,151 @@ public class SlackNotificationConfig {
         this.teamName = teamName;
     }
 
-	public String getUniqueKey() {
-		return uniqueKey;
-	}
+    public String getUniqueKey() {
+        return uniqueKey;
+    }
 
-	public void setUniqueKey(String uniqueKey) {
-		this.uniqueKey = uniqueKey;
-	}
-	
-	public String getEnabledListAsString(){
-		if (!this.enabled){
-			return "Disabled";
-		} else if (states.allEnabled()){
-			return "All Build Events";
-		} else if (states.noneEnabled()) {
-			return "None";
-		} else {
-			String enabledStates = "";
-			if (states.enabled(BuildStateEnum.BUILD_STARTED)){
-				enabledStates += ", Build Started";
-			}
-//			if (BuildState.enabled(BuildState.BUILD_FINISHED,this.statemask)){
+    public void setUniqueKey(String uniqueKey) {
+        this.uniqueKey = uniqueKey;
+    }
+
+    public String getEnabledListAsString() {
+        if (!this.enabled) {
+            return "Disabled";
+        } else if (states.allEnabled()) {
+            return "All Build Events";
+        } else if (states.noneEnabled()) {
+            return "None";
+        } else {
+            String enabledStates = "";
+            if (states.enabled(BuildStateEnum.BUILD_STARTED)) {
+                enabledStates += ", Build Started";
+            }
+//			if (BuildState.isEnabled(BuildState.BUILD_FINISHED,this.statemask)){
 //				enabledStates += ", Build Completed";
 //			}
-//			if (BuildState.enabled(BuildState.BUILD_CHANGED_STATUS,this.statemask)){
+//			if (BuildState.isEnabled(BuildState.BUILD_CHANGED_STATUS,this.statemask)){
 //				enabledStates += ", Build Changed Status";
 //			}
-			if (states.enabled(BuildStateEnum.BUILD_INTERRUPTED)){
-				enabledStates += ", Build Interrupted";
-			}
-			if (states.enabled(BuildStateEnum.BEFORE_BUILD_FINISHED)){
-				enabledStates += ", Build Almost Completed";
-			}
-			if (states.enabled(BuildStateEnum.RESPONSIBILITY_CHANGED)){
-				enabledStates += ", Build Responsibility Changed";
-			}
-			if (states.enabled(BuildStateEnum.BUILD_FAILED)){
-				if (states.enabled(BuildStateEnum.BUILD_BROKEN)){
-					enabledStates += ", Build Broken";
-				} else {
-					enabledStates += ", Build Failed";
-				}
-			}
-			if (states.enabled(BuildStateEnum.BUILD_SUCCESSFUL)){
-				if (states.enabled(BuildStateEnum.BUILD_FIXED)){
-					enabledStates += ", Build Fixed";
-				} else {
-					enabledStates += ", Build Successful";
-				}
-			}
-			if (enabledStates.length() > 0){
-				return enabledStates.substring(1);
-			} else {
-				return "None";
-			}
-		}
-	}
-	
-	public String getSlackNotificationEnabledAsChecked() {
-		if (this.enabled){
-			return "checked ";
-		}
-		return ""; 
-	}
-	
-	public String getStateAllAsChecked() {
-		if (states.allEnabled()){
-			return "checked ";
-		}		
-		return ""; 
-	}
-	
-	public String getStateBuildStartedAsChecked() {
-		if (states.enabled(BUILD_STARTED)){
-			return "checked ";
-		}
-		return ""; 
-	}
-	
-	public String getStateBuildFinishedAsChecked() {
-		if (states.enabled(BUILD_FINISHED)){
-			return "checked ";
-		}
-		return ""; 
-	}
+            if (states.enabled(BuildStateEnum.BUILD_INTERRUPTED)) {
+                enabledStates += ", Build Interrupted";
+            }
+            if (states.enabled(BuildStateEnum.BEFORE_BUILD_FINISHED)) {
+                enabledStates += ", Build Almost Completed";
+            }
+            if (states.enabled(BuildStateEnum.RESPONSIBILITY_CHANGED)) {
+                enabledStates += ", Build Responsibility Changed";
+            }
+            if (states.enabled(BuildStateEnum.BUILD_FAILED)) {
+                if (states.enabled(BuildStateEnum.BUILD_BROKEN)) {
+                    enabledStates += ", Build Broken";
+                } else {
+                    enabledStates += ", Build Failed";
+                }
+            }
+            if (states.enabled(BuildStateEnum.BUILD_SUCCESSFUL)) {
+                if (states.enabled(BuildStateEnum.BUILD_FIXED)) {
+                    enabledStates += ", Build Fixed";
+                } else {
+                    enabledStates += ", Build Successful";
+                }
+            }
+            if (enabledStates.length() > 0) {
+                return enabledStates.substring(1);
+            } else {
+                return "None";
+            }
+        }
+    }
 
-	public String getStateBeforeFinishedAsChecked() {
-		if (states.enabled(BEFORE_BUILD_FINISHED)){
-			return "checked ";
-		}
-		return ""; 
-	}
+    String getSlackNotificationEnabledAsChecked() {
+        if (this.enabled) {
+            return "checked ";
+        }
+        return "";
+    }
 
-	public String getStateResponsibilityChangedAsChecked() {
-		if (states.enabled(RESPONSIBILITY_CHANGED)){
-			return "checked ";
-		}
-		return ""; 
-	}
+    String getStateAllAsChecked() {
+        if (states.allEnabled()) {
+            return "checked ";
+        }
+        return "";
+    }
 
-	public String getStateBuildInterruptedAsChecked() {
-		if (states.enabled(BUILD_INTERRUPTED)){
-			return "checked ";
-		}
-		return ""; 
-	}
-	
-	public String getStateBuildSuccessfulAsChecked() {
-		if (states.enabled(BUILD_SUCCESSFUL)){
-			return "checked ";
-		}
-		return ""; 
-	}
-	
-	public String getStateBuildFixedAsChecked() {
-		if (states.enabled(BUILD_FIXED)){
-			return "checked ";
-		}
-		return ""; 
-	}
-	
-	public String getStateBuildFailedAsChecked() {
-		if (states.enabled(BUILD_FAILED)){
-			return "checked ";
-		}
-		return ""; 
-	}
+    String getStateBuildStartedAsChecked() {
+        if (states.enabled(BUILD_STARTED)) {
+            return "checked ";
+        }
+        return "";
+    }
 
-	public String getStateBuildBrokenAsChecked() {
-		if (states.enabled(BUILD_BROKEN)){
-			return "checked ";
-		}
-		return ""; 
-	}
+    String getStateBeforeFinishedAsChecked() {
+        if (states.enabled(BEFORE_BUILD_FINISHED)) {
+            return "checked ";
+        }
+        return "";
+    }
 
-	public Boolean isEnabledForAllBuildsInProject() {
-		return allBuildTypesEnabled;
-	}
+    String getStateResponsibilityChangedAsChecked() {
+        if (states.enabled(RESPONSIBILITY_CHANGED)) {
+            return "checked ";
+        }
+        return "";
+    }
 
-	public void enableForAllBuildsInProject(Boolean allBuildTypesEnabled) {
-		this.allBuildTypesEnabled = allBuildTypesEnabled;
-	}
-	
-	public Boolean isEnabledForSubProjects() {
-		return subProjectsEnabled;
-	}
-	
-	public void enableForSubProjects(Boolean subProjectsEnabled) {
-		this.subProjectsEnabled = subProjectsEnabled;
-	}
-	
-	public void clearAllEnabledBuildsInProject(){
-		this.enabledBuildTypesSet.clear();
-	}
-	
-	public void enableBuildInProject(String buildTypeId) {
-		this.enabledBuildTypesSet.add(buildTypeId);
-	}
+    String getStateBuildInterruptedAsChecked() {
+        if (states.enabled(BUILD_INTERRUPTED)) {
+            return "checked ";
+        }
+        return "";
+    }
 
-    public void setMentionChannelEnabled(boolean mentionChannelEnabled) {
+    String getStateBuildFixedAsChecked() {
+        if (states.enabled(BUILD_FIXED)) {
+            return "checked ";
+        }
+        return "";
+    }
+
+    String getStateBuildFailedAsChecked() {
+        if (states.enabled(BUILD_FAILED)) {
+            return "checked ";
+        }
+        return "";
+    }
+
+    String getStateBuildBrokenAsChecked() {
+        if (states.enabled(BUILD_BROKEN)) {
+            return "checked ";
+        }
+        return "";
+    }
+
+    public Boolean isEnabledForAllBuildsInProject() {
+        return allBuildTypesEnabled;
+    }
+
+    void enableForAllBuildsInProject(Boolean allBuildTypesEnabled) {
+        this.allBuildTypesEnabled = allBuildTypesEnabled;
+    }
+
+    public Boolean isEnabledForSubProjects() {
+        return subProjectsEnabled;
+    }
+
+    void enableForSubProjects(Boolean subProjectsEnabled) {
+        this.subProjectsEnabled = subProjectsEnabled;
+    }
+
+    void clearAllEnabledBuildsInProject() {
+        this.enabledBuildTypesSet.clear();
+    }
+
+    void enableBuildInProject(String buildTypeId) {
+        this.enabledBuildTypesSet.add(buildTypeId);
+    }
+
+    void setMentionChannelEnabled(boolean mentionChannelEnabled) {
         this.mentionChannelEnabled = mentionChannelEnabled;
     }
 
@@ -546,27 +534,27 @@ public class SlackNotificationConfig {
         return mentionChannelEnabled;
     }
 
-	public void setMentionSlackUserEnabled(boolean mentionSlackUserEnabled) {
-		this.mentionSlackUserEnabled = mentionSlackUserEnabled;
-	}
+    void setMentionSlackUserEnabled(boolean mentionSlackUserEnabled) {
+        this.mentionSlackUserEnabled = mentionSlackUserEnabled;
+    }
 
-	public boolean getMentionSlackUserEnabled() {
-		return mentionSlackUserEnabled;
-	}
+    public boolean getMentionSlackUserEnabled() {
+        return mentionSlackUserEnabled;
+    }
 
-	public void setMentionHereEnabled(boolean mentionHereEnabled) {
-		this.mentionHereEnabled = mentionHereEnabled;
-	}
+    void setMentionHereEnabled(boolean mentionHereEnabled) {
+        this.mentionHereEnabled = mentionHereEnabled;
+    }
 
-	public boolean getMentionHereEnabled() {
-		return mentionHereEnabled;
-	}
+    public boolean getMentionHereEnabled() {
+        return mentionHereEnabled;
+    }
 
-    public boolean hasCustomContent() {
+    boolean hasCustomContent() {
         return customContent;
     }
 
-    public void setHasCustomContent(boolean customContent) {
+    void setHasCustomContent(boolean customContent) {
         this.customContent = customContent;
     }
 
@@ -578,12 +566,12 @@ public class SlackNotificationConfig {
         this.content = content;
     }
 
-	public boolean isMentionWhoTriggeredEnabled() {
-		return mentionWhoTriggeredEnabled;
-	}
+    public boolean isMentionWhoTriggeredEnabled() {
+        return mentionWhoTriggeredEnabled;
+    }
 
-	public void setMentionWhoTriggeredEnabled(boolean mentionWhoTriggeredEnabled) {
-		this.mentionWhoTriggeredEnabled = mentionWhoTriggeredEnabled;
-	}
+    void setMentionWhoTriggeredEnabled(boolean mentionWhoTriggeredEnabled) {
+        this.mentionWhoTriggeredEnabled = mentionWhoTriggeredEnabled;
+    }
 
 }

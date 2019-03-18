@@ -111,11 +111,8 @@ public class SlackNotificationIndexPageController extends BaseController {
 			    		params.put(PROJECT_SLACK_NOTIFICATION_AS_JSON, ProjectSlackNotificationsBeanJsonSerialiser.serialise(ProjectSlackNotificationsBean.build(projSettings, project, myMainSettings)));
 			    	} else {
 			    		params.put(NO_SLACK_NOTIFICATIONS, FALSE);
-			    		params.put(SLACK_NOTIFICATIONS, "true");
-			    		params.put("slackNotificationList", projSettings.getSlackNotificationsAsList());
-			    		params.put("slackNotificationsDisabled", !projSettings.isEnabled());
-			    		params.put("slackNotificationsEnabledAsChecked", projSettings.isEnabledAsChecked());
-			    		params.put(PROJECT_SLACK_NOTIFICATION_AS_JSON, ProjectSlackNotificationsBeanJsonSerialiser.serialise(ProjectSlackNotificationsBean.build(projSettings, project, myMainSettings)));
+                        SlackNotificationAjaxEditPageController.buildParams(params, projSettings, SLACK_NOTIFICATIONS);
+                        params.put(PROJECT_SLACK_NOTIFICATION_AS_JSON, ProjectSlackNotificationsBeanJsonSerialiser.serialise(ProjectSlackNotificationsBean.build(projSettings, project, myMainSettings)));
 
 			    	}
 		    	} else {

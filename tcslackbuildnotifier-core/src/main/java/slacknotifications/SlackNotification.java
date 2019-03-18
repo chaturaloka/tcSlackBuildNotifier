@@ -12,21 +12,21 @@ import java.util.List;
 
 public interface SlackNotification {
 
-	void setProxy(SlackNotificationProxyConfig proxyConfig);
+    void setProxy(SlackNotificationProxyConfig proxyConfig);
 
-	void setProxy(String proxyHost, Integer proxyPort, Credentials credentials);
+    void setProxy(String proxyHost, Integer proxyPort, Credentials credentials);
 
-	void post() throws IOException;
+    void post() throws IOException;
 
-	Integer getStatus();
+    Integer getStatus();
 
-	String getProxyHost();
+    String getProxyHost();
 
-	int getProxyPort();
+    int getProxyPort();
 
-	String getChannel();
+    String getChannel();
 
-	void setChannel(String channel);
+    void setChannel(String channel);
 
     String getTeamName();
 
@@ -44,51 +44,51 @@ public interface SlackNotification {
 
     void setIconUrl(String iconUrl);
 
-	String getParameterisedUrl();
+    String getParameterisedUrl();
 
-	String parametersAsQueryString();
+    String parametersAsQueryString();
 
-	void addParam(String key, String value);
+    void addParam(String key, String value);
 
-	void addParams(List<NameValuePair> paramsList);
+    void addParams(List<NameValuePair> paramsList);
 
-	String getParam(String key);
+    String getParam(String key);
 
-	void setFilename(String filename);
+    void setFilename(String filename);
 
-	String getFilename();
+    String getFilename();
 
-	String getContent();
+    String getContent();
 
-	Boolean isEnabled();
+    Boolean isEnabled();
 
-	void setEnabled(Boolean enabled);
+    void setEnabled(Boolean enabled);
 
-	void setEnabled(String enabled);
+    void setEnabled(String enabled);
 
-	Boolean isErrored();
+    Boolean isErrored();
 
-	void setErrored(Boolean errored);
+    void setErrored(Boolean errored);
 
-	String getErrorReason();
+    String getErrorReason();
 
-	void setErrorReason(String errorReason);
+    void setErrorReason(String errorReason);
 
-	BuildState getBuildStates();
-	
-	void setBuildStates(BuildState states);
+    BuildState getBuildStates();
 
-	String getProxyUsername();
+    void setBuildStates(BuildState states);
 
-	void setProxyUsername(String proxyUsername);
+    String getProxyUsername();
 
-	String getProxyPassword();
+    void setProxyUsername(String proxyUsername);
 
-	void setProxyPassword(String proxyPassword);
+    String getProxyPassword();
 
-	SlackNotificationPayloadContent getPayload();
+    void setProxyPassword(String proxyPassword);
 
-	void setPayload(SlackNotificationPayloadContent payloadContent);
+    SlackNotificationPayloadContent getPayload();
+
+    void setPayload(SlackNotificationPayloadContent payloadContent);
 
     PostMessageResponse getResponse();
 
@@ -97,20 +97,20 @@ public interface SlackNotification {
     void setShowElapsedBuildTime(Boolean showElapsedBuildTime);
 
     void setShowCommits(boolean showCommits);
-	
+
     void setShowCommitters(boolean showCommitters);
-	
-	void setShowTriggeredBy(boolean showTriggeredBy);
+
+    void setShowTriggeredBy(boolean showTriggeredBy);
 
     void setMaxCommitsToDisplay(int maxCommitsToDisplay);
 
     void setMentionChannelEnabled(boolean mentionChannelEnabled);
 
-	void setMentionSlackUserEnabled(boolean mentionSlackUserEnabled);
+    void setMentionSlackUserEnabled(boolean mentionSlackUserEnabled);
 
-	void setMentionHereEnabled(boolean mentionHereEnabled);
+    void setMentionHereEnabled(boolean mentionHereEnabled);
 
     void setShowFailureReason(boolean showFailureReason);
 
-	void setMentionWhoTriggeredEnabled(boolean mentionWhoTriggeredEnabled);
+    void setMentionWhoTriggeredEnabled(boolean mentionWhoTriggeredEnabled);
 }
