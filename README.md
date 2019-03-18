@@ -7,8 +7,8 @@ Adds random Chuck Norris quote along with the build results in slack message.
 
 Posts Build Status to [Slack](http://www.slack.com)
 
-![Sample Notification](https://raw.github.com/petegoo/tcSlackBuildNotifier/master/docs/build-status_pass.png)
-![Sample Notification](https://raw.github.com/petegoo/tcSlackBuildNotifier/master/docs/build-status_fail.png)
+![Sample Notification](https://raw.githubusercontent.com/subbramanil/tcSlackBuildNotifier/master/docs/TeamCity%20Build%20Success.png)
+![Sample Notification](https://raw.githubusercontent.com/subbramanil/tcSlackBuildNotifier/master/docs/TeamCity%20Build%20Failure.png)
 
 _Tested on TeamCity 2018.2.3 (build 61544)_
 
