@@ -267,7 +267,9 @@ public class SlackNotificationImpl implements SlackNotification {
 
     private List<Attachment> getAttachments() {
         List<Attachment> attachments = new ArrayList<Attachment>();
+
         Attachment attachment = new Attachment(this.payload.getBuildName(), null, null, this.payload.getColor());
+        attachment.setThumb_url("https://raw.githubusercontent.com/subbramanil/tcSlackBuildNotifier/master/docs/TeamCity72x72.png");
 
         List<String> firstDetailLines = new ArrayList<String>();
         if (showBuildAgent == null || showBuildAgent) {
@@ -275,9 +277,7 @@ public class SlackNotificationImpl implements SlackNotification {
         }
         if (this.payload.getIsComplete() && (showElapsedBuildTime == null || showElapsedBuildTime)) {
             firstDetailLines.add("Build Elapsed: " + formatTime(this.payload.getElapsedTime()));
-            firstDetailLines.add(payload.getMsgFromChuckNorris());
         }
-
         attachment.addField(this.payload.getBuildName(), StringUtil.join(firstDetailLines, "\n"), false);
 
         if (showFailureReason && this.payload.getBuildResult().equals(SlackNotificationPayloadContent.BUILD_STATUS_FAILURE)) {
@@ -299,7 +299,6 @@ public class SlackNotificationImpl implements SlackNotification {
         StringBuilder sbCommits = new StringBuilder();
 
         List<Commit> commits = this.payload.getCommits();
-
         List<Commit> commitsToDisplay = new ArrayList<Commit>(commits);
 
         if (showCommits) {
@@ -327,8 +326,6 @@ public class SlackNotificationImpl implements SlackNotification {
         }
 
         List<String> slackUsers = new ArrayList<String>();
-
-
         for (Commit commit : commits) {
             if (commit.hasSlackUserId()) {
                 slackUsers.add("<!" + commit.getSlackUserId() + ">");
@@ -342,7 +339,6 @@ public class SlackNotificationImpl implements SlackNotification {
             for (Commit commit : commits) {
                 committers.add(commit.getUserName());
             }
-
             String committersString = StringUtil.join(", ", committers);
 
             if (!commits.isEmpty()) {
@@ -383,6 +379,12 @@ public class SlackNotificationImpl implements SlackNotification {
 
         if (needMentionForFirstFailure || needMentionForTheOneWhoTriggered) {
             attachment.addField("", mentionContent, true);
+        }
+
+        if (this.payload.getIsComplete()) {
+            attachment.setFooter(payload.getMsgFromChuckNorris());
+            attachment.setFooter_icon("https://raw.githubusercontent.com/subbramanil/tcSlackBuildNotifier/master/docs/_chuck_sad.jpg");
+            attachments.add(attachment);
         }
 
         attachments.add(attachment);
