@@ -11,7 +11,7 @@ public class SlackNotificationContentConfig {
     public static final boolean DEFAULT_SHOW_COMMITTERS = true;
     public static final boolean DEFAULT_SHOW_TRIGGERED_BY = true;
     public static final boolean DEFAULT_SHOW_FAILURE_REASON = false;
-    public static final boolean DEFAULT_SHOW_CHUCK_NORRIS_QUOTE = false;
+    public static final boolean DEFAULT_SHOW_FUNNY_QUOTE = false;
     private String iconUrl = SlackNotificationMainConfig.DEFAULT_ICONURL;
     private String botName = SlackNotificationMainConfig.DEFAULT_BOTNAME;
     private Boolean showBuildAgent;

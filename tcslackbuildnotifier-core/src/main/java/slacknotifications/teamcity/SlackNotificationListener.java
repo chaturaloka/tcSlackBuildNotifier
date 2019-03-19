@@ -78,7 +78,7 @@ public class SlackNotificationListener extends BuildServerAdapter {
         slackNotification.setShowCommitters(myMainSettings.getShowCommitters());
         slackNotification.setShowTriggeredBy(myMainSettings.getShowTriggeredBy());
         slackNotification.setShowFailureReason(myMainSettings.getShowFailureReason() == null ? SlackNotificationContentConfig.DEFAULT_SHOW_FAILURE_REASON : myMainSettings.getShowFailureReason());
-        slackNotification.setShowFunnyQuote(myMainSettings.getshowFunnyQuote() == null ? SlackNotificationContentConfig.DEFAULT_SHOW_CHUCK_NORRIS_QUOTE : myMainSettings.getshowFunnyQuote());
+        slackNotification.setShowFunnyQuote(myMainSettings.getshowFunnyQuote() == null ? SlackNotificationContentConfig.DEFAULT_SHOW_FUNNY_QUOTE : myMainSettings.getshowFunnyQuote());
         slackNotification.setMaxCommitsToDisplay(myMainSettings.getMaxCommitsToDisplay());
         slackNotification.setMentionChannelEnabled(slackNotificationConfig.getMentionChannelEnabled());
 		slackNotification.setMentionSlackUserEnabled(slackNotificationConfig.getMentionSlackUserEnabled());
@@ -95,7 +95,7 @@ public class SlackNotificationListener extends BuildServerAdapter {
             slackNotification.setShowCommitters(slackNotificationConfig.getContent().getShowCommitters());
             slackNotification.setShowTriggeredBy(slackNotificationConfig.getContent().getShowTriggeredBy());
             slackNotification.setShowFailureReason(slackNotificationConfig.getContent().getShowFailureReason() == null ? SlackNotificationContentConfig.DEFAULT_SHOW_FAILURE_REASON : slackNotificationConfig.getContent().getShowFailureReason());
-			slackNotification.setShowFunnyQuote(slackNotificationConfig.getContent().getshowFunnyQuote() == null ? SlackNotificationContentConfig.DEFAULT_SHOW_CHUCK_NORRIS_QUOTE : slackNotificationConfig.getContent().getshowFunnyQuote());
+			slackNotification.setShowFunnyQuote(slackNotificationConfig.getContent().getshowFunnyQuote() == null ? SlackNotificationContentConfig.DEFAULT_SHOW_FUNNY_QUOTE : slackNotificationConfig.getContent().getshowFunnyQuote());
         }
 		Loggers.ACTIVITIES.debug("SlackNotificationListener :: SlackNotification proxy set to "
 				+ slackNotification.getProxyHost() + " for " + slackNotificationConfig.getChannel());
