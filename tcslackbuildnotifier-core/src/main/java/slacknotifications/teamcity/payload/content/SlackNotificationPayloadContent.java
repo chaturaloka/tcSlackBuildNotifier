@@ -76,15 +76,15 @@ public class SlackNotificationPayloadContent {
     private long elapsedTime;
     private boolean isComplete;
 
-    public String getMsgFromChuckNorris() {
-        return msgFromChuckNorris;
+    public String getFunnyQuote() {
+        return funnyQuote;
     }
 
-    public void setMsgFromChuckNorris(String msgFromChuckNorris) {
-        this.msgFromChuckNorris = msgFromChuckNorris;
+    public void setFunnyQuote(String funnyQuote) {
+        this.funnyQuote = funnyQuote;
     }
 
-    private String msgFromChuckNorris;
+    private String funnyQuote;
     private ArrayList<String> failedBuildMessages = new ArrayList<String>();
     private ArrayList<String> failedTestNames = new ArrayList<String>();
 
@@ -189,7 +189,7 @@ public class SlackNotificationPayloadContent {
         setBuildName(sRunningBuild.getBuildType().getName());
 
         if (buildState == BuildStateEnum.BUILD_FINISHED) {
-            setMsgFromChuckNorris(buildChuckNorrisMsg(previousBuild.getBuildStatus()));
+            setFunnyQuote(buildFunnyQuote(previousBuild.getBuildStatus()));
         }
 
         if (sRunningBuild.getTriggeredBy().getUser() != null) {
@@ -218,7 +218,7 @@ public class SlackNotificationPayloadContent {
         setBuildDescriptionWithLinkSyntax(String.format("<" + getBuildStatusUrl() + "|" + getBuildResult() + " - " + sRunningBuild.getBuildType().getFullName() + " #" + sRunningBuild.getBuildNumber() + branchSuffix + ">"));
     }
 
-    private String buildChuckNorrisMsg(Status buildResult) {
+    private String buildFunnyQuote(Status buildResult) {
 
         String msg = "Empty Message";
 

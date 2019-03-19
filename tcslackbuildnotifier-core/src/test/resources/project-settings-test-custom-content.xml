@@ -14,7 +14,7 @@
                  showTriggeredBy="true"
                  maxCommitsToDisplay="20"
                 showFailureReason="true"
-                 showChuckNorrisQuote="true"/>
+                 showFunnyQuote="true"/>
     </slackNotification>
   </slackNotifications>
 </settings>

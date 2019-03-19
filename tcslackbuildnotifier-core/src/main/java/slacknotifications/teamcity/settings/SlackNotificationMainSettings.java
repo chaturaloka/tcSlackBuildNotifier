@@ -130,8 +130,8 @@ public class SlackNotificationMainSettings implements MainConfigProcessor {
         return this.slackNotificationMainConfig.getContent().getShowFailureReason();
     }
 
-    public Boolean getShowChuckNorrisQuote() {
-        return this.slackNotificationMainConfig.getContent().getShowChuckNorrisQuote();
+    public Boolean getshowFunnyQuote() {
+        return this.slackNotificationMainConfig.getContent().getshowFunnyQuote();
     }
 
     public Boolean getSlackNotificationShowFurtherReading(){

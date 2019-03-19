@@ -39,7 +39,7 @@ public class SlacknotificationConfigAndBuildTypeListHolder {
     private boolean showTriggeredBy;
     private int maxCommitsToDisplay;
     private boolean showFailureReason;
-    private boolean showChuckNorrisQuote;
+    private boolean showFunnyQuote;
     private String botName;
     private String iconUrl;
 
@@ -67,7 +67,7 @@ public class SlacknotificationConfigAndBuildTypeListHolder {
         showCommitters = valueOrFallback(config.getContent().getShowCommitters(), valueOrFallback(mainSettings.getShowCommitters(), SlackNotificationContentConfig.DEFAULT_SHOW_COMMITTERS));
         showTriggeredBy = valueOrFallback(config.getContent().getShowTriggeredBy(), valueOrFallback(mainSettings.getShowTriggeredBy(), SlackNotificationContentConfig.DEFAULT_SHOW_TRIGGERED_BY));
         showFailureReason = valueOrFallback(config.getContent().getShowFailureReason(), valueOrFallback(mainSettings.getShowFailureReason(), SlackNotificationContentConfig.DEFAULT_SHOW_FAILURE_REASON));
-		showChuckNorrisQuote = valueOrFallback(config.getContent().getShowChuckNorrisQuote(), valueOrFallback(mainSettings.getShowChuckNorrisQuote(), SlackNotificationContentConfig.DEFAULT_SHOW_CHUCK_NORRIS_QUOTE));
+		showFunnyQuote = valueOrFallback(config.getContent().getshowFunnyQuote(), valueOrFallback(mainSettings.getshowFunnyQuote(), SlackNotificationContentConfig.DEFAULT_SHOW_CHUCK_NORRIS_QUOTE));
         botName = valueOrFallback(config.getContent().getBotName(), SlackNotificationMainConfig.DEFAULT_BOTNAME);
         iconUrl = valueOrFallback(config.getContent().getIconUrl(), SlackNotificationMainConfig.DEFAULT_ICONURL);
 	}

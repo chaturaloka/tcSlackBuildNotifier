@@ -112,7 +112,7 @@ public interface SlackNotification {
 
     void setShowFailureReason(boolean showFailureReason);
 
-    void setShowChuckNorrisQuote(boolean showChuckNorrisQuote);
+    void setShowFunnyQuote(boolean showFunnyQuote);
 
     void setMentionWhoTriggeredEnabled(boolean mentionWhoTriggeredEnabled);
 }

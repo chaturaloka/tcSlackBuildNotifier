@@ -26,7 +26,7 @@ public class SlackNotificationMainConfig implements ChangeListener {
     private static final String SHOW_COMMITTERS = "showCommitters";
     private static final String SHOW_TRIGGERED_BY = "showTriggeredBy";
     private static final String SHOW_FAILURE_REASON = "showFailureReason";
-    private static final String SHOW_CHUCK_NORRIS_QUOTE = "showChuckNorrisQuote";
+    private static final String SHOW_CHUCK_NORRIS_QUOTE = "showFunnyQuote";
     private static final String MAX_COMMITS_TO_DISPLAY = "maxCommitsToDisplay";
     private static final String SHOW_ELAPSED_BUILD_TIME = "showElapsedBuildTime";
     private static final String HTTPS = "https://";
@@ -295,8 +295,8 @@ public class SlackNotificationMainConfig implements ChangeListener {
                         if (SlackNotificationMainConfig.this.content.getShowFailureReason() != null) {
                             rootElement.setAttribute(SHOW_FAILURE_REASON, Boolean.toString(SlackNotificationMainConfig.this.content.getShowFailureReason()));
                         }
-                        if (SlackNotificationMainConfig.this.content.getShowChuckNorrisQuote() != null) {
-                            rootElement.setAttribute(SHOW_CHUCK_NORRIS_QUOTE, Boolean.toString(SlackNotificationMainConfig.this.content.getShowChuckNorrisQuote()));
+                        if (SlackNotificationMainConfig.this.content.getshowFunnyQuote() != null) {
+                            rootElement.setAttribute(SHOW_CHUCK_NORRIS_QUOTE, Boolean.toString(SlackNotificationMainConfig.this.content.getshowFunnyQuote()));
                         }
                         rootElement.setAttribute(MAX_COMMITS_TO_DISPLAY, Integer.toString(SlackNotificationMainConfig.this.content.getMaxCommitsToDisplay()));
 
@@ -378,7 +378,7 @@ public class SlackNotificationMainConfig implements ChangeListener {
                 content.setShowFailureReason(Boolean.parseBoolean(slackNotificationsElement.getAttributeValue(SHOW_FAILURE_REASON)));
             }
             if (slackNotificationsElement.getAttribute(SHOW_CHUCK_NORRIS_QUOTE) != null) {
-                content.setShowChuckNorrisQuote(Boolean.parseBoolean(slackNotificationsElement.getAttributeValue(SHOW_CHUCK_NORRIS_QUOTE)));
+                content.setshowFunnyQuote(Boolean.parseBoolean(slackNotificationsElement.getAttributeValue(SHOW_CHUCK_NORRIS_QUOTE)));
             }
 
             Element proxyElement = slackNotificationsElement.getChild(PROXY);

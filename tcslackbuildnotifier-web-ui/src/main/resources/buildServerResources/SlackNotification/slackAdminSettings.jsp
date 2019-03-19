@@ -148,15 +148,31 @@
                     </td>
                 </tr>
 
-                <tr>
-                    <th>
-                        <label for="showChuckNorrisQuote">Show Random Chuck Norris Quote: </label>
-                    </th>
-                    <td>
-                        <forms:checkbox name="showChuckNorrisQuote" checked="${showChuckNorrisQuote}" value="${showChuckNorrisQuote}"/>
-                        <span style="color: #888; font-size: 90%;">When checked, a random Chuck Norris Quote will be attached to the footer.</span>
-                    </td>
-                </tr>
+              <tr class="groupingTitle">
+                  <td colspan="2">Funny Quote Configuration</td>
+              </tr>
+              <tr>
+                  <th>
+                      <label for="showFunnyQuote">Show Random Funny Quote from Chuck Norris or Jedi: </label>
+                  </th>
+                  <td>
+                      <forms:checkbox name="showFunnyQuote" checked="${showFunnyQuote}" value="${showFunnyQuote}"/>
+                      <span style="color: #888; font-size: 90%;">When checked, a random Chuck Norris or Jedi Quote will be attached to the footer.</span>
+
+                      <%--<forms:radiobutton name="chuckNorris" checked="${showFunnyQuote}" value="${showFunnyQuote}"/>--%>
+                  </td>
+              </tr>
+              <tr>
+                  <th>
+                      <label for="funnyQuoteIconUrl">Funny Quote Icon url: <l:star /></label>
+                  </th>
+                  <td>
+                      <forms:textField name="funnyQuoteIconUrl" value="${iconUrl}" style="width: 300px;" />
+                      <span class="smallNote">The url of the icon to appear along with the quote. You can leave this as the default or customize it to a png file.</span>
+                      <span class="smallNote">The default is <b>https://raw.githubusercontent.com/PeteGoo/tcSlackBuildNotifier/master/docs/TeamCity72x72.png</b></span>
+                  </td>
+              </tr>
+
                 <tr class="groupingTitle">
                         <td colspan="2">Proxy Configuration</td>
                 </tr>

@@ -22,7 +22,7 @@ public class SlackNotificationContentConfig {
     private int maxCommitsToDisplay = 5;
     private boolean enabled;
     private Boolean showFailureReason;
-    private Boolean showChuckNorrisQuote;
+    private Boolean showFunnyQuote;
 
     public String getIconUrl() {
         return iconUrl;
@@ -104,11 +104,11 @@ public class SlackNotificationContentConfig {
         this.enabled = enabled;
     }
 
-    public Boolean getShowChuckNorrisQuote() {
-        return showChuckNorrisQuote;
+    public Boolean getshowFunnyQuote() {
+        return showFunnyQuote;
     }
 
-    public void setShowChuckNorrisQuote(Boolean showChuckNorrisQuote) {
-        this.showChuckNorrisQuote = showChuckNorrisQuote;
+    public void setshowFunnyQuote(Boolean showFunnyQuote) {
+        this.showFunnyQuote = showFunnyQuote;
     }
 }

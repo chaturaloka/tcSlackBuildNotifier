@@ -149,7 +149,7 @@
                     jQuerySlacknotification('#botName').val(slacknotification.botName);
                     jQuerySlacknotification('#iconUrl').val(slacknotification.iconUrl)
                     jQuerySlacknotification('#showFailureReason').attr('checked', slacknotification.showFailureReason);
-                    jQuerySlacknotification('#showChuckNorrisQuote').attr('checked', slacknotification.showChuckNorrisQuote);
+                    jQuerySlacknotification('#showFunnyQuote').attr('checked', slacknotification.showFunnyQuote);
                 }
             });
             updateSelectedBuildTypes();
