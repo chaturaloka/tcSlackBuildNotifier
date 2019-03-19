@@ -10,6 +10,34 @@ public class Attachment {
     private String text;
     private String pretext;
     private String color;
+    private String footer;
+    private String footer_icon;
+    private String thumb_url;
+    private String image_url;
+
+    public String getFooter() {
+        return footer;
+    }
+
+    public void setFooter(String footer) {
+        this.footer = footer;
+    }
+
+    public String getFooter_icon() {
+        return footer_icon;
+    }
+
+    public void setFooter_icon(String footer_icon) {
+        this.footer_icon = footer_icon;
+    }
+
+    public String getThumb_url() {
+        return thumb_url;
+    }
+
+    public void setThumb_url(String thumb_url) {
+        this.thumb_url = thumb_url;
+    }
 
     private List<Field> fields;
 
@@ -45,5 +73,13 @@ public class Attachment {
 
     public List<Field> getFields() {
         return fields;
+    }
+
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
     }
 }
