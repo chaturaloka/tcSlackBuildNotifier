@@ -14,7 +14,8 @@
                  showTriggeredBy="true"
                  maxCommitsToDisplay="20"
                 showFailureReason="true"
-                 showFunnyQuote="true"/>
+                 showFunnyQuote="true"
+                 funnyQuoteIconUrl="http://www.myicon.com/icon.gif"/>
     </slackNotification>
   </slackNotifications>
 </settings>

@@ -114,5 +114,9 @@ public interface SlackNotification {
 
     void setShowFunnyQuote(boolean showFunnyQuote);
 
+    String getFunnyQuoteIconUrl();
+
+    void setFunnyQuoteIconUrl(String iconUrl);
+
     void setMentionWhoTriggeredEnabled(boolean mentionWhoTriggeredEnabled);
 }

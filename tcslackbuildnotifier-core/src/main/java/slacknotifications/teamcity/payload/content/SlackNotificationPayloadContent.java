@@ -189,7 +189,7 @@ public class SlackNotificationPayloadContent {
         setBuildName(sRunningBuild.getBuildType().getName());
 
         if (buildState == BuildStateEnum.BUILD_FINISHED) {
-            setFunnyQuote(buildFunnyQuote(previousBuild.getBuildStatus()));
+            setFunnyQuote(buildFunnyQuote(sRunningBuild.getBuildStatus()));
         }
 
         if (sRunningBuild.getTriggeredBy().getUser() != null) {

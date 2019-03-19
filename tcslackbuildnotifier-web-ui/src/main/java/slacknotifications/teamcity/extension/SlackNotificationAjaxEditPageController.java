@@ -41,6 +41,7 @@ public class SlackNotificationAjaxEditPageController extends BaseController {
     private static final String MAX_COMMITS_DISPLAY = "maxCommitsToDisplay";
     private static final String BOT_NAME = "botName";
     private static final String ICON_URL = "iconUrl";
+    private static final String FUNNY_QUOTE_ICON_URL = "funnyQuoteIconUrl";
     private static final String FALSE = "false";
     private static final String BEFORE_FINISHED = "BeforeFinished";
     private static final String BUILD_INTERRUPTED = "BuildInterrupted";
@@ -197,6 +198,11 @@ public class SlackNotificationAjaxEditPageController extends BaseController {
                                     if ((request.getParameter(ICON_URL) != null)
                                             && (request.getParameter(ICON_URL).length() > 0)) {
                                         content.setIconUrl(request.getParameter(ICON_URL));
+                                    }
+
+                                    if ((request.getParameter(FUNNY_QUOTE_ICON_URL) != null)
+                                            && (request.getParameter(FUNNY_QUOTE_ICON_URL).length() > 0)) {
+                                        content.setFunnyQuoteIconUrl(request.getParameter(FUNNY_QUOTE_ICON_URL));
                                     }
                                 }
 

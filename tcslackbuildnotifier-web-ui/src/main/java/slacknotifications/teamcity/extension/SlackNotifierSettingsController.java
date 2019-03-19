@@ -38,6 +38,7 @@ public class SlackNotifierSettingsController extends BaseController {
     private String token;
     private String botName;
     private String iconUrl;
+    private String funnyQuoteIconUrl;
     private String defaultChannel;
     private String maxCommitsToDisplay;
     private String showBuildAgent;
@@ -107,6 +108,7 @@ public class SlackNotifierSettingsController extends BaseController {
         token = request.getParameter("token");
         botName = request.getParameter("botName");
         iconUrl = request.getParameter("iconUrl");
+        funnyQuoteIconUrl = request.getParameter("funnyQuoteIconUrl");
         defaultChannel = request.getParameter("defaultChannel");
         maxCommitsToDisplay = request.getParameter("maxCommitsToDisplay");
         showBuildAgent = request.getParameter("showBuildAgent");
@@ -137,6 +139,7 @@ public class SlackNotifierSettingsController extends BaseController {
                 Boolean.parseBoolean(showTriggeredBy),
                 Boolean.parseBoolean(showFailureReason),
                 Boolean.parseBoolean(showFunnyQuote),
+                funnyQuoteIconUrl,
                 proxyHost, proxyPort, proxyUser, proxyPassword);
 
 
@@ -175,13 +178,15 @@ public class SlackNotifierSettingsController extends BaseController {
     SlackNotification createMockNotification(String teamName, String defaultChannel, String botName,
                                              String token, String iconUrl, Integer maxCommitsToDisplay,
                                              Boolean showElapsedBuildTime, Boolean showBuildAgent, Boolean showCommits,
-                                             Boolean showCommitters, Boolean showTriggeredBy, Boolean showFailureReason, Boolean showFunnyQuote, String proxyHost,
+                                             Boolean showCommitters, Boolean showTriggeredBy, Boolean showFailureReason,
+                                             Boolean showFunnyQuote, String funnyQuoteIconUrl, String proxyHost,
                                              String proxyPort, String proxyUser, String proxyPassword) {
         SlackNotification notification = new SlackNotificationImpl(defaultChannel);
         notification.setTeamName(teamName);
         notification.setBotName(botName);
         notification.setToken(token);
         notification.setIconUrl(iconUrl);
+        notification.setFunnyQuoteIconUrl(funnyQuoteIconUrl);
         notification.setMaxCommitsToDisplay(maxCommitsToDisplay);
         notification.setShowElapsedBuildTime(showElapsedBuildTime);
         notification.setShowBuildAgent(showBuildAgent);
@@ -249,6 +254,7 @@ public class SlackNotifierSettingsController extends BaseController {
         this.config.setToken(token);
         this.config.getContent().setBotName(botName);
         this.config.getContent().setIconUrl(iconUrl);
+        this.config.getContent().setFunnyQuoteIconUrl(funnyQuoteIconUrl);
         this.config.setDefaultChannel(defaultChannel);
         this.config.getContent().setMaxCommitsToDisplay(Integer.parseInt(maxCommitsToDisplay));
         this.config.getContent().setShowBuildAgent(Boolean.parseBoolean(showBuildAgent));

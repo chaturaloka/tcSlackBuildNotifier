@@ -217,6 +217,7 @@ public class SlackNotificator implements Notificator {
         notification.setMentionChannelEnabled(false);
         notification.setShowFailureReason(mainConfig.getShowFailureReason());
         notification.setShowFunnyQuote(mainConfig.getshowFunnyQuote());
+        notification.setFunnyQuoteIconUrl(mainConfig.getFunnyQuoteIconUrl());
 
         return notification;
 

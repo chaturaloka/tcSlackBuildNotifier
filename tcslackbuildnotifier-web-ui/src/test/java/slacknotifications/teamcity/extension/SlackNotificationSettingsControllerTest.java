@@ -49,10 +49,12 @@ public class SlackNotificationSettingsControllerTest {
                 true,
                 true,
                 true,
+                SlackNotificationMainConfig.DEFAULT_FUNNY_QUOTE_ICONURL,
                 null, null, null, null);
 
         assertNotNull(notification);
         assertEquals("the team", notification.getTeamName());
         assertEquals(SlackNotificationMainConfig.DEFAULT_ICONURL, notification.getIconUrl());
+        assertEquals(SlackNotificationMainConfig.DEFAULT_FUNNY_QUOTE_ICONURL, notification.getFunnyQuoteIconUrl());
     }
 }

@@ -23,6 +23,7 @@ public class SlackNotificationContentConfig {
     private boolean enabled;
     private Boolean showFailureReason;
     private Boolean showFunnyQuote;
+    private String funnyQuoteIconUrl = SlackNotificationMainConfig.DEFAULT_FUNNY_QUOTE_ICONURL;
 
     public String getIconUrl() {
         return iconUrl;
@@ -110,5 +111,13 @@ public class SlackNotificationContentConfig {
 
     public void setshowFunnyQuote(Boolean showFunnyQuote) {
         this.showFunnyQuote = showFunnyQuote;
+    }
+
+    public void setFunnyQuoteIconUrl(String funnyQuoteIconUrl) {
+        this.funnyQuoteIconUrl = funnyQuoteIconUrl;
+    }
+
+    public String getFunnyQuoteIconUrl() {
+        return funnyQuoteIconUrl;
     }
 }

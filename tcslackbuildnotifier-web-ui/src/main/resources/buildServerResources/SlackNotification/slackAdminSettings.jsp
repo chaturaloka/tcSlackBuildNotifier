@@ -167,7 +167,7 @@
                       <label for="funnyQuoteIconUrl">Funny Quote Icon url: <l:star /></label>
                   </th>
                   <td>
-                      <forms:textField name="funnyQuoteIconUrl" value="${iconUrl}" style="width: 300px;" />
+                      <forms:textField name="funnyQuoteIconUrl" value="${funnyQuoteIconUrl}" style="width: 300px;" />
                       <span class="smallNote">The url of the icon to appear along with the quote. You can leave this as the default or customize it to a png file.</span>
                       <span class="smallNote">The default is <b>https://raw.githubusercontent.com/PeteGoo/tcSlackBuildNotifier/master/docs/TeamCity72x72.png</b></span>
                   </td>

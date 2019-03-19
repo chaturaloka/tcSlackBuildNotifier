@@ -14,45 +14,44 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class SlackNotificationMainSettings implements MainConfigProcessor {
-	private static final String NAME = SlackNotificationMainSettings.class.getName();
-	private SlackNotificationMainConfig slackNotificationMainConfig;
-	private SBuildServer server;
+    private static final String NAME = SlackNotificationMainSettings.class.getName();
+    private SlackNotificationMainConfig slackNotificationMainConfig;
+    private SBuildServer server;
     private ServerPaths serverPaths;
     private String version;
 
-    public SlackNotificationMainSettings(SBuildServer server, ServerPaths serverPaths){
+    public SlackNotificationMainSettings(SBuildServer server, ServerPaths serverPaths) {
         this.serverPaths = serverPaths;
         Loggers.SERVER.debug(NAME + " :: Constructor called");
-		this.server = server;
-		slackNotificationMainConfig = new SlackNotificationMainConfig(serverPaths);
+        this.server = server;
+        slackNotificationMainConfig = new SlackNotificationMainConfig(serverPaths);
 
-	}
+    }
 
-    public void register(){
+    public void register() {
         Loggers.SERVER.debug(NAME + ":: Registering");
         server.registerExtension(MainConfigProcessor.class, "slacknotifications", this);
     }
-    
-	public String getProxySettingsAsString(){
-		return this.slackNotificationMainConfig.getProxySettingsAsString();
-	}
-	
+
+    public String getProxySettingsAsString() {
+        return this.slackNotificationMainConfig.getProxySettingsAsString();
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public void readFrom(Element rootElement)
-    /* Is passed an Element by TC, and is expected to persist it to the settings object.
-     * Old settings should be overwritten.
-     */
-    {
-        if(slackNotificationMainConfig.getConfigFileExists()){
+        /* Is passed an Element by TC, and is expected to persist it to the settings object.
+         * Old settings should be overwritten.
+         */ {
+        if (slackNotificationMainConfig.getConfigFileExists()) {
             // The MainConfigProcessor approach has been deprecated.
             // Instead we will use our own config file so we have better control over when it is persisted
             return;
         }
-    	Loggers.SERVER.info("SlackNotificationMainSettings: re-reading main settings using old-style MainConfigProcessor. From now on we will use the slack/slack-config.xml file instead of main-config.xml");
-    	Loggers.SERVER.debug(NAME + ":readFrom :: " + rootElement.toString());
-    	SlackNotificationMainConfig tempConfig = new SlackNotificationMainConfig(serverPaths);
-    	Element slackNotificationsElement = rootElement.getChild("slacknotifications");
+        Loggers.SERVER.info("SlackNotificationMainSettings: re-reading main settings using old-style MainConfigProcessor. From now on we will use the slack/slack-config.xml file instead of main-config.xml");
+        Loggers.SERVER.debug(NAME + ":readFrom :: " + rootElement.toString());
+        SlackNotificationMainConfig tempConfig = new SlackNotificationMainConfig(serverPaths);
+        Element slackNotificationsElement = rootElement.getChild("slacknotifications");
         tempConfig.readConfigurationFromXmlElement(slackNotificationsElement);
         this.slackNotificationMainConfig = tempConfig;
         tempConfig.save();
@@ -60,23 +59,22 @@ public class SlackNotificationMainSettings implements MainConfigProcessor {
 
     @Override
     public void writeTo(Element parentElement)
-    /* Is passed an (probably empty) Element by TC, which is expected to be populated from the settings
-     * in memory. 
-     */
-    {
+        /* Is passed an (probably empty) Element by TC, which is expected to be populated from the settings
+         * in memory.
+         */ {
 
     }
-    
-    public String getProxy(){
-    	return this.slackNotificationMainConfig.getProxyConfig().getProxyHost();
+
+    public String getProxy() {
+        return this.slackNotificationMainConfig.getProxyConfig().getProxyHost();
     }
 
-    public String getInfoText(){
-    	return this.slackNotificationMainConfig.getSlackNotificationInfoText();
+    public String getInfoText() {
+        return this.slackNotificationMainConfig.getSlackNotificationInfoText();
     }
 
-    public String getInfoUrl(){
-    	return this.slackNotificationMainConfig.getSlackNotificationInfoUrl();
+    public String getInfoUrl() {
+        return this.slackNotificationMainConfig.getSlackNotificationInfoUrl();
     }
 
     public String getDefaultChannel() {
@@ -91,17 +89,19 @@ public class SlackNotificationMainSettings implements MainConfigProcessor {
         return this.slackNotificationMainConfig.getToken();
     }
 
-    public String getIconUrl()
-    {
+    public String getIconUrl() {
         return this.slackNotificationMainConfig.getContent().getIconUrl();
     }
 
-    public String getBotName()
-    {
+    public String getFunnyQuoteIconUrl() {
+        return this.slackNotificationMainConfig.getContent().getFunnyQuoteIconUrl();
+    }
+
+    public String getBotName() {
         return this.slackNotificationMainConfig.getContent().getBotName();
     }
 
-    public boolean getEnabled(){
+    public boolean getEnabled() {
         return this.slackNotificationMainConfig.getEnabled();
     }
 
@@ -114,15 +114,15 @@ public class SlackNotificationMainSettings implements MainConfigProcessor {
         return this.slackNotificationMainConfig.getContent().getShowElapsedBuildTime();
     }
 
-    public boolean getShowCommits(){
+    public boolean getShowCommits() {
         return this.slackNotificationMainConfig.getContent().getShowCommits();
     }
-	
-    public boolean getShowCommitters(){
+
+    public boolean getShowCommitters() {
         return this.slackNotificationMainConfig.getContent().getShowCommitters();
     }
 
-    public boolean getShowTriggeredBy(){
+    public boolean getShowTriggeredBy() {
         return this.slackNotificationMainConfig.getContent().getShowTriggeredBy();
     }
 
@@ -134,16 +134,17 @@ public class SlackNotificationMainSettings implements MainConfigProcessor {
         return this.slackNotificationMainConfig.getContent().getshowFunnyQuote();
     }
 
-    public Boolean getSlackNotificationShowFurtherReading(){
-    	return this.slackNotificationMainConfig.getSlackNotificationShowFurtherReading();
+    public Boolean getSlackNotificationShowFurtherReading() {
+        return this.slackNotificationMainConfig.getSlackNotificationShowFurtherReading();
     }
-    
-	public void dispose() {
-		Loggers.SERVER.debug(NAME + ":dispose() called");
-	}
 
-	public SlackNotificationProxyConfig getProxyConfig() {
-		return this.slackNotificationMainConfig.getProxyConfig();	}
+    public void dispose() {
+        Loggers.SERVER.debug(NAME + ":dispose() called");
+    }
+
+    public SlackNotificationProxyConfig getProxyConfig() {
+        return this.slackNotificationMainConfig.getProxyConfig();
+    }
 
 
     public int getMaxCommitsToDisplay() {
@@ -155,7 +156,7 @@ public class SlackNotificationMainSettings implements MainConfigProcessor {
     }
 
     public String getPluginVersion() throws IOException {
-        if(version != null){
+        if (version != null) {
             return version;
         }
         Properties props = new Properties();

@@ -5,6 +5,7 @@ var SlackNotifierAdmin = {
             var teamName = document.forms["slackNotifierAdminForm"]["teamName"].value;
             var token = document.forms["slackNotifierAdminForm"]["token"].value;
             var iconUrl = document.forms["slackNotifierAdminForm"]["iconUrl"].value;
+            var funnyQuoteIconUrl = document.forms["slackNotifierAdminForm"]["funnyQuoteIconUrl"].value;
             var botName = document.forms["slackNotifierAdminForm"]["botName"].value;
             var maxCommitsToDisplay = document.forms["slackNotifierAdminForm"]["maxCommitsToDisplay"].value;
             var showCommits = document.forms["slackNotifierAdminForm"]["showCommits"].checked;
@@ -22,6 +23,9 @@ var SlackNotifierAdmin = {
             }
             if(!iconUrl){
                 errors.push("Icon url is required.");
+            }
+            if(!funnyQuoteIconUrl){
+                errors.push("Funny Quote Icon url is required.");
             }
             if(!botName){
                 errors.push("Bot name is required.");
@@ -81,6 +85,7 @@ var SlackNotifierAdmin = {
                     token: $("token").value,
                     botName: $("botName").value,
                     iconUrl: $("iconUrl").value,
+                    funnyQuoteIconUrl: $("funnyQuoteIconUrl").value,
                     maxCommitsToDisplay: $("maxCommitsToDisplay").value,
                     showCommits: $("showCommits").checked,
                     showCommitters: $("showCommitters").checked,
@@ -119,6 +124,7 @@ var SlackNotifierAdmin = {
                     token: $("token").value,
                     botName: $("botName").value,
                     iconUrl: $("iconUrl").value,
+                    funnyQuoteIconUrl: $("funnyQuoteIconUrl").value,
                     maxCommitsToDisplay: $("maxCommitsToDisplay").value,
                     showCommits: $("showCommits").checked,
                     showCommitters: $("showCommitters").checked,

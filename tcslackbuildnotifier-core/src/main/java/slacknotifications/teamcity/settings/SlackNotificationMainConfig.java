@@ -17,6 +17,7 @@ import java.io.IOException;
 public class SlackNotificationMainConfig implements ChangeListener {
     public static final String DEFAULT_BOTNAME = "TeamCity";
     public static final String DEFAULT_ICONURL = "https://raw.githubusercontent.com/PeteGoo/tcSlackBuildNotifier/master/docs/TeamCity72x72.png";
+    public static final String DEFAULT_FUNNY_QUOTE_ICONURL = "https://raw.githubusercontent.com/PeteGoo/tcSlackBuildNotifier/master/docs/TeamCity72x72.png";
     private static final String TOKEN = "token";
     private static final String DEFAULT_CHANNEL = "defaultChannel";
     private static final String ICON_URL = "iconurl";
@@ -27,6 +28,7 @@ public class SlackNotificationMainConfig implements ChangeListener {
     private static final String SHOW_TRIGGERED_BY = "showTriggeredBy";
     private static final String SHOW_FAILURE_REASON = "showFailureReason";
     private static final String SHOW_FUNNY_QUOTE = "showFunnyQuote";
+    private static final String FUNNY_QUOTE_ICON_URL = "funnyQuoteIconUrl";
     private static final String MAX_COMMITS_TO_DISPLAY = "maxCommitsToDisplay";
     private static final String SHOW_ELAPSED_BUILD_TIME = "showElapsedBuildTime";
     private static final String HTTPS = "https://";
@@ -274,7 +276,7 @@ public class SlackNotificationMainConfig implements ChangeListener {
                         rootElement.setAttribute("defaultChannel", emptyIfNull(SlackNotificationMainConfig.this.defaultChannel));
                         rootElement.setAttribute(TEAM_NAME, emptyIfNull(SlackNotificationMainConfig.this.teamName));
                         rootElement.setAttribute("token", emptyIfNull(SlackNotificationMainConfig.this.token));
-                        rootElement.setAttribute("iconurl", emptyIfNull(SlackNotificationMainConfig.this.content.getIconUrl()));
+                        rootElement.setAttribute(FUNNY_QUOTE_ICON_URL, emptyIfNull(SlackNotificationMainConfig.this.content.getFunnyQuoteIconUrl()));
                         rootElement.setAttribute("botname", emptyIfNull(SlackNotificationMainConfig.this.content.getBotName()));
 
                         if (SlackNotificationMainConfig.this.content.getShowBuildAgent() != null) {
@@ -379,6 +381,9 @@ public class SlackNotificationMainConfig implements ChangeListener {
             }
             if (slackNotificationsElement.getAttribute(SHOW_FUNNY_QUOTE) != null) {
                 content.setshowFunnyQuote(Boolean.parseBoolean(slackNotificationsElement.getAttributeValue(SHOW_FUNNY_QUOTE)));
+            }
+            if (slackNotificationsElement.getAttribute(FUNNY_QUOTE_ICON_URL) != null) {
+                content.setFunnyQuoteIconUrl(slackNotificationsElement.getAttributeValue(FUNNY_QUOTE_ICON_URL));
             }
 
             Element proxyElement = slackNotificationsElement.getChild(PROXY);

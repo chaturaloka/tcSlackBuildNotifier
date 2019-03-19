@@ -150,6 +150,7 @@
                     jQuerySlacknotification('#iconUrl').val(slacknotification.iconUrl)
                     jQuerySlacknotification('#showFailureReason').attr('checked', slacknotification.showFailureReason);
                     jQuerySlacknotification('#showFunnyQuote').attr('checked', slacknotification.showFunnyQuote);
+                    jQuerySlacknotification('#funnyQuoteIconUrl').val(slacknotification.funnyQuoteIconUrl)
                 }
             });
             updateSelectedBuildTypes();

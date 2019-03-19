@@ -67,6 +67,7 @@ public class SlackNotificationImpl implements SlackNotification {
     private boolean mentionWhoTriggeredEnabled;
     private boolean showFailureReason;
     private boolean showFunnyQuote;
+    private String funnyQuoteIconUrl;
 
     /*	This is a bit mask of states that should trigger a SlackNotification.
      *  All ones (11111111) means that all states will trigger the slacknotifications
@@ -384,7 +385,7 @@ public class SlackNotificationImpl implements SlackNotification {
 
         if (this.payload.getIsComplete() && showFunnyQuote) {
             attachment.setFooter(payload.getFunnyQuote());
-            attachment.setFooter_icon("https://raw.githubusercontent.com/subbramanil/tcSlackBuildNotifier/master/docs/_chuck_sad.jpg");
+            attachment.setFooter_icon(funnyQuoteIconUrl);
         }
 
         attachments.add(attachment);
@@ -680,6 +681,16 @@ public class SlackNotificationImpl implements SlackNotification {
     @Override
     public void setShowFunnyQuote(boolean showFunnyQuote) {
         this.showFunnyQuote = showFunnyQuote;
+    }
+
+    @Override
+    public String getFunnyQuoteIconUrl() {
+        return this.funnyQuoteIconUrl;
+    }
+
+    @Override
+    public void setFunnyQuoteIconUrl(String iconUrl) {
+        this.funnyQuoteIconUrl = iconUrl;
     }
 
     public boolean isMentionWhoTriggeredEnabled() {
