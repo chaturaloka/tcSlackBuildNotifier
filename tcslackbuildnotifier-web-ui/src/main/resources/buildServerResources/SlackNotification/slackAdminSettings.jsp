@@ -147,6 +147,16 @@
                         <span style="color: #888; font-size: 90%;">When checked, the reason for the build failure, including failed tests are displayed.</span>
                     </td>
                 </tr>
+
+                <tr>
+                    <th>
+                        <label for="showChuckNorrisQuote">Show Random Chuck Norris Quote: </label>
+                    </th>
+                    <td>
+                        <forms:checkbox name="showChuckNorrisQuote" checked="${showChuckNorrisQuote}" value="${showChuckNorrisQuote}"/>
+                        <span style="color: #888; font-size: 90%;">When checked, a random Chuck Norris Quote will be attached to the footer.</span>
+                    </td>
+                </tr>
                 <tr class="groupingTitle">
                         <td colspan="2">Proxy Configuration</td>
                 </tr>

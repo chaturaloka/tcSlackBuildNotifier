@@ -66,6 +66,7 @@ public class SlackNotificationImpl implements SlackNotification {
     private boolean mentionHereEnabled;
     private boolean mentionWhoTriggeredEnabled;
     private boolean showFailureReason;
+    private boolean showChuckNorrisQuote;
 
     /*	This is a bit mask of states that should trigger a SlackNotification.
      *  All ones (11111111) means that all states will trigger the slacknotifications
@@ -381,7 +382,7 @@ public class SlackNotificationImpl implements SlackNotification {
             attachment.addField("", mentionContent, true);
         }
 
-        if (this.payload.getIsComplete()) {
+        if (this.payload.getIsComplete() && showChuckNorrisQuote) {
             attachment.setFooter(payload.getMsgFromChuckNorris());
             attachment.setFooter_icon("https://raw.githubusercontent.com/subbramanil/tcSlackBuildNotifier/master/docs/_chuck_sad.jpg");
             attachments.add(attachment);
@@ -675,6 +676,11 @@ public class SlackNotificationImpl implements SlackNotification {
     @Override
     public void setShowFailureReason(boolean showFailureReason) {
         this.showFailureReason = showFailureReason;
+    }
+
+    @Override
+    public void setShowChuckNorrisQuote(boolean showChuckNorrisQuote) {
+        this.showChuckNorrisQuote = showChuckNorrisQuote;
     }
 
     public boolean isMentionWhoTriggeredEnabled() {

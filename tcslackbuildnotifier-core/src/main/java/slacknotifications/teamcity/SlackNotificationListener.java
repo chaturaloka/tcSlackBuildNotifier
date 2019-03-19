@@ -78,6 +78,7 @@ public class SlackNotificationListener extends BuildServerAdapter {
         slackNotification.setShowCommitters(myMainSettings.getShowCommitters());
         slackNotification.setShowTriggeredBy(myMainSettings.getShowTriggeredBy());
         slackNotification.setShowFailureReason(myMainSettings.getShowFailureReason() == null ? SlackNotificationContentConfig.DEFAULT_SHOW_FAILURE_REASON : myMainSettings.getShowFailureReason());
+        slackNotification.setShowChuckNorrisQuote(myMainSettings.getShowChuckNorrisQuote() == null ? SlackNotificationContentConfig.DEFAULT_SHOW_CHUCK_NORRIS_QUOTE : myMainSettings.getShowChuckNorrisQuote());
         slackNotification.setMaxCommitsToDisplay(myMainSettings.getMaxCommitsToDisplay());
         slackNotification.setMentionChannelEnabled(slackNotificationConfig.getMentionChannelEnabled());
 		slackNotification.setMentionSlackUserEnabled(slackNotificationConfig.getMentionSlackUserEnabled());
@@ -94,6 +95,7 @@ public class SlackNotificationListener extends BuildServerAdapter {
             slackNotification.setShowCommitters(slackNotificationConfig.getContent().getShowCommitters());
             slackNotification.setShowTriggeredBy(slackNotificationConfig.getContent().getShowTriggeredBy());
             slackNotification.setShowFailureReason(slackNotificationConfig.getContent().getShowFailureReason() == null ? SlackNotificationContentConfig.DEFAULT_SHOW_FAILURE_REASON : slackNotificationConfig.getContent().getShowFailureReason());
+			slackNotification.setShowChuckNorrisQuote(slackNotificationConfig.getContent().getShowChuckNorrisQuote() == null ? SlackNotificationContentConfig.DEFAULT_SHOW_CHUCK_NORRIS_QUOTE : slackNotificationConfig.getContent().getShowChuckNorrisQuote());
         }
 		Loggers.ACTIVITIES.debug("SlackNotificationListener :: SlackNotification proxy set to "
 				+ slackNotification.getProxyHost() + " for " + slackNotificationConfig.getChannel());

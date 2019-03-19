@@ -48,6 +48,7 @@ public class SlackNotificationSettingsControllerTest {
                 true,
                 true,
                 true,
+                true,
                 null, null, null, null);
 
         assertNotNull(notification);

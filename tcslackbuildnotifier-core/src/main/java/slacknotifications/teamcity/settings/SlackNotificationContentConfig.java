@@ -11,6 +11,7 @@ public class SlackNotificationContentConfig {
     public static final boolean DEFAULT_SHOW_COMMITTERS = true;
     public static final boolean DEFAULT_SHOW_TRIGGERED_BY = true;
     public static final boolean DEFAULT_SHOW_FAILURE_REASON = false;
+    public static final boolean DEFAULT_SHOW_CHUCK_NORRIS_QUOTE = false;
     private String iconUrl = SlackNotificationMainConfig.DEFAULT_ICONURL;
     private String botName = SlackNotificationMainConfig.DEFAULT_BOTNAME;
     private Boolean showBuildAgent;
@@ -21,6 +22,7 @@ public class SlackNotificationContentConfig {
     private int maxCommitsToDisplay = 5;
     private boolean enabled;
     private Boolean showFailureReason;
+    private Boolean showChuckNorrisQuote;
 
     public String getIconUrl() {
         return iconUrl;
@@ -100,5 +102,13 @@ public class SlackNotificationContentConfig {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public Boolean getShowChuckNorrisQuote() {
+        return showChuckNorrisQuote;
+    }
+
+    public void setShowChuckNorrisQuote(Boolean showChuckNorrisQuote) {
+        this.showChuckNorrisQuote = showChuckNorrisQuote;
     }
 }

@@ -216,6 +216,7 @@ public class SlackNotificator implements Notificator {
         notification.setMaxCommitsToDisplay(mainConfig.getMaxCommitsToDisplay());
         notification.setMentionChannelEnabled(false);
         notification.setShowFailureReason(mainConfig.getShowFailureReason());
+        notification.setShowChuckNorrisQuote(mainConfig.getShowChuckNorrisQuote());
 
         return notification;
 

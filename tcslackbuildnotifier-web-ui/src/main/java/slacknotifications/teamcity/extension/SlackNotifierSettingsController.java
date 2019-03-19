@@ -46,6 +46,7 @@ public class SlackNotifierSettingsController extends BaseController {
     private String showTriggeredBy;
     private String showElapsedBuildTime;
     private String showFailureReason;
+    private String showChuckNorrisQuote;
     private String proxyHost;
     private String proxyPort;
     private String proxyUser;
@@ -63,7 +64,7 @@ public class SlackNotifierSettingsController extends BaseController {
                                     @NotNull WebControllerManager manager,
                                     @NotNull SlackNotificationMainConfig config,
                                     SlackNotificationPayloadManager payloadManager,
-                                    PluginDescriptor descriptor){
+                                    PluginDescriptor descriptor) {
 
         this.server = server;
         this.serverPaths = serverPaths;
@@ -80,11 +81,10 @@ public class SlackNotifierSettingsController extends BaseController {
     protected ModelAndView doHandle(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response) throws Exception {
         HashMap<String, Object> params = new HashMap<String, Object>();
 
-        if(request.getParameter(EDIT_PARAMETER) != null){
+        if (request.getParameter(EDIT_PARAMETER) != null) {
             logger.debug("Updating configuration");
             params = this.handleConfigurationChange(request);
-        }
-        else if(request.getParameter(TEST_PARAMETER) != null){
+        } else if (request.getParameter(TEST_PARAMETER) != null) {
             logger.debug("Sending test notification");
             params = this.handleTestNotification(request);
         } else if (request.getParameter(ACTION_PARAMETER) != null) {
@@ -115,6 +115,7 @@ public class SlackNotifierSettingsController extends BaseController {
         showTriggeredBy = request.getParameter("showTriggeredBy");
         showElapsedBuildTime = request.getParameter("showElapsedBuildTime");
         showFailureReason = request.getParameter("showFailureReason");
+        showChuckNorrisQuote = request.getParameter("showChuckNorrisQuote");
         proxyHost = request.getParameter("proxyHost");
         proxyPort = request.getParameter("proxyPort");
         proxyUser = request.getParameter("proxyUser");
@@ -135,8 +136,8 @@ public class SlackNotifierSettingsController extends BaseController {
                 Boolean.parseBoolean(showCommitters),
                 Boolean.parseBoolean(showTriggeredBy),
                 Boolean.parseBoolean(showFailureReason),
+                Boolean.parseBoolean(showChuckNorrisQuote),
                 proxyHost, proxyPort, proxyUser, proxyPassword);
-
 
 
         notification.post();
@@ -151,7 +152,7 @@ public class SlackNotifierSettingsController extends BaseController {
 
     private void Validate(String teamName, String token, String botName, String iconUrl, String defaultChannel
             , String maxCommitsToDisplay, String showBuildAgent, String proxyHost, String proxyPort, String proxyUser, String proxyPassword) throws SlackConfigValidationException {
-        if(teamName == null || StringUtil.isEmpty(teamName)
+        if (teamName == null || StringUtil.isEmpty(teamName)
                 || token == null || StringUtil.isEmpty(token)
                 || botName == null || StringUtil.isEmpty(botName)
                 || iconUrl == null || StringUtil.isEmpty(iconUrl)
@@ -161,20 +162,20 @@ public class SlackNotifierSettingsController extends BaseController {
                 || (!isNullOrEmpty(proxyHost) && isNullOrEmpty(proxyPort))
                 || (!isNullOrEmpty(proxyUser) && isNullOrEmpty(proxyPassword))
                 || (!isNullOrEmpty(proxyPort) && tryParseInt(proxyPort) == null)
-                ){
+        ) {
 
             throw new SlackConfigValidationException("Could not validate parameters. Please recheck the request.");
         }
     }
 
-    private boolean isNullOrEmpty(String str){
+    private boolean isNullOrEmpty(String str) {
         return str == null || StringUtil.isEmpty(str);
     }
 
     SlackNotification createMockNotification(String teamName, String defaultChannel, String botName,
                                              String token, String iconUrl, Integer maxCommitsToDisplay,
                                              Boolean showElapsedBuildTime, Boolean showBuildAgent, Boolean showCommits,
-                                             Boolean showCommitters, Boolean showTriggeredBy, Boolean showFailureReason, String proxyHost,
+                                             Boolean showCommitters, Boolean showTriggeredBy, Boolean showFailureReason, Boolean showChuckNorrisQuote, String proxyHost,
                                              String proxyPort, String proxyUser, String proxyPassword) {
         SlackNotification notification = new SlackNotificationImpl(defaultChannel);
         notification.setTeamName(teamName);
@@ -188,10 +189,11 @@ public class SlackNotifierSettingsController extends BaseController {
         notification.setShowCommitters(showCommitters);
         notification.setShowTriggeredBy(showTriggeredBy);
         notification.setShowFailureReason(showFailureReason);
+        notification.setShowChuckNorrisQuote(showChuckNorrisQuote);
 
-        if(proxyHost != null && !StringUtil.isEmpty(proxyHost)){
+        if (proxyHost != null && !StringUtil.isEmpty(proxyHost)) {
             Credentials creds = null;
-            if(proxyUser != null && !StringUtil.isEmpty(proxyUser)){
+            if (proxyUser != null && !StringUtil.isEmpty(proxyUser)) {
                 creds = new UsernamePasswordCredentials(proxyUser, proxyPassword);
             }
             notification.setProxy(proxyHost, Integer.parseInt(proxyPort), creds);
@@ -237,7 +239,7 @@ public class SlackNotifierSettingsController extends BaseController {
 
     private HashMap<String, Object> handleConfigurationChange(HttpServletRequest request) throws SlackConfigValidationException {
         setRequestParams(request);
-        if(!isNullOrEmpty(proxyPassword)){
+        if (!isNullOrEmpty(proxyPassword)) {
             proxyPassword = RSACipher.decryptWebRequestData(proxyPassword);
         }
 
@@ -255,6 +257,7 @@ public class SlackNotifierSettingsController extends BaseController {
         this.config.getContent().setShowTriggeredBy(Boolean.parseBoolean(showTriggeredBy));
         this.config.getContent().setShowElapsedBuildTime((Boolean.parseBoolean(showElapsedBuildTime)));
         this.config.getContent().setShowFailureReason((Boolean.parseBoolean(showFailureReason)));
+        this.config.getContent().setShowChuckNorrisQuote((Boolean.parseBoolean(showChuckNorrisQuote)));
 
 
         this.config.setProxyHost(proxyHost);

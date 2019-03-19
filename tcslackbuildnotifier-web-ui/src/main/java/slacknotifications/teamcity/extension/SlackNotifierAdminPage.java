@@ -71,6 +71,7 @@ public class SlackNotifierAdminPage extends AdminPage {
         model.put("showTriggeredBy", this.slackMainSettings.getShowTriggeredBy());
         model.put("showElapsedBuildTime", this.slackMainSettings.getShowElapsedBuildTime());
         model.put("showFailureReason", this.slackMainSettings.getShowFailureReason());
+        model.put("showChuckNorrisQuote", this.slackMainSettings.getShowChuckNorrisQuote());
 
         SlackNotificationProxyConfig proxyConfig = this.slackMainSettings.getProxyConfig();
         model.put("proxyHost", proxyConfig.getProxyHost());

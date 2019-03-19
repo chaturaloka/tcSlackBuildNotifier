@@ -38,6 +38,7 @@ public class SlackNotificationConfig {
     private static final String SHOW_TRIGGERED_BY = "showTriggeredBy";
     private static final String MAX_COMMITS_TO_DISPLAY = "maxCommitsToDisplay";
     private static final String SHOW_FAILURE_REASON = "showFailureReason";
+    private static final String SHOW_CHUCK_NORRIS_QUOTE = "showChuckNorrisQuote";
 
 
     private Boolean enabled = true;
@@ -199,6 +200,9 @@ public class SlackNotificationConfig {
             if (eContent.getAttribute(SHOW_FAILURE_REASON) != null) {
                 this.content.setShowFailureReason(Boolean.parseBoolean(eContent.getAttributeValue(SHOW_FAILURE_REASON)));
             }
+            if (eContent.getAttribute(SHOW_CHUCK_NORRIS_QUOTE) != null) {
+                this.content.setShowChuckNorrisQuote(Boolean.parseBoolean(eContent.getAttributeValue(SHOW_CHUCK_NORRIS_QUOTE)));
+            }
         }
 
 
@@ -305,6 +309,7 @@ public class SlackNotificationConfig {
             customContentEl.setAttribute(SHOW_COMMITTERS, this.content.getShowCommitters().toString());
             customContentEl.setAttribute(SHOW_TRIGGERED_BY, this.content.getShowTriggeredBy().toString());
             customContentEl.setAttribute(SHOW_FAILURE_REASON, this.content.getShowFailureReason().toString());
+            customContentEl.setAttribute(SHOW_CHUCK_NORRIS_QUOTE, this.content.getShowChuckNorrisQuote().toString());
             el.addContent(customContentEl);
         }
 

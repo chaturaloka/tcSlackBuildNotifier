@@ -186,6 +186,9 @@ public class SlackNotificationAjaxEditPageController extends BaseController {
                                     content.setShowFailureReason((request.getParameter("showFailureReason") != null)
                                             && ("on".equalsIgnoreCase(request.getParameter("showFailureReason"))));
 
+                                    content.setShowChuckNorrisQuote((request.getParameter("showChuckNorrisQuote") != null)
+                                            && ("on".equalsIgnoreCase(request.getParameter("showChuckNorrisQuote"))));
+
                                     if ((request.getParameter(BOT_NAME) != null)
                                             && (request.getParameter(BOT_NAME).length() > 0)) {
                                         content.setBotName(request.getParameter(BOT_NAME));
