@@ -3,12 +3,12 @@ tcSlackBuildNotifier
 
 ## Newly Added 
 
-Adds random Chuck Norris quote along with the build results in slack message.
+Adds random Chuck Norris quote in the footer of the slack message.
 
 Posts Build Status to [Slack](http://www.slack.com)
 
-![Sample Notification](https://raw.githubusercontent.com/subbramanil/tcSlackBuildNotifier/master/docs/TeamCity%20Build%20Success.png)
-![Sample Notification](https://raw.githubusercontent.com/subbramanil/tcSlackBuildNotifier/master/docs/TeamCity%20Build%20Failure.png)
+![Sample Success](https://raw.githubusercontent.com/subbramanil/tcSlackBuildNotifier/master/docs/TeamCity_Success.png)
+![Sample Failure](https://raw.githubusercontent.com/subbramanil/tcSlackBuildNotifier/master/docs/TeamCity_Failure.png)
 
 _Tested on TeamCity 2018.2.3 (build 61544)_
 
