@@ -385,7 +385,6 @@ public class SlackNotificationImpl implements SlackNotification {
         if (this.payload.getIsComplete() && showChuckNorrisQuote) {
             attachment.setFooter(payload.getMsgFromChuckNorris());
             attachment.setFooter_icon("https://raw.githubusercontent.com/subbramanil/tcSlackBuildNotifier/master/docs/_chuck_sad.jpg");
-            attachments.add(attachment);
         }
 
         attachments.add(attachment);
