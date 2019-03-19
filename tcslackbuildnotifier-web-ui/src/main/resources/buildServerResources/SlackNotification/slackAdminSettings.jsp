@@ -153,11 +153,11 @@
               </tr>
               <tr>
                   <th>
-                      <label for="showFunnyQuote">Show Random Funny Quote from Chuck Norris or Jedi: </label>
+                      <label for="showFunnyQuote">Show Random Funny Quote from Chuck Norris or Yoda: </label>
                   </th>
                   <td>
                       <forms:checkbox name="showFunnyQuote" checked="${showFunnyQuote}" value="${showFunnyQuote}"/>
-                      <span style="color: #888; font-size: 90%;">When checked, a random Chuck Norris or Jedi Quote will be attached to the footer.</span>
+                      <span style="color: #888; font-size: 90%;">When checked, a random Chuck Norris or Yoda Quote will be attached to the footer.</span>
 
                       <%--<forms:radiobutton name="chuckNorris" checked="${showFunnyQuote}" value="${showFunnyQuote}"/>--%>
                   </td>

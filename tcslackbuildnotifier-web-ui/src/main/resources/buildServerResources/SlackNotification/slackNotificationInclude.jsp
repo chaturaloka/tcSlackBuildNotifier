@@ -237,13 +237,13 @@
                                           </tr>
 											<tr class="onCustomContentEnabled">
                                               <td>
-                                                  <label for="showFunnyQuote">Show Random Funny Quote from Chuck Norris or Jedi: </label>
+                                                  <label for="showFunnyQuote">Show Random Funny Quote from Chuck Norris or Yoda: </label>
                                               </td>
                                               <td>
                                                   <input type="checkbox" name="showFunnyQuote" id="showFunnyQuote" />
                                               </td>
                                               <td>
-                                                  <span style="color: #888; font-size: 90%;">When checked, a random Chuck Norris or Jedi Quote will be attached to the footer.</span>
+                                                  <span style="color: #888; font-size: 90%;">When checked, a random Chuck Norris or Yoda Quote will be attached to the footer.</span>
                                               </td>
                                           </tr>
                                            <tr class="onCustomContentEnabled">
