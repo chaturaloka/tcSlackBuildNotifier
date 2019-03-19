@@ -26,7 +26,7 @@ public class SlackNotificationPayloadContent {
     String buildFullName;
     String buildName;
     String buildId;
-    String buildTypeId;
+    private String buildTypeId;
     String buildInternalTypeId;
     String buildExternalTypeId;
     String buildStatusUrl;
@@ -121,13 +121,10 @@ public class SlackNotificationPayloadContent {
 
     private void populateResults(SRunningBuild sRunningBuild) {
         List<BuildProblemData> failureReasons = sRunningBuild.getFailureReasons();
-        if (failureReasons == null) {
-            return;
-        }
         HashSet<String> failureTestNames = new HashSet<String>();
         HashSet<String> failureMessages = new HashSet<String>();
         for (BuildProblemData reason : failureReasons) {
-            if (reason.getType() == BuildProblemData.TC_FAILED_TESTS_TYPE) {
+            if (reason.getType().equals(BuildProblemData.TC_FAILED_TESTS_TYPE)) {
                 List<TestInfo> failedTestMessages = sRunningBuild.getTestMessages(0, 2000);
                 if (!failedTestMessages.isEmpty()) {
                     for (TestInfo failedTest : failedTestMessages) {

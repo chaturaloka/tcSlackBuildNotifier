@@ -14,7 +14,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 
 public class SlackNotificationProjectSettings implements ProjectSettings {
-	private static final String ENABLED = "enabled";
+	private static final String ENABLED = "isEnabled";
 	private static final String NAME = SlackNotificationProjectSettings.class.getName();
 	ProjectSettingsManager psm;
 	ProjectSettings ps;
@@ -52,7 +52,7 @@ public class SlackNotificationProjectSettings implements ProjectSettings {
 				Loggers.SERVER.debug(e.toString());
 				configs.add(whConfig);
 				Loggers.SERVER.debug(NAME + ":readFrom :: channel " + whConfig.getChannel());
-				Loggers.SERVER.debug(NAME + ":readFrom :: enabled " + String.valueOf(whConfig.getEnabled()));
+				Loggers.SERVER.debug(NAME + ":readFrom :: isEnabled " + String.valueOf(whConfig.getEnabled()));
 	        }
 			this.slackNotificationsConfigs = configs;
     	}
@@ -73,7 +73,7 @@ public class SlackNotificationProjectSettings implements ProjectSettings {
             	Loggers.SERVER.debug(el.toString());
                 parentElement.addContent(el);
 				Loggers.SERVER.debug(NAME + ":writeTo :: channel " + whc.getChannel());
-				Loggers.SERVER.debug(NAME + ":writeTo :: enabled " + String.valueOf(whc.getEnabled()));
+				Loggers.SERVER.debug(NAME + ":writeTo :: isEnabled " + String.valueOf(whc.getEnabled()));
             }
         }
     }

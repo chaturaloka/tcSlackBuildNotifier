@@ -9,6 +9,7 @@ import slacknotifications.teamcity.settings.SlackNotificationConfig;
 import java.io.File;
 import java.io.IOException;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class ConfigLoaderUtil {
@@ -22,7 +23,7 @@ public class ConfigLoaderUtil {
 
 	public static SlackNotificationConfig getFirstSlackNotificationInConfig(File f) throws JDOMException, IOException{
 		Element fileAsElement = ConfigLoaderUtil.getFullConfigElement(f);
-		assertTrue("One and only one slackNotifications expected when loading test config from file : " + f.getName(), fileAsElement.getChild("slackNotifications").getChildren("slackNotification").size() == 1);
+		assertEquals("One and only one slackNotifications expected when loading test config from file : " + f.getName(), 1, fileAsElement.getChild("slackNotifications").getChildren("slackNotification").size());
 		return new SlackNotificationConfig((Element) fileAsElement.getChild("slackNotifications").getChildren("slackNotification").get(0));
 	}
 	

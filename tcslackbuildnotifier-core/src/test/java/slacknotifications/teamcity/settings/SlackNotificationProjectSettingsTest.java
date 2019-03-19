@@ -9,26 +9,26 @@ import org.junit.Test;
 import static org.mockito.Mockito.mock;
 
 public class SlackNotificationProjectSettingsTest {
-	ProjectSettingsManager psm = mock(ProjectSettingsManager.class);
-	
-	
-	@Before
-	public void setUp() throws Exception {
-	}
+    private ProjectSettingsManager psm = mock(ProjectSettingsManager.class);
 
-	@After
-	public void tearDown() throws Exception {
-	}
 
-	@Test
-	public void TestFactory(){
-		SlackNotificationProjectSettingsFactory psf = new SlackNotificationProjectSettingsFactory(psm);
-		psf.createProjectSettings("project1");
-	}
+    @Before
+    public void setUp() {
+    }
 
-	@Test
-	public void TestSettings(){
+    @After
+    public void tearDown() {
+    }
 
-	}
-	
+    @Test
+    public void TestFactory() {
+        SlackNotificationProjectSettingsFactory psf = new SlackNotificationProjectSettingsFactory(psm);
+        psf.createProjectSettings("project1");
+    }
+
+    @Test
+    public void TestSettings() {
+
+    }
+
 }
