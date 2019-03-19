@@ -3,7 +3,9 @@ tcSlackBuildNotifier
 
 ## Newly Added 
 
-Adds random Chuck Norris quote in the footer of the slack message.
+Adds random Funny quote in the footer of the slack message.
+
+Choose either Yoda or Chuck Norris
 
 Posts Build Status to [Slack](http://www.slack.com)
 

@@ -189,7 +189,7 @@ public class SlackNotificationPayloadContent {
         setBuildName(sRunningBuild.getBuildType().getName());
 
         if (buildState == BuildStateEnum.BUILD_FINISHED) {
-            setFunnyQuote(buildFunnyQuote(sRunningBuild.getBuildStatus()));
+            setFunnyQuote(new FunnyQuoteBuilder().getFunnyQuote(sRunningBuild.getBuildStatus(), false));
         }
 
         if (sRunningBuild.getTriggeredBy().getUser() != null) {
@@ -217,31 +217,6 @@ public class SlackNotificationPayloadContent {
         String branchSuffix = (getBranchIsDefault() != null && getBranchIsDefault()) || getBranchDisplayName() == null ? "" : (" [" + getBranchDisplayName() + "]");
         setBuildDescriptionWithLinkSyntax(String.format("<" + getBuildStatusUrl() + "|" + getBuildResult() + " - " + sRunningBuild.getBuildType().getFullName() + " #" + sRunningBuild.getBuildNumber() + branchSuffix + ">"));
     }
-
-    private String buildFunnyQuote(Status buildResult) {
-
-        String msg = "Empty Message";
-
-        try {
-            List<String> quotes = IOUtils.readLines(
-                    getClass().getResourceAsStream("/quotes.txt"), "UTF-8"
-            );
-
-            String quote = quotes.get((new Random()).nextInt(quotes.size()));
-
-            if (buildResult == Status.FAILURE) {
-                msg = "Chuck Norris disapproves build and remember that " + quote;
-            } else {
-                msg = "Chuck Norris approves build and remember that " + quote;
-            }
-
-        } catch (IOException e) {
-            jetbrains.buildServer.log.Loggers.SERVER.error("Failed to load quotes", e);
-        }
-
-        return msg;
-    }
-
 
     private Branch getBranch() {
         return this.branch;
