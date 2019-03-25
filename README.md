@@ -1,6 +1,8 @@
 tcSlackBuildNotifier
 ====================
 
+[![CircleCI](https://circleci.com/gh/subbramanil/tcSlackBuildNotifier/tree/master.svg?style=svg)](https://circleci.com/gh/subbramanil/tcSlackBuildNotifier/tree/master)
+
 ## Newly Added 
 
 Adds random Funny quote in the footer of the slack message.
