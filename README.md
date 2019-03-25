@@ -5,14 +5,24 @@ tcSlackBuildNotifier
 
 Adds random Funny quote in the footer of the slack message.
 
-Choose either Yoda or Chuck Norris
+![New Configuration](https://raw.githubusercontent.com/subbramanil/tcSlackBuildNotifier/master/docs/Funny_Config.png)
 
 Posts Build Status to [Slack](http://www.slack.com)
 
-![Sample Success](https://raw.githubusercontent.com/subbramanil/tcSlackBuildNotifier/master/docs/TeamCity_Success.png)
-![Sample Failure](https://raw.githubusercontent.com/subbramanil/tcSlackBuildNotifier/master/docs/TeamCity_Failure.png)
+### Chuck Norris
+
+![Sample Chuck Success](https://raw.githubusercontent.com/subbramanil/tcSlackBuildNotifier/master/docs/Chuck_TeamCity_Success.png)
+![Sample Chuck Failure](https://raw.githubusercontent.com/subbramanil/tcSlackBuildNotifier/master/docs/Chuck_TeamCity_Failure.png)
+
+### Yoda
+
+![Sample Yoda Success](https://raw.githubusercontent.com/subbramanil/tcSlackBuildNotifier/master/docs/Yoda_TeamCity_Success.png)
+![Sample Yoda Failure](https://raw.githubusercontent.com/subbramanil/tcSlackBuildNotifier/master/docs/Yoda_TeamCity_Failure.png)
+
 
 _Tested on TeamCity 2018.2.3 (build 61544)_
+
+*Note:* Yoda is hardcoded for now.
 
 
 ## Original Plugin Abilities
