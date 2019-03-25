@@ -17,6 +17,8 @@ jobs:
       - restore_cache:
           key: tcSlackBuildNotifier-{{ checksum "pom.xml" }}
 
+      - run: mvn install:install-file -Dfile=~/tcSlackBuildNotifier/tcslackbuildnotifier-core/pom.xml
+
       - run: mvn dependency:go-offline
 
       - save_cache:
