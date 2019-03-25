@@ -26,12 +26,10 @@ jobs:
             - ~/.m2
           key: tcSlackBuildNotifier-{{ checksum "pom.xml" }}
 
-      - run: mvn clean
-
       - run: mvn package
 
-#      - store_test_results:
-#          path: target/surefire-reports
+      - store_test_results:
+          path: target/surefire-reports
 
       - store_artifacts:
           path: target/tcslackbuildnotifier-*.zip
