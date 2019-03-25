@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * Created by Peter on 24/01/2015.
@@ -63,7 +62,7 @@ public class SlackNotifierAdminPage extends AdminPage {
         model.put("token", this.slackMainSettings.getToken());
         model.put("botName", this.slackMainSettings.getBotName());
         model.put("iconUrl", this.slackMainSettings.getIconUrl());
-        model.put("funnyQuoteIconUrl", this.slackMainSettings.getIconUrl());
+        model.put("funnyQuoteIconUrl", this.slackMainSettings.getFunnyQuoteIconUrl());
         model.put("defaultChannel", this.slackMainSettings.getDefaultChannel());
         model.put("maxCommitsToDisplay", this.slackMainSettings.getMaxCommitsToDisplay());
         model.put("showBuildAgent", this.slackMainSettings.getShowBuildAgent());

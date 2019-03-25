@@ -128,7 +128,7 @@ public class SlackNotifierSettingsController extends BaseController {
         setRequestParams(request);
         HashMap<String, Object> params = new HashMap<String, Object>();
 
-        Validate(teamName, token, botName, iconUrl, defaultChannel, maxCommitsToDisplay, showBuildAgent, proxyHost, proxyPort, proxyUser, proxyPassword);
+        Validate(teamName, token, botName, iconUrl, funnyQuoteIconUrl, defaultChannel, maxCommitsToDisplay, showBuildAgent, proxyHost, proxyPort, proxyUser, proxyPassword);
 
         SlackNotification notification = createMockNotification(teamName, defaultChannel, botName,
                 token, iconUrl, Integer.parseInt(maxCommitsToDisplay),
@@ -153,12 +153,14 @@ public class SlackNotifierSettingsController extends BaseController {
         return params;
     }
 
-    private void Validate(String teamName, String token, String botName, String iconUrl, String defaultChannel
-            , String maxCommitsToDisplay, String showBuildAgent, String proxyHost, String proxyPort, String proxyUser, String proxyPassword) throws SlackConfigValidationException {
+    private void Validate(String teamName, String token, String botName, String iconUrl, String funnyQuoteIconUrl, String defaultChannel,
+                          String maxCommitsToDisplay, String showBuildAgent, String proxyHost, String proxyPort,
+                          String proxyUser, String proxyPassword) throws SlackConfigValidationException {
         if (teamName == null || StringUtil.isEmpty(teamName)
                 || token == null || StringUtil.isEmpty(token)
                 || botName == null || StringUtil.isEmpty(botName)
                 || iconUrl == null || StringUtil.isEmpty(iconUrl)
+                || funnyQuoteIconUrl == null || StringUtil.isEmpty(funnyQuoteIconUrl)
                 || defaultChannel == null || StringUtil.isEmpty(defaultChannel)
                 || (showBuildAgent.toLowerCase().equals("false") && (maxCommitsToDisplay == null || StringUtil.isEmpty(maxCommitsToDisplay)))
                 || tryParseInt(maxCommitsToDisplay) == null
@@ -248,7 +250,7 @@ public class SlackNotifierSettingsController extends BaseController {
             proxyPassword = RSACipher.decryptWebRequestData(proxyPassword);
         }
 
-        Validate(teamName, token, botName, iconUrl, defaultChannel, maxCommitsToDisplay, showBuildAgent, proxyHost, proxyPort, proxyUser, proxyPassword);
+        Validate(teamName, token, botName, iconUrl, funnyQuoteIconUrl, defaultChannel, maxCommitsToDisplay, showBuildAgent, proxyHost, proxyPort, proxyUser, proxyPassword);
 
         this.config.setTeamName(teamName);
         this.config.setToken(token);
@@ -264,7 +266,6 @@ public class SlackNotifierSettingsController extends BaseController {
         this.config.getContent().setShowElapsedBuildTime((Boolean.parseBoolean(showElapsedBuildTime)));
         this.config.getContent().setShowFailureReason((Boolean.parseBoolean(showFailureReason)));
         this.config.getContent().setshowFunnyQuote((Boolean.parseBoolean(showFunnyQuote)));
-
 
         this.config.setProxyHost(proxyHost);
         this.config.setProxyPort(isNullOrEmpty(proxyPort) ? null : Integer.parseInt(proxyPort));

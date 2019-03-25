@@ -147,4 +147,4 @@ var SlackNotifierAdmin = {
 
         return false;
     }
-}
+};
