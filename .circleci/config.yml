@@ -17,9 +17,7 @@ jobs:
       - restore_cache:
           key: tcSlackBuildNotifier-{{ checksum "pom.xml" }}
 
-      - dependencies:
-          override:
-            - mvn install -DskipTests
+      - run: mvn install -DskipTests
         #      - run: mvn install:install-file -Dfile=target/tcslackbuildnotifier-core-1.4.18.jar -DgroupId=petegoo.teamcity.plugins.tcslacknotifications -DartifactId=tcslackbuildnotifier -Dversion=1.4.18 -Dpackaging=jar
 
       - run: mvn dependency:go-offline
