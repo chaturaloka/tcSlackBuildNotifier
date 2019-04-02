@@ -57,4 +57,3 @@
 			</c:forEach>
 			
 		</c:forEach>
-		</div>

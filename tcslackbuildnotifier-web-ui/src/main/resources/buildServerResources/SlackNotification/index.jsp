@@ -340,7 +340,6 @@
 				          <p>Further Reading:
 				          <li><a href="https://github.com/PeteGoo/tcSlackBuildNotifier">tcSlackBuildNotifier plugin</a>
                           </li>
-				          </ul>	
 				</c:when>
 		
 				<c:when test="${ShowFurtherReading == 'SINGLE'}">

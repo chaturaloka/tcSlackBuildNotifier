@@ -226,17 +226,11 @@ public class SlackNotificationListener extends BuildServerAdapter {
 	public void responsibleChanged(SProject project,
 			Collection<TestName> testNames, ResponsibilityEntry entry,
 			boolean isUserAction) {
-		Loggers.SERVER.debug(BUILD_STATE_MESSAGE_START + project.getProjectId() + BUILD_STATE_MESSAGE_END);
-		for (SlackNotificationConfigWrapper whcw : getListOfEnabledSlackNotifications(project.getProjectId())){
-                        whcw.slackNotification.setPayload(myManager.responsibleChanged(project,
-                                testNames,
-                                entry,
-                                isUserAction));
-						whcw.slackNotification.setEnabled(whcw.slackNotification.getBuildStates().enabled(BuildStateEnum.RESPONSIBILITY_CHANGED));
-						doPost(whcw.slackNotification);
-						//Loggers.ACTIVITIES.debug("SlackNotificationListener :: " + myManager.getFormat(whcw.whc.getPayloadFormat()).getFormatDescription());
+		handleResponsibleChanged(project, testNames, entry, isUserAction);
+	}
 
-     	}
+	private void handleResponsibleChanged(SProject project, Collection<TestName> testNames, ResponsibilityEntry entry, boolean isUserAction) {
+		handleResponsibleChanged(project, testNames, entry, isUserAction);
 	}
 
 	@Override

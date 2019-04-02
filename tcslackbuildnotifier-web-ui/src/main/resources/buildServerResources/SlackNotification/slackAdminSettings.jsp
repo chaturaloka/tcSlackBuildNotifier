@@ -31,7 +31,7 @@
 
             <bs:messages key="message"/>
             <br/>
-            <div style="slack-config-errors" id="slackNotificationErrors">
+            <div id="slackNotificationErrors">
             </div>
 
             <table class="runnerFormTable">

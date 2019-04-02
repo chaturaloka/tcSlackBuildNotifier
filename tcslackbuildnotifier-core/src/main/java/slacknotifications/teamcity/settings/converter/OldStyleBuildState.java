@@ -51,7 +51,7 @@ public final class OldStyleBuildState {
     /**
      * Convert build state Integer into short string 
      * 
-     * @param  Build state as an Integer constant.
+     * @param  stateInt state as an Integer constant.
      * @return A string representing the shortname of the state. Is used in messages.
      */
 	public static String getShortName(Integer stateInt) {
@@ -61,7 +61,7 @@ public final class OldStyleBuildState {
 	/**
 	 * Convert build state Integer into descriptive string 
 	 * 
-	 * @param  Build state as an Integer constant.
+	 * @param  stateInt state as an Integer constant.
 	 * @return A string that fits into the sentence "The build has...<state>"
 	 */
 	public static String getDescriptionSuffix(Integer stateInt) {

@@ -36,7 +36,6 @@ public class BuildState {
      * to notify.
      * 
      * @param currentBuildState
-     * @param buildStatesToNotify
      * @return Whether or not the slacknotifications should trigger for the current build state.
      */
     public boolean enabled(BuildStateEnum currentBuildState) {
@@ -102,7 +101,7 @@ public class BuildState {
     /**
      * Convert build state Integer into short string 
      * 
-     * @param  Build state as an Integer constant.
+     * @param  state state as an Integer constant.
      * @return A string representing the shortname of the state. Is used in messages.
      */
 	public String getShortName(BuildStateEnum state) {
@@ -112,7 +111,7 @@ public class BuildState {
 	/**
 	 * Convert build state Integer into descriptive string 
 	 * 
-	 * @param  Build state as an Integer constant.
+	 * @param  state state as an Integer constant.
 	 * @return A string that fits into the sentence "The build has...<state>"
 	 */
 	public String getDescriptionSuffix(BuildStateEnum state) {

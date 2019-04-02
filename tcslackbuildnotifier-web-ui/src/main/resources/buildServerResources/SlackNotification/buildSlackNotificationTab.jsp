@@ -24,7 +24,6 @@
 			</tbody>
 		</table>
 		</div>
-	</div>
 </c:if>
 
 <div style='margin-top: 2.5em;'><h3 class="title">Slack notifications configured for ${projectName} &gt; ${buildName}</h3>
@@ -49,5 +48,4 @@
 			</tbody>
 		</table>
 		</div>
-	</div>
 </c:if>

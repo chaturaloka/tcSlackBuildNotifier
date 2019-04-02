@@ -94,7 +94,7 @@ public final class TeamCityIdResolver {
 	/**
 	 * Finds a TeamCity project in the ProjectManager by ProjectId.
 	 * Uses findProjectByExternalId() if available, otherwise uses findProjectById()
-	 * @param TeamCity projectManager instance
+	 * @param projectManager projectManager instance
 	 * @param projectId string
 	 * @return TeamCity Project Config object
 	 */
@@ -110,7 +110,7 @@ public final class TeamCityIdResolver {
 	/**
 	 * Finds a TeamCity BuiltType in the ProjectManager by buildTypeId.
 	 * Uses findBuildTypeByExternalId() if available, otherwise uses findBuildTypeById()
-	 * @param ProjectManager instance
+	 * @param projectManager instance
 	 * @param buildTypeId string
 	 * @return TeamCity BuildType config object
 	 */

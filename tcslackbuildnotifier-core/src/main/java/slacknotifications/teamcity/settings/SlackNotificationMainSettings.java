@@ -37,7 +37,6 @@ public class SlackNotificationMainSettings implements MainConfigProcessor {
         return this.slackNotificationMainConfig.getProxySettingsAsString();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void readFrom(Element rootElement)
         /* Is passed an Element by TC, and is expected to persist it to the settings object.
