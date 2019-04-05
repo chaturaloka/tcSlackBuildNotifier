@@ -6,6 +6,7 @@ import org.jdom.DataConversionException;
 import org.jdom.Element;
 import slacknotifications.teamcity.BuildState;
 import slacknotifications.teamcity.BuildStateEnum;
+import slacknotifications.teamcity.Loggers;
 import slacknotifications.teamcity.TeamCityIdResolver;
 import slacknotifications.teamcity.settings.converter.SlackNotificationBuildStateConverter;
 
@@ -116,7 +117,7 @@ public class SlackNotificationConfig {
                         states.setEnabled(BuildStateEnum.findBuildState(eState.getAttributeValue("type")),
                                 eState.getAttribute(IS_ENABLED).getBooleanValue());
                     } catch (DataConversionException e1) {
-                        e1.printStackTrace();
+                        Loggers.SERVER.error("SlackNotificationConfig :: ", e1);
                     }
                 }
             }
@@ -128,14 +129,14 @@ public class SlackNotificationConfig {
                 try {
                     this.enableForAllBuildsInProject(eTypes.getAttribute(ENABLED_FOR_ALL).getBooleanValue());
                 } catch (DataConversionException e1) {
-                    e1.printStackTrace();
+                    Loggers.SERVER.error("SlackNotificationConfig :: ", e1);
                 }
             }
             if (eTypes.getAttribute(ENABLED_FOR_SUBPROJECTS) != null) {
                 try {
                     this.enableForSubProjects(eTypes.getAttribute(ENABLED_FOR_SUBPROJECTS).getBooleanValue());
                 } catch (DataConversionException e1) {
-                    e1.printStackTrace();
+                    Loggers.SERVER.error("SlackNotificationConfig :: ", e1);
                 }
             }
             if (!isEnabledForAllBuildsInProject()) {

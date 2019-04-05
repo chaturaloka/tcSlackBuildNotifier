@@ -95,7 +95,7 @@ public class SlackNotificationImpl implements SlackNotification {
             try {
                 this.proxyPort = Integer.parseInt(proxyPort);
             } catch (NumberFormatException ex) {
-                ex.printStackTrace();
+                Loggers.SERVER.error("SlackNotificationImpl :: ", ex);
             }
         }
         this.setProxy(proxyHost, this.proxyPort, null);
