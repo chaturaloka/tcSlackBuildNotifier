@@ -43,6 +43,7 @@ public class SlacknotificationConfigAndBuildTypeListHolder {
     private String botName;
     private String iconUrl;
     private String funnyQuoteIconUrl;
+    private String funnyQuoteCharacter;
 
 	public SlacknotificationConfigAndBuildTypeListHolder(SlackNotificationConfig config, SlackNotificationMainSettings mainSettings) {
 		token = config.getToken();
@@ -72,6 +73,7 @@ public class SlacknotificationConfigAndBuildTypeListHolder {
         botName = valueOrFallback(config.getContent().getBotName(), SlackNotificationMainConfig.DEFAULT_BOTNAME);
         iconUrl = valueOrFallback(config.getContent().getIconUrl(), SlackNotificationMainConfig.DEFAULT_ICONURL);
         funnyQuoteIconUrl = valueOrFallback(config.getContent().getFunnyQuoteIconUrl(), SlackNotificationMainConfig.DEFAULT_FUNNY_QUOTE_ICONURL);
+		funnyQuoteCharacter = valueOrFallback(config.getContent().getFunnyQuoteCharacter(), SlackNotificationMainConfig.DEFAULT_FUNNY_QUOTE_CHARACTER);
 	}
 
 	

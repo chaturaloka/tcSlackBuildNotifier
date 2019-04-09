@@ -116,6 +116,10 @@ public interface SlackNotification {
 
     String getFunnyQuoteIconUrl();
 
+    void setFunnyQuoteCharacter(String funnyCharacterName);
+
+    String getFunnyQuoteCharacter();
+
     void setFunnyQuoteIconUrl(String iconUrl);
 
     void setMentionWhoTriggeredEnabled(boolean mentionWhoTriggeredEnabled);

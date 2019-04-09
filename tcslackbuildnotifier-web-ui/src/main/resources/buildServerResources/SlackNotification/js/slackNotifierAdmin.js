@@ -65,7 +65,7 @@ var SlackNotifierAdmin = {
             }
         }
         catch(err){
-            $('slackNotificationErrors').innerHTML = 'Oops! Something went wrong!';
+            $('slackNotificationErrors').innerHTML = 'Oops! Something went wrong!' + err;
             return false;
         }
     },
@@ -86,6 +86,7 @@ var SlackNotifierAdmin = {
                     botName: $("botName").value,
                     iconUrl: $("iconUrl").value,
                     funnyQuoteIconUrl: $("funnyQuoteIconUrl").value,
+                    funnyQuoteCharacter: ($("yoda").checked)? "Yoda" : "Chuck",
                     maxCommitsToDisplay: $("maxCommitsToDisplay").value,
                     showCommits: $("showCommits").checked,
                     showCommitters: $("showCommitters").checked,
@@ -125,6 +126,7 @@ var SlackNotifierAdmin = {
                     botName: $("botName").value,
                     iconUrl: $("iconUrl").value,
                     funnyQuoteIconUrl: $("funnyQuoteIconUrl").value,
+                    funnyQuoteCharacter: ($("yoda").checked)? "Yoda" : "Chuck",
                     maxCommitsToDisplay: $("maxCommitsToDisplay").value,
                     showCommits: $("showCommits").checked,
                     showCommitters: $("showCommitters").checked,

@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.web.servlet.ModelAndView;
 import slacknotifications.teamcity.BuildState;
 import slacknotifications.teamcity.BuildStateEnum;
+import slacknotifications.teamcity.Loggers;
 import slacknotifications.teamcity.TeamCityIdResolver;
 import slacknotifications.teamcity.extension.bean.ProjectSlackNotificationsBean;
 import slacknotifications.teamcity.extension.bean.ProjectSlackNotificationsBeanJsonSerialiser;
@@ -42,6 +43,7 @@ public class SlackNotificationAjaxEditPageController extends BaseController {
     private static final String BOT_NAME = "botName";
     private static final String ICON_URL = "iconUrl";
     private static final String FUNNY_QUOTE_ICON_URL = "funnyQuoteIconUrl";
+    private static final String FUNNY_QUOTE_CHARACTER = "funnyQuoteCharacter";
     private static final String FALSE = "false";
     private static final String BEFORE_FINISHED = "BeforeFinished";
     private static final String BUILD_INTERRUPTED = "BuildInterrupted";
@@ -203,6 +205,13 @@ public class SlackNotificationAjaxEditPageController extends BaseController {
                                     if ((request.getParameter(FUNNY_QUOTE_ICON_URL) != null)
                                             && (request.getParameter(FUNNY_QUOTE_ICON_URL).length() > 0)) {
                                         content.setFunnyQuoteIconUrl(request.getParameter(FUNNY_QUOTE_ICON_URL));
+                                    }
+
+                                    if ((request.getParameter(FUNNY_QUOTE_CHARACTER) != null)
+                                            && (request.getParameter(FUNNY_QUOTE_CHARACTER).length() > 0)) {
+
+                                        content.setFunnyQuoteCharacter(request.getParameter(FUNNY_QUOTE_CHARACTER));
+                                        Loggers.SERVER.info("request.getParameter(FUNNY_QUOTE_CHARACTER) " + request.getParameter(FUNNY_QUOTE_CHARACTER));
                                     }
                                 }
 

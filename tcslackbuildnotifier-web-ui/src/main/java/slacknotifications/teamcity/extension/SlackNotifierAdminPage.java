@@ -58,11 +58,15 @@ public class SlackNotifierAdminPage extends AdminPage {
     public void fillModel(@NotNull Map<String, Object> model, @NotNull HttpServletRequest request){
         super.fillModel(model, request);
         slackMainSettings.refresh();
+
+        Loggers.SERVER.debug("this.slackMainSettings.getFunnyQuoteCharacter(): " + this.slackMainSettings.getFunnyQuoteCharacter());
+
         model.put("teamName", this.slackMainSettings.getTeamName());
         model.put("token", this.slackMainSettings.getToken());
         model.put("botName", this.slackMainSettings.getBotName());
         model.put("iconUrl", this.slackMainSettings.getIconUrl());
         model.put("funnyQuoteIconUrl", this.slackMainSettings.getFunnyQuoteIconUrl());
+        model.put("funnyQuoteCharacter", this.slackMainSettings.getFunnyQuoteCharacter());
         model.put("defaultChannel", this.slackMainSettings.getDefaultChannel());
         model.put("maxCommitsToDisplay", this.slackMainSettings.getMaxCommitsToDisplay());
         model.put("showBuildAgent", this.slackMainSettings.getShowBuildAgent());

@@ -69,6 +69,7 @@ public class SlackNotificationListener extends BuildServerAdapter {
         slackNotification.setToken(StringUtil.isEmpty(slackNotificationConfig.getToken()) ? myMainSettings.getToken() : slackNotificationConfig.getToken());
         slackNotification.setIconUrl(myMainSettings.getIconUrl());
         slackNotification.setFunnyQuoteIconUrl(myMainSettings.getFunnyQuoteIconUrl());
+        slackNotification.setFunnyQuoteCharacter(myMainSettings.getFunnyQuoteCharacter());
         slackNotification.setBotName(myMainSettings.getBotName());
 		slackNotification.setEnabled(myMainSettings.getEnabled() && slackNotificationConfig.getEnabled());
 		slackNotification.setBuildStates(slackNotificationConfig.getBuildStates());
@@ -98,6 +99,7 @@ public class SlackNotificationListener extends BuildServerAdapter {
             slackNotification.setShowFailureReason(slackNotificationConfig.getContent().getShowFailureReason() == null ? SlackNotificationContentConfig.DEFAULT_SHOW_FAILURE_REASON : slackNotificationConfig.getContent().getShowFailureReason());
 			slackNotification.setShowFunnyQuote(slackNotificationConfig.getContent().getshowFunnyQuote() == null ? SlackNotificationContentConfig.DEFAULT_SHOW_FUNNY_QUOTE : slackNotificationConfig.getContent().getshowFunnyQuote());
 			slackNotification.setFunnyQuoteIconUrl(slackNotificationConfig.getContent().getFunnyQuoteIconUrl());
+			slackNotification.setFunnyQuoteIconUrl(slackNotificationConfig.getContent().getFunnyQuoteCharacter());
         }
 		Loggers.ACTIVITIES.debug("SlackNotificationListener :: SlackNotification proxy set to "
 				+ slackNotification.getProxyHost() + " for " + slackNotificationConfig.getChannel());

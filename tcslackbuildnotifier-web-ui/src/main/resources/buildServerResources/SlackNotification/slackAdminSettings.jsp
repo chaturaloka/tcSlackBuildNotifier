@@ -73,7 +73,7 @@
                         <label for="iconUrl">Icon url: <l:star/></label>
                     </th>
                     <td>
-                        <forms:textField name="iconUrl" value="${iconUrl}" style="width: 300px;"/>
+                        <forms:textField name="iconUrl" value="${iconUrl}" style="width: 600px;"/>
                         <span class="smallNote">The url of the icon to appear beside your bot. You can leave this as the default or customize it to a png file.</span>
                         <span class="smallNote">The default is <b>https://raw.githubusercontent.com/PeteGoo/tcSlackBuildNotifier/master/docs/TeamCity72x72.png</b></span>
                     </td>
@@ -171,10 +171,24 @@
                 </tr>
                 <tr>
                     <th>
+                        <label for="funnyQuoteCharacter">Choose Funny Character: </label>
+                    </th>
+                    <td>
+                        <input type="radio" id="chuck" name="funnyCharacterChoice" value="chuck"
+                               checked>
+                        <label for="chuck">Chuck Norris</label>
+
+                        <input type="radio" id="yoda" name="funnyCharacterChoice" value="yoda">
+
+                        <label for="yoda">Yoda</label>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
                         <label for="funnyQuoteIconUrl">Funny Quote Icon url: <l:star/></label>
                     </th>
                     <td>
-                        <forms:textField name="funnyQuoteIconUrl" value="${funnyQuoteIconUrl}" style="width: 300px;"/>
+                        <forms:textField name="funnyQuoteIconUrl" value="${funnyQuoteIconUrl}" style="width: 600px;"/>
                         <span class="smallNote">The url of the icon to appear along with the quote. You can leave this as the default or customize it to a png file.</span>
                         <span class="smallNote">The default is <b>https://raw.githubusercontent.com/PeteGoo/tcSlackBuildNotifier/master/docs/TeamCity72x72.png</b></span>
                     </td>

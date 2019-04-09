@@ -41,6 +41,7 @@ public class SlackNotificationConfig {
     private static final String SHOW_FAILURE_REASON = "showFailureReason";
     private static final String SHOW_FUNNY_QUOTE = "showFunnyQuote";
     private static final String FUNNY_QUOTE_ICON_URL = "funnyQuoteIconUrl";
+    private static final String FUNNY_QUOTE_CHARACTER = "funnyQuoteCharacter";
 
 
     private Boolean enabled = true;
@@ -181,6 +182,9 @@ public class SlackNotificationConfig {
             if (eContent.getAttribute(FUNNY_QUOTE_ICON_URL) != null) {
                 this.content.setFunnyQuoteIconUrl(eContent.getAttributeValue(FUNNY_QUOTE_ICON_URL));
             }
+            if (eContent.getAttribute(FUNNY_QUOTE_CHARACTER) != null) {
+                this.content.setFunnyQuoteCharacter(eContent.getAttributeValue(FUNNY_QUOTE_CHARACTER));
+            }
             if (eContent.getAttribute(BOT_NAME) != null) {
                 this.content.setBotName(eContent.getAttributeValue(BOT_NAME));
             }
@@ -316,6 +320,7 @@ public class SlackNotificationConfig {
             customContentEl.setAttribute(SHOW_FAILURE_REASON, this.content.getShowFailureReason().toString());
             customContentEl.setAttribute(SHOW_FUNNY_QUOTE, this.content.getshowFunnyQuote().toString());
             customContentEl.setAttribute(FUNNY_QUOTE_ICON_URL, this.content.getFunnyQuoteIconUrl());
+            customContentEl.setAttribute(FUNNY_QUOTE_CHARACTER, this.content.getFunnyQuoteCharacter());
             el.addContent(customContentEl);
         }
 

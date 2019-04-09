@@ -50,6 +50,7 @@ public class SlackNotificationSettingsControllerTest {
                 true,
                 true,
                 SlackNotificationMainConfig.DEFAULT_FUNNY_QUOTE_ICONURL,
+                SlackNotificationMainConfig.DEFAULT_FUNNY_QUOTE_CHARACTER,
                 null, null, null, null);
 
         assertNotNull(notification);

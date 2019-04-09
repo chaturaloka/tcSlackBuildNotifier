@@ -68,6 +68,7 @@ public class SlackNotificationImpl implements SlackNotification {
     private boolean showFailureReason;
     private boolean showFunnyQuote;
     private String funnyQuoteIconUrl;
+    private String funnyQuoteCharacter;
 
     /*	This is a bit mask of states that should trigger a SlackNotification.
      *  All ones (11111111) means that all states will trigger the slacknotifications
@@ -686,6 +687,16 @@ public class SlackNotificationImpl implements SlackNotification {
     @Override
     public String getFunnyQuoteIconUrl() {
         return this.funnyQuoteIconUrl;
+    }
+
+    @Override
+    public void setFunnyQuoteCharacter(String funnyCharacterName) {
+        this.funnyQuoteCharacter = funnyCharacterName;
+    }
+
+    @Override
+    public String getFunnyQuoteCharacter() {
+        return funnyQuoteCharacter;
     }
 
     @Override

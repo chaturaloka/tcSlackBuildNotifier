@@ -133,6 +133,10 @@ public class SlackNotificationMainSettings implements MainConfigProcessor {
         return this.slackNotificationMainConfig.getContent().getshowFunnyQuote();
     }
 
+    public String getFunnyQuoteCharacter() {
+        return this.slackNotificationMainConfig.getContent().getFunnyQuoteCharacter();
+    }
+
     public Boolean getSlackNotificationShowFurtherReading() {
         return this.slackNotificationMainConfig.getSlackNotificationShowFurtherReading();
     }

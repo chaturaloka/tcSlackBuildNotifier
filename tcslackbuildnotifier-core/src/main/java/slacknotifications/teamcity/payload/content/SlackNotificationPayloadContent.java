@@ -1,20 +1,16 @@
 package slacknotifications.teamcity.payload.content;
 
 import jetbrains.buildServer.BuildProblemData;
-import jetbrains.buildServer.messages.Status;
 import jetbrains.buildServer.serverSide.*;
 import jetbrains.buildServer.tests.TestInfo;
-import org.apache.commons.io.IOUtils;
 import slacknotifications.teamcity.BuildStateEnum;
 import slacknotifications.teamcity.Loggers;
 import slacknotifications.teamcity.SlackNotificator;
 import slacknotifications.teamcity.TeamCityIdResolver;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 
 public class SlackNotificationPayloadContent {
     final PayloadContentCommits payloadCommits = new PayloadContentCommits();
