@@ -36,7 +36,7 @@ public class SlackNotifierAdminPage extends AdminPage {
                                      @NotNull PluginDescriptor descriptor,
                                      @NotNull SBuildServer sBuildServer,
                                      @NotNull SlackNotificationMainSettings slackMainSettings
-                                     ) {
+    ) {
         super(pagePlaces);
         this.sBuildServer = sBuildServer;
         this.slackMainSettings = slackMainSettings;
@@ -55,7 +55,7 @@ public class SlackNotifierAdminPage extends AdminPage {
     }
 
     @Override
-    public void fillModel(@NotNull Map<String, Object> model, @NotNull HttpServletRequest request){
+    public void fillModel(@NotNull Map<String, Object> model, @NotNull HttpServletRequest request) {
         super.fillModel(model, request);
         slackMainSettings.refresh();
         model.put("teamName", this.slackMainSettings.getTeamName());

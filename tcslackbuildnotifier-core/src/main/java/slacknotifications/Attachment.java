@@ -14,6 +14,16 @@ public class Attachment {
     private String footer_icon;
     private String thumb_url;
     private String image_url;
+    private List<Field> fields;
+    private String fallback;
+
+    public Attachment(String fallback, String text, String pretext, String color) {
+        this.fallback = fallback;
+        this.text = text;
+        this.pretext = pretext;
+        this.color = color;
+        this.fields = new ArrayList<Field>();
+    }
 
     public String getFooter() {
         return footer;
@@ -39,16 +49,6 @@ public class Attachment {
         this.thumb_url = thumb_url;
     }
 
-    private List<Field> fields;
-
-    public Attachment(String fallback, String text, String pretext, String color) {
-        this.fallback = fallback;
-        this.text = text;
-        this.pretext = pretext;
-        this.color = color;
-        this.fields = new ArrayList<Field>();
-    }
-
     public void addField(String title, String value, boolean isShort) {
         this.fields.add(new Field(title, value, isShort));
     }
@@ -56,8 +56,6 @@ public class Attachment {
     public String getFallback() {
         return fallback;
     }
-
-    private String fallback;
 
     public String getText() {
         return text;

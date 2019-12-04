@@ -7,21 +7,20 @@ import jetbrains.buildServer.util.StringUtil;
  */
 public class Commit {
 
+    private String description;
+    private String userName;
+    private String revision;
+    private String slackUserId;
     public Commit(String revision, String description, String userName, String slackUserId) {
         this.description = description;
         this.userName = userName;
         this.revision = revision;
 
-        if(slackUserId != null && slackUserId.startsWith("@")){
+        if (slackUserId != null && slackUserId.startsWith("@")) {
             slackUserId = slackUserId.substring(1);
         }
         this.slackUserId = slackUserId;
     }
-
-    private String description;
-    private String userName;
-    private String revision;
-    private String slackUserId;
 
     public String getRevision() {
         return revision;
@@ -52,13 +51,13 @@ public class Commit {
     }
 
     public void setSlackUserId(String slackUserId) {
-        if(slackUserId != null && slackUserId.startsWith("@")){
+        if (slackUserId != null && slackUserId.startsWith("@")) {
             slackUserId = slackUserId.substring(1);
         }
         this.slackUserId = slackUserId;
     }
 
-    public boolean hasSlackUserId(){
+    public boolean hasSlackUserId() {
         return StringUtil.isNotEmpty(slackUserId);
     }
 }

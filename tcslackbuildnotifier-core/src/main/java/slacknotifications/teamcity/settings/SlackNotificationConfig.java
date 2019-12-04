@@ -536,28 +536,28 @@ public class SlackNotificationConfig {
         this.enabledBuildTypesSet.add(buildTypeId);
     }
 
-    void setMentionChannelEnabled(boolean mentionChannelEnabled) {
-        this.mentionChannelEnabled = mentionChannelEnabled;
-    }
-
     public boolean getMentionChannelEnabled() {
         return mentionChannelEnabled;
     }
 
-    void setMentionSlackUserEnabled(boolean mentionSlackUserEnabled) {
-        this.mentionSlackUserEnabled = mentionSlackUserEnabled;
+    void setMentionChannelEnabled(boolean mentionChannelEnabled) {
+        this.mentionChannelEnabled = mentionChannelEnabled;
     }
 
     public boolean getMentionSlackUserEnabled() {
         return mentionSlackUserEnabled;
     }
 
-    void setMentionHereEnabled(boolean mentionHereEnabled) {
-        this.mentionHereEnabled = mentionHereEnabled;
+    void setMentionSlackUserEnabled(boolean mentionSlackUserEnabled) {
+        this.mentionSlackUserEnabled = mentionSlackUserEnabled;
     }
 
     public boolean getMentionHereEnabled() {
         return mentionHereEnabled;
+    }
+
+    void setMentionHereEnabled(boolean mentionHereEnabled) {
+        this.mentionHereEnabled = mentionHereEnabled;
     }
 
     boolean hasCustomContent() {

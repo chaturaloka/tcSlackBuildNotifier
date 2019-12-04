@@ -31,6 +31,8 @@ import java.util.Set;
 
 public class SlackNotificationAjaxEditPageController extends BaseController {
 
+    static final String BUILD_FAILED = "BuildFailed";
+    static final String BUILD_SUCCESSFUL = "BuildSuccessful";
     private static final String PROJECT_ID = "projectId";
     private static final String SLACK_NOTIFICATION = "slackNotifications";
     private static final String SUBMIT_ACTION = "submitAction";
@@ -48,10 +50,6 @@ public class SlackNotificationAjaxEditPageController extends BaseController {
     private static final String BUILD_STARTED = "BuildStarted";
     private static final String BUILD_BROKEN = "BuildBroken";
     private static final String BUILD_FIXED = "BuildFixed";
-    static final String BUILD_FAILED = "BuildFailed";
-    static final String BUILD_SUCCESSFUL = "BuildSuccessful";
-
-
     private final WebControllerManager myWebManager;
     private final SlackNotificationMainSettings myMainSettings;
     private final SBuildServer myServer;
@@ -67,10 +65,6 @@ public class SlackNotificationAjaxEditPageController extends BaseController {
         mySettings = settings;
         myPluginPath = pluginDescriptor.getPluginResourcesPath();
         myMainSettings = mainSettings;
-    }
-
-    public void register() {
-        myWebManager.registerController("/slacknotifications/ajaxEdit.html", this);
     }
 
     static void checkAndAddBuildState(HttpServletRequest r, BuildState state, BuildStateEnum myBuildState, String varName) {
@@ -92,6 +86,17 @@ public class SlackNotificationAjaxEditPageController extends BaseController {
         } else {
             state.disable(BuildStateEnum.BUILD_FINISHED);
         }
+    }
+
+    static void buildParams(HashMap<String, Object> params, SlackNotificationProjectSettings projSettings, String slackNotification) {
+        params.put(slackNotification, "true");
+        params.put("slackNotificationList", projSettings.getSlackNotificationsAsList());
+        params.put("slackNotificationsDisabled", !projSettings.isEnabled());
+        params.put("slackNotificationsEnabledAsChecked", projSettings.isEnabledAsChecked());
+    }
+
+    public void register() {
+        myWebManager.registerController("/slacknotifications/ajaxEdit.html", this);
     }
 
     @Nullable
@@ -301,14 +306,6 @@ public class SlackNotificationAjaxEditPageController extends BaseController {
 
         return new ModelAndView(myPluginPath + "SlackNotification/ajaxEdit.jsp", params);
     }
-
-    static void buildParams(HashMap<String, Object> params, SlackNotificationProjectSettings projSettings, String slackNotification) {
-        params.put(slackNotification, "true");
-        params.put("slackNotificationList", projSettings.getSlackNotificationsAsList());
-        params.put("slackNotificationsDisabled", !projSettings.isEnabled());
-        params.put("slackNotificationsEnabledAsChecked", projSettings.isEnabledAsChecked());
-    }
-
 
     private int convertToInt(String s) {
         try {

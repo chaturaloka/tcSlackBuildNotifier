@@ -26,14 +26,17 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 
 public class SlackNotificationImpl implements SlackNotification {
 
     private static final String UTF8 = "UTF-8";
-
+    private final static String CONTENT_TYPE = "application/x-www-form-urlencoded";
     private String proxyHost;
     private Integer proxyPort = 0;
     private String proxyUsername;
@@ -53,7 +56,6 @@ public class SlackNotificationImpl implements SlackNotification {
     private List<NameValuePair> params = new ArrayList<NameValuePair>();
     private BuildState states;
     private String botName;
-    private final static String CONTENT_TYPE = "application/x-www-form-urlencoded";
     private PostMessageResponse response;
     private Boolean showBuildAgent;
     private Boolean showElapsedBuildTime;
@@ -118,6 +120,18 @@ public class SlackNotificationImpl implements SlackNotification {
     public SlackNotificationImpl(HttpClient httpClient, String channel) {
         this.channel = channel;
         this.client = httpClient;
+    }
+
+    public static String convertAttachmentsToJson(List<Attachment> attachments) {
+        Gson gson = new Gson();
+        return gson.toJson(attachments);
+//        XStream xstream = new XStream(new JsonHierarchicalStreamDriver());
+//        xstream.setMode(XStream.NO_REFERENCES);
+//        xstream.alias("build", Attachment.class);
+//        /* For some reason, the items are coming back as "@name" and "@value"
+//         * so strip those out with a regex.
+//         */
+//        return xstream.toXML(attachments).replaceAll("\"@(fallback|text|pretext|color|fields|title|value|short)\": \"(.*)\"", "\"$1\": \"$2\"");
     }
 
     public void setProxy(SlackNotificationProxyConfig proxyConfig) {
@@ -392,71 +406,6 @@ public class SlackNotificationImpl implements SlackNotification {
         return attachments;
     }
 
-    private class WebHookPayload {
-        private String channel;
-        private String username;
-        private String text;
-        private String icon_url;
-        private List<Attachment> attachments;
-
-        public String getChannel() {
-            return channel;
-        }
-
-        public void setChannel(String channel) {
-            this.channel = channel;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-
-        public String getText() {
-            return text;
-        }
-
-        public void setText(String text) {
-            this.text = text;
-        }
-
-        public String getIcon_url() {
-            return icon_url;
-        }
-
-        void setIcon_url(String icon_url) {
-            this.icon_url = icon_url;
-        }
-
-        public List<Attachment> getAttachments() {
-            return attachments;
-        }
-
-        void setAttachments(List<Attachment> attachments) {
-            this.attachments = attachments;
-        }
-
-        String toJson() {
-            Gson gson = new Gson();
-            return gson.toJson(this);
-        }
-    }
-
-    public static String convertAttachmentsToJson(List<Attachment> attachments) {
-        Gson gson = new Gson();
-        return gson.toJson(attachments);
-//        XStream xstream = new XStream(new JsonHierarchicalStreamDriver());
-//        xstream.setMode(XStream.NO_REFERENCES);
-//        xstream.alias("build", Attachment.class);
-//        /* For some reason, the items are coming back as "@name" and "@value"
-//         * so strip those out with a regex.
-//         */
-//        return xstream.toXML(attachments).replaceAll("\"@(fallback|text|pretext|color|fields|title|value|short)\": \"(.*)\"", "\"$1\": \"$2\"");
-    }
-
     public Integer getStatus() {
         return this.resultCode;
     }
@@ -542,12 +491,12 @@ public class SlackNotificationImpl implements SlackNotification {
         return "";
     }
 
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
-
     public String getFilename() {
         return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 
     public String getContent() {
@@ -582,6 +531,10 @@ public class SlackNotificationImpl implements SlackNotification {
         this.errorReason = errorReason;
     }
 
+    public String getProxyUsername() {
+        return proxyUsername;
+    }
+
 //	public Integer getEventListBitMask() {
 //		return EventListBitMask;
 //	}
@@ -589,10 +542,6 @@ public class SlackNotificationImpl implements SlackNotification {
 //	public void setTriggerStateBitMask(Integer triggerStateBitMask) {
 //		EventListBitMask = triggerStateBitMask;
 //	}
-
-    public String getProxyUsername() {
-        return proxyUsername;
-    }
 
     public void setProxyUsername(String proxyUsername) {
         this.proxyUsername = proxyUsername;
@@ -719,5 +668,58 @@ public class SlackNotificationImpl implements SlackNotification {
                 TimeUnit.SECONDS.toSeconds(seconds) -
                         TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(seconds))
         );
+    }
+
+    private class WebHookPayload {
+        private String channel;
+        private String username;
+        private String text;
+        private String icon_url;
+        private List<Attachment> attachments;
+
+        public String getChannel() {
+            return channel;
+        }
+
+        public void setChannel(String channel) {
+            this.channel = channel;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+
+        public String getIcon_url() {
+            return icon_url;
+        }
+
+        void setIcon_url(String icon_url) {
+            this.icon_url = icon_url;
+        }
+
+        public List<Attachment> getAttachments() {
+            return attachments;
+        }
+
+        void setAttachments(List<Attachment> attachments) {
+            this.attachments = attachments;
+        }
+
+        String toJson() {
+            Gson gson = new Gson();
+            return gson.toJson(this);
+        }
     }
 }
