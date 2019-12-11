@@ -280,6 +280,7 @@ public class SlackNotificationImpl implements SlackNotification {
 
             this.content = EntityUtils.toString(response.getEntity());
 
+        } catch (Exception e) {
         } finally {
             httppost.releaseConnection();
         }
