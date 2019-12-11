@@ -170,114 +170,118 @@ public class SlackNotificationImpl implements SlackNotification {
     }
 
     private void postViaApi() throws IOException {
-        if ((this.enabled) && (!this.errored)) {
-            if (this.teamName == null) {
-                this.teamName = "";
-            }
-            String url = String.format("https://slack.com/api/chat.postMessage" +
-                            "?token=%s" +
-                            "&link_names=1" +
-                            "&as_user=0" +
-                            "&username=%s" +
-                            "&icon_url=%s" +
-                            "&channel=%s" +
-                            "&text=%s" +
-                            "&pretty=1",
-                    this.token,
-                    this.botName == null ? "" : URLEncoder.encode(this.botName, UTF8),
-                    this.iconUrl == null ? "" : URLEncoder.encode(this.iconUrl, UTF8),
-                    this.channel == null ? "" : URLEncoder.encode(this.channel, UTF8),
-                    this.payload == null ? "" : URLEncoder.encode(payload.getBuildDescriptionWithLinkSyntax(), UTF8));
+        if (!this.enabled && this.errored) {
+            return;
+        }
 
-            HttpPost httppost = new HttpPost(url);
+        if (this.teamName == null) {
+            this.teamName = "";
+        }
+        String url = String.format("https://slack.com/api/chat.postMessage" +
+                        "?token=%s" +
+                        "&link_names=1" +
+                        "&as_user=0" +
+                        "&username=%s" +
+                        "&icon_url=%s" +
+                        "&channel=%s" +
+                        "&text=%s" +
+                        "&pretty=1",
+                this.token,
+                this.botName == null ? "" : URLEncoder.encode(this.botName, UTF8),
+                this.iconUrl == null ? "" : URLEncoder.encode(this.iconUrl, UTF8),
+                this.channel == null ? "" : URLEncoder.encode(this.channel, UTF8),
+                this.payload == null ? "" : URLEncoder.encode(payload.getBuildDescriptionWithLinkSyntax(), UTF8));
 
-            Loggers.SERVER.info("SlackNotificationListener :: Preparing message for URL " + url + " using proxy " + this.proxyHost + ":" + this.proxyPort);
-            if (this.filename.length() > 0) {
+        HttpPost httppost = new HttpPost(url);
+
+        Loggers.SERVER.info("SlackNotificationListener :: Preparing message for URL " + url + " using proxy " + this.proxyHost + ":" + this.proxyPort);
+        if (this.filename.length() > 0) {
 //                File file = new File(this.filename);
-                throw new NotImplementedException();
+            throw new NotImplementedException();
+        }
+        if (this.payload != null) {
+
+            List<Attachment> attachments = getAttachments();
+
+            String attachmentsParam = String.format("attachments=%s", URLEncoder.encode(convertAttachmentsToJson(attachments), UTF8));
+
+            Loggers.SERVER.info("SlackNotificationListener :: Body message will be " + attachmentsParam);
+
+            httppost.setEntity(new StringEntity(attachmentsParam));
+            httppost.setHeader("Content-Type", CONTENT_TYPE);
+        }
+        try {
+            HttpResponse response = client.execute(httppost);
+            this.resultCode = response.getStatusLine().getStatusCode();
+            if (this.resultCode == HttpStatus.SC_OK) {
+                this.response = PostMessageResponse.fromJson(EntityUtils.toString(response.getEntity()));
             }
-            if (this.payload != null) {
-
-                List<Attachment> attachments = getAttachments();
-
-                String attachmentsParam = String.format("attachments=%s", URLEncoder.encode(convertAttachmentsToJson(attachments), UTF8));
-
-                Loggers.SERVER.info("SlackNotificationListener :: Body message will be " + attachmentsParam);
-
-                httppost.setEntity(new StringEntity(attachmentsParam));
-                httppost.setHeader("Content-Type", CONTENT_TYPE);
+            if (response.getEntity().getContentLength() > 0) {
+                this.content = EntityUtils.toString(response.getEntity());
             }
-            try {
-                HttpResponse response = client.execute(httppost);
-                this.resultCode = response.getStatusLine().getStatusCode();
-                if (this.resultCode == HttpStatus.SC_OK) {
-                    this.response = PostMessageResponse.fromJson(EntityUtils.toString(response.getEntity()));
-                }
-                if (response.getEntity().getContentLength() > 0) {
-                    this.content = EntityUtils.toString(response.getEntity());
-                }
-            } finally {
-                httppost.releaseConnection();
-            }
+        } finally {
+            httppost.releaseConnection();
         }
     }
 
     private void postViaWebHook() throws IOException {
-        if ((this.enabled) && (!this.errored)) {
-            if (this.teamName == null) {
-                this.teamName = "";
-            }
+        if (!this.enabled && this.errored) {
+            return;
+        }
 
-            String url;
-            if (this.token != null && this.token.startsWith("http")) {
-                url = this.token;
+        if (this.teamName == null) {
+            this.teamName = "";
+        }
+
+        String url;
+        if (this.token != null && this.token.startsWith("http")) {
+            url = this.token;
+        } else {
+            url = String.format("https://%s.slack.com/services/hooks/incoming-webhook?token=%s",
+                    this.teamName.toLowerCase(),
+                    this.token);
+        }
+
+        Loggers.SERVER.info("SlackNotificationListener :: Preparing message for URL " + url);
+
+        WebHookPayload requestBody = new WebHookPayload();
+        requestBody.setChannel(this.getChannel());
+        requestBody.setUsername(this.getBotName());
+        requestBody.setIcon_url(this.getIconUrl());
+
+        HttpPost httppost = new HttpPost(url);
+
+        if (this.payload != null) {
+            requestBody.setText(payload.getBuildDescriptionWithLinkSyntax());
+            requestBody.setAttachments(getAttachments());
+        }
+
+        String bodyParam = String.format("payload=%s", URLEncoder.encode(requestBody.toJson(), UTF8));
+
+        Loggers.SERVER.info("SlackNotificationListener :: Body message will be " + bodyParam);
+
+        httppost.setEntity(new StringEntity(bodyParam));
+        httppost.setHeader("Content-Type", CONTENT_TYPE);
+
+        try {
+            HttpResponse response = client.execute(httppost);
+            this.resultCode = response.getStatusLine().getStatusCode();
+
+            PostMessageResponse resp = new PostMessageResponse();
+
+            if (this.resultCode != HttpStatus.SC_OK) {
+                String error = EntityUtils.toString(response.getEntity());
+                resp.setOk(error.equals("ok"));
+                resp.setError(error);
             } else {
-                url = String.format("https://%s.slack.com/services/hooks/incoming-webhook?token=%s",
-                        this.teamName.toLowerCase(),
-                        this.token);
+                resp.setOk(true);
+                this.response = resp;
             }
 
-            Loggers.SERVER.info("SlackNotificationListener :: Preparing message for URL " + url);
+            this.content = EntityUtils.toString(response.getEntity());
 
-            WebHookPayload requestBody = new WebHookPayload();
-            requestBody.setChannel(this.getChannel());
-            requestBody.setUsername(this.getBotName());
-            requestBody.setIcon_url(this.getIconUrl());
-
-            HttpPost httppost = new HttpPost(url);
-
-            if (this.payload != null) {
-                requestBody.setText(payload.getBuildDescriptionWithLinkSyntax());
-                requestBody.setAttachments(getAttachments());
-            }
-
-            String bodyParam = String.format("payload=%s", URLEncoder.encode(requestBody.toJson(), UTF8));
-
-            Loggers.SERVER.info("SlackNotificationListener :: Body message will be " + bodyParam);
-
-            httppost.setEntity(new StringEntity(bodyParam));
-            httppost.setHeader("Content-Type", CONTENT_TYPE);
-
-            try {
-                HttpResponse response = client.execute(httppost);
-                this.resultCode = response.getStatusLine().getStatusCode();
-
-                PostMessageResponse resp = new PostMessageResponse();
-
-                if (this.resultCode != HttpStatus.SC_OK) {
-                    String error = EntityUtils.toString(response.getEntity());
-                    resp.setOk(error.equals("ok"));
-                    resp.setError(error);
-                } else {
-                    resp.setOk(true);
-                    this.response = resp;
-                }
-
-                this.content = EntityUtils.toString(response.getEntity());
-
-            } finally {
-                httppost.releaseConnection();
-            }
+        } finally {
+            httppost.releaseConnection();
         }
     }
 
