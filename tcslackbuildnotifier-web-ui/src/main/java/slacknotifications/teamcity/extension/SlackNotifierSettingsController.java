@@ -3,7 +3,8 @@ package slacknotifications.teamcity.extension;
 
 import com.intellij.openapi.util.text.StringUtil;
 import jetbrains.buildServer.controllers.BaseController;
-import jetbrains.buildServer.serverSide.*;
+import jetbrains.buildServer.serverSide.SBuildServer;
+import jetbrains.buildServer.serverSide.ServerPaths;
 import jetbrains.buildServer.serverSide.crypt.RSACipher;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import jetbrains.buildServer.web.openapi.WebControllerManager;

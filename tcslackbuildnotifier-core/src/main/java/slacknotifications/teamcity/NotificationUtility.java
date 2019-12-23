@@ -11,28 +11,27 @@ import java.io.IOException;
  */
 public final class NotificationUtility {
 
-    public void doPost(SlackNotification notification){
+    public void doPost(SlackNotification notification) {
         try {
-            if (notification.isEnabled()){
+            if (notification.isEnabled()) {
                 notification.post();
                 if (notification.getResponse() != null && !notification.getResponse().getOk()) {
                     Loggers.SERVER.error(this.getClass().getSimpleName() + " :: SlackNotification failed : "
                             + notification.getChannel()
                             + " returned error " + notification.getResponse().getError()
                             + " " + notification.getErrorReason());
-                }
-                else {
+                } else {
                     Loggers.SERVER.info(this.getClass().getSimpleName() + " :: SlackNotification delivered : "
                             + notification.getChannel()
                             + " returned " + notification.getStatus()
                             + " " + notification.getErrorReason());
                 }
                 Loggers.SERVER.debug(this.getClass().getSimpleName() + ":doPost :: content dump: " + notification.getPayload());
-                if (notification.isErrored()){
+                if (notification.isErrored()) {
                     Loggers.SERVER.error(notification.getErrorReason());
                 }
                 if ((notification.getStatus() == null || notification.getStatus() > HttpStatus.SC_OK))
-                    Loggers.ACTIVITIES.warn("SlackNotificationListener :: " + notification.getParam("projectId") + " SlackNotification (url: " + notification.getChannel() + " proxy: " + notification.getProxyHost() + ":" + notification.getProxyPort()+") returned HTTP status " + notification.getStatus().toString());
+                    Loggers.ACTIVITIES.warn("SlackNotificationListener :: " + notification.getParam("projectId") + " SlackNotification (url: " + notification.getChannel() + " proxy: " + notification.getProxyHost() + ":" + notification.getProxyPort() + ") returned HTTP status " + notification.getStatus().toString());
 
             } else {
                 Loggers.SERVER.debug("SlackNotification NOT triggered: "

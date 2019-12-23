@@ -6,7 +6,6 @@ import slacknotifications.teamcity.BuildState;
 import slacknotifications.teamcity.payload.content.PostMessageResponse;
 import slacknotifications.teamcity.payload.content.SlackNotificationPayloadContent;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -54,9 +53,9 @@ public interface SlackNotification {
 
     String getParam(String key);
 
-    void setFilename(String filename);
-
     String getFilename();
+
+    void setFilename(String filename);
 
     String getContent();
 

@@ -1,22 +1,25 @@
 package slacknotifications.teamcity.payload.content;
 
 import jetbrains.buildServer.BuildProblemData;
-import jetbrains.buildServer.messages.Status;
 import jetbrains.buildServer.serverSide.*;
 import jetbrains.buildServer.tests.TestInfo;
-import org.apache.commons.io.IOUtils;
 import slacknotifications.teamcity.BuildStateEnum;
 import slacknotifications.teamcity.Loggers;
 import slacknotifications.teamcity.SlackNotificator;
 import slacknotifications.teamcity.TeamCityIdResolver;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 
 public class SlackNotificationPayloadContent {
+    public final static String BUILD_STATUS_FAILURE = "Failed";
+    public final static String BUILD_STATUS_SUCCESS = "Succeeded";
+    public final static String BUILD_STATUS_RUNNING = "Running";
+    public final static String BUILD_STATUS_NO_CHANGE = "Unchanged";
+    public final static String BUILD_STATUS_FIXED = "Fixed";
+    public final static String BUILD_STATUS_BROKEN = "Broken";
+    public final static String BUILD_STATUS_UNKNOWN = "Unknown";
     final PayloadContentCommits payloadCommits = new PayloadContentCommits();
     String buildStatus;
     String buildResult;
@@ -26,7 +29,6 @@ public class SlackNotificationPayloadContent {
     String buildFullName;
     String buildName;
     String buildId;
-    private String buildTypeId;
     String buildInternalTypeId;
     String buildExternalTypeId;
     String buildStatusUrl;
@@ -46,14 +48,6 @@ public class SlackNotificationPayloadContent {
     String message;
     String text;
     String branchName;
-    String branchDisplayName;
-    String buildStateDescription;
-    String progressSummary;
-    private boolean isFirstFailedBuild;
-
-    Boolean branchIsDefault;
-
-    Branch branch;
 
 /*
     public final static String BUILD_STATUS_FAILURE   = "failure";
@@ -63,34 +57,22 @@ public class SlackNotificationPayloadContent {
     public final static String BUILD_STATUS_FIXED     = "fixed";
     public final static String BUILD_STATUS_BROKEN    = "broken";
     public final static String BUILD_STATUS_UNKNOWN   = "unknown";*/
-
-    public final static String BUILD_STATUS_FAILURE = "Failed";
-    public final static String BUILD_STATUS_SUCCESS = "Succeeded";
-    public final static String BUILD_STATUS_RUNNING = "Running";
-    public final static String BUILD_STATUS_NO_CHANGE = "Unchanged";
-    public final static String BUILD_STATUS_FIXED = "Fixed";
-    public final static String BUILD_STATUS_BROKEN = "Broken";
-    public final static String BUILD_STATUS_UNKNOWN = "Unknown";
+    String branchDisplayName;
+    String buildStateDescription;
+    String progressSummary;
+    Boolean branchIsDefault;
+    Branch branch;
+    private String buildTypeId;
+    private boolean isFirstFailedBuild;
     private String buildLink;
     private String color;
     private long elapsedTime;
     private boolean isComplete;
-
-    public String getFunnyQuote() {
-        return funnyQuote;
-    }
-
-    public void setFunnyQuote(String funnyQuote) {
-        this.funnyQuote = funnyQuote;
-    }
-
     private String funnyQuote;
     private ArrayList<String> failedBuildMessages = new ArrayList<String>();
     private ArrayList<String> failedTestNames = new ArrayList<String>();
-
     public SlackNotificationPayloadContent() {
     }
-
     /**
      * Constructor: Only called by RepsonsibilityChanged.
      *
@@ -117,6 +99,14 @@ public class SlackNotificationPayloadContent {
         payloadCommits.populateCommits(sRunningBuild);
         populateArtifacts(sRunningBuild);
         populateResults(sRunningBuild);
+    }
+
+    public String getFunnyQuote() {
+        return funnyQuote;
+    }
+
+    public void setFunnyQuote(String funnyQuote) {
+        this.funnyQuote = funnyQuote;
     }
 
     private void populateResults(SRunningBuild sRunningBuild) {
@@ -238,12 +228,12 @@ public class SlackNotificationPayloadContent {
         return branchIsDefault;
     }
 
-    public Boolean isMergeBranch() {
-        return this.branchName != null && this.branchName.endsWith("/merge");
-    }
-
     public void setBranchIsDefault(boolean branchIsDefault) {
         this.branchIsDefault = branchIsDefault;
+    }
+
+    public Boolean isMergeBranch() {
+        return this.branchName != null && this.branchName.endsWith("/merge");
     }
 
     /**
@@ -379,15 +369,13 @@ public class SlackNotificationPayloadContent {
         this.text = text;
     }
 
-
-    public void setBuildDescriptionWithLinkSyntax(String buildLink) {
-        this.buildLink = buildLink;
-    }
-
     public String getBuildDescriptionWithLinkSyntax() {
         return buildLink;
     }
 
+    public void setBuildDescriptionWithLinkSyntax(String buildLink) {
+        this.buildLink = buildLink;
+    }
 
     public String getColor() {
         return color;
@@ -397,13 +385,12 @@ public class SlackNotificationPayloadContent {
         this.color = color;
     }
 
+    public long getElapsedTime() {
+        return elapsedTime;
+    }
 
     public void setElapsedTime(long elapsedTime) {
         this.elapsedTime = elapsedTime;
-    }
-
-    public long getElapsedTime() {
-        return elapsedTime;
     }
 
     public List<Commit> getCommits() {

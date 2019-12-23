@@ -11,6 +11,11 @@ public class PostMessageResponse {
     private String ts;
     private String error;
 
+    public static PostMessageResponse fromJson(String json) {
+        Gson gson = new Gson();
+        return gson.fromJson(json, PostMessageResponse.class);
+    }
+
     public boolean getOk() {
         return ok;
     }
@@ -35,14 +40,9 @@ public class PostMessageResponse {
         this.ts = ts;
     }
 
-    public String toJson(){
+    public String toJson() {
         Gson gson = new Gson();
         return gson.toJson(this);
-    }
-
-    public static PostMessageResponse fromJson(String json){
-        Gson gson = new Gson();
-        return gson.fromJson(json, PostMessageResponse.class);
     }
 
     public String getError() {

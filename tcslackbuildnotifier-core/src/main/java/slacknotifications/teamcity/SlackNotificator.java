@@ -27,17 +27,15 @@ import java.util.Set;
 
 public class SlackNotificator implements Notificator {
 
+    private static final String SLACK_USERID_KEY = "tcSlackNotifier.userId";
+    private static final String TYPE = "tcSlackBuildNotifier";
+    public static final PropertyKey USERID_KEY = new NotificatorPropertyKey(TYPE, SLACK_USERID_KEY);
     private final SlackNotificationMainSettings mainConfig;
     private final SlackNotificationFactory notificationFactory;
     private final SlackNotificationPayloadManager payloadManager;
     private final SBuildServer buildServer;
     private ArrayList<UserPropertyInfo> userProps;
     private NotificationUtility notificationUtility;
-
-    private static final String SLACK_USERID_KEY = "tcSlackNotifier.userId";
-    private static final String TYPE = "tcSlackBuildNotifier";
-
-    public static final PropertyKey USERID_KEY = new NotificatorPropertyKey(TYPE, SLACK_USERID_KEY);
 
     public SlackNotificator(NotificatorRegistry notificatorRegistry,
                             SBuildServer sBuildServer,

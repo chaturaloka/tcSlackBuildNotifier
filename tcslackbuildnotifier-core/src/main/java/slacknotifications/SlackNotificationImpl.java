@@ -26,14 +26,17 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 
 public class SlackNotificationImpl implements SlackNotification {
 
     private static final String UTF8 = "UTF-8";
-
+    private final static String CONTENT_TYPE = "application/x-www-form-urlencoded";
     private String proxyHost;
     private Integer proxyPort = 0;
     private String proxyUsername;
@@ -53,7 +56,6 @@ public class SlackNotificationImpl implements SlackNotification {
     private List<NameValuePair> params = new ArrayList<NameValuePair>();
     private BuildState states;
     private String botName;
-    private final static String CONTENT_TYPE = "application/x-www-form-urlencoded";
     private PostMessageResponse response;
     private Boolean showBuildAgent;
     private Boolean showElapsedBuildTime;
@@ -120,6 +122,18 @@ public class SlackNotificationImpl implements SlackNotification {
         this.client = httpClient;
     }
 
+    public static String convertAttachmentsToJson(List<Attachment> attachments) {
+        Gson gson = new Gson();
+        return gson.toJson(attachments);
+//        XStream xstream = new XStream(new JsonHierarchicalStreamDriver());
+//        xstream.setMode(XStream.NO_REFERENCES);
+//        xstream.alias("build", Attachment.class);
+//        /* For some reason, the items are coming back as "@name" and "@value"
+//         * so strip those out with a regex.
+//         */
+//        return xstream.toXML(attachments).replaceAll("\"@(fallback|text|pretext|color|fields|title|value|short)\": \"(.*)\"", "\"$1\": \"$2\"");
+    }
+
     public void setProxy(SlackNotificationProxyConfig proxyConfig) {
         if ((proxyConfig != null) && (proxyConfig.getProxyHost() != null) && (proxyConfig.getProxyPort() != null)) {
             this.setProxy(proxyConfig.getProxyHost(), proxyConfig.getProxyPort(), proxyConfig.getCreds());
@@ -156,114 +170,119 @@ public class SlackNotificationImpl implements SlackNotification {
     }
 
     private void postViaApi() throws IOException {
-        if ((this.enabled) && (!this.errored)) {
-            if (this.teamName == null) {
-                this.teamName = "";
-            }
-            String url = String.format("https://slack.com/api/chat.postMessage" +
-                            "?token=%s" +
-                            "&link_names=1" +
-                            "&as_user=0" +
-                            "&username=%s" +
-                            "&icon_url=%s" +
-                            "&channel=%s" +
-                            "&text=%s" +
-                            "&pretty=1",
-                    this.token,
-                    this.botName == null ? "" : URLEncoder.encode(this.botName, UTF8),
-                    this.iconUrl == null ? "" : URLEncoder.encode(this.iconUrl, UTF8),
-                    this.channel == null ? "" : URLEncoder.encode(this.channel, UTF8),
-                    this.payload == null ? "" : URLEncoder.encode(payload.getBuildDescriptionWithLinkSyntax(), UTF8));
+        if (!this.enabled && this.errored) {
+            return;
+        }
 
-            HttpPost httppost = new HttpPost(url);
+        if (this.teamName == null) {
+            this.teamName = "";
+        }
+        String url = String.format("https://slack.com/api/chat.postMessage" +
+                        "?token=%s" +
+                        "&link_names=1" +
+                        "&as_user=0" +
+                        "&username=%s" +
+                        "&icon_url=%s" +
+                        "&channel=%s" +
+                        "&text=%s" +
+                        "&pretty=1",
+                this.token,
+                this.botName == null ? "" : URLEncoder.encode(this.botName, UTF8),
+                this.iconUrl == null ? "" : URLEncoder.encode(this.iconUrl, UTF8),
+                this.channel == null ? "" : URLEncoder.encode(this.channel, UTF8),
+                this.payload == null ? "" : URLEncoder.encode(payload.getBuildDescriptionWithLinkSyntax(), UTF8));
 
-            Loggers.SERVER.info("SlackNotificationListener :: Preparing message for URL " + url + " using proxy " + this.proxyHost + ":" + this.proxyPort);
-            if (this.filename.length() > 0) {
+        HttpPost httppost = new HttpPost(url);
+
+        Loggers.SERVER.info("SlackNotificationListener :: Preparing message for URL " + url + " using proxy " + this.proxyHost + ":" + this.proxyPort);
+        if (this.filename.length() > 0) {
 //                File file = new File(this.filename);
-                throw new NotImplementedException();
+            throw new NotImplementedException();
+        }
+        if (this.payload != null) {
+
+            List<Attachment> attachments = getAttachments();
+
+            String attachmentsParam = String.format("attachments=%s", URLEncoder.encode(convertAttachmentsToJson(attachments), UTF8));
+
+            Loggers.SERVER.info("SlackNotificationListener :: Body message will be " + attachmentsParam);
+
+            httppost.setEntity(new StringEntity(attachmentsParam));
+            httppost.setHeader("Content-Type", CONTENT_TYPE);
+        }
+        try {
+            HttpResponse response = client.execute(httppost);
+            this.resultCode = response.getStatusLine().getStatusCode();
+            if (this.resultCode == HttpStatus.SC_OK) {
+                this.response = PostMessageResponse.fromJson(EntityUtils.toString(response.getEntity()));
             }
-            if (this.payload != null) {
-
-                List<Attachment> attachments = getAttachments();
-
-                String attachmentsParam = String.format("attachments=%s", URLEncoder.encode(convertAttachmentsToJson(attachments), UTF8));
-
-                Loggers.SERVER.info("SlackNotificationListener :: Body message will be " + attachmentsParam);
-
-                httppost.setEntity(new StringEntity(attachmentsParam));
-                httppost.setHeader("Content-Type", CONTENT_TYPE);
+            if (response.getEntity().getContentLength() > 0) {
+                this.content = EntityUtils.toString(response.getEntity());
             }
-            try {
-                HttpResponse response = client.execute(httppost);
-                this.resultCode = response.getStatusLine().getStatusCode();
-                if (this.resultCode == HttpStatus.SC_OK) {
-                    this.response = PostMessageResponse.fromJson(EntityUtils.toString(response.getEntity()));
-                }
-                if (response.getEntity().getContentLength() > 0) {
-                    this.content = EntityUtils.toString(response.getEntity());
-                }
-            } finally {
-                httppost.releaseConnection();
-            }
+        } finally {
+            httppost.releaseConnection();
         }
     }
 
     private void postViaWebHook() throws IOException {
-        if ((this.enabled) && (!this.errored)) {
-            if (this.teamName == null) {
-                this.teamName = "";
-            }
+        if (!this.enabled && this.errored) {
+            return;
+        }
 
-            String url;
-            if (this.token != null && this.token.startsWith("http")) {
-                url = this.token;
+        if (this.teamName == null) {
+            this.teamName = "";
+        }
+
+        String url;
+        if (this.token != null && this.token.startsWith("http")) {
+            url = this.token;
+        } else {
+            url = String.format("https://%s.slack.com/services/hooks/incoming-webhook?token=%s",
+                    this.teamName.toLowerCase(),
+                    this.token);
+        }
+
+        Loggers.SERVER.info("SlackNotificationListener :: Preparing message for URL " + url);
+
+        WebHookPayload requestBody = new WebHookPayload();
+        requestBody.setChannel(this.getChannel());
+        requestBody.setUsername(this.getBotName());
+        requestBody.setIcon_url(this.getIconUrl());
+
+        HttpPost httppost = new HttpPost(url);
+
+        if (this.payload != null) {
+            requestBody.setText(payload.getBuildDescriptionWithLinkSyntax());
+            requestBody.setAttachments(getAttachments());
+        }
+
+        String bodyParam = String.format("payload=%s", URLEncoder.encode(requestBody.toJson(), UTF8));
+
+        Loggers.SERVER.info("SlackNotificationListener :: Body message will be " + bodyParam);
+
+        httppost.setEntity(new StringEntity(bodyParam));
+        httppost.setHeader("Content-Type", CONTENT_TYPE);
+
+        try {
+            HttpResponse response = client.execute(httppost);
+            this.resultCode = response.getStatusLine().getStatusCode();
+
+            PostMessageResponse resp = new PostMessageResponse();
+
+            if (this.resultCode != HttpStatus.SC_OK) {
+                String error = EntityUtils.toString(response.getEntity());
+                resp.setOk(error.equals("ok"));
+                resp.setError(error);
             } else {
-                url = String.format("https://%s.slack.com/services/hooks/incoming-webhook?token=%s",
-                        this.teamName.toLowerCase(),
-                        this.token);
+                resp.setOk(true);
+                this.response = resp;
             }
 
-            Loggers.SERVER.info("SlackNotificationListener :: Preparing message for URL " + url);
+            this.content = EntityUtils.toString(response.getEntity());
 
-            WebHookPayload requestBody = new WebHookPayload();
-            requestBody.setChannel(this.getChannel());
-            requestBody.setUsername(this.getBotName());
-            requestBody.setIcon_url(this.getIconUrl());
-
-            HttpPost httppost = new HttpPost(url);
-
-            if (this.payload != null) {
-                requestBody.setText(payload.getBuildDescriptionWithLinkSyntax());
-                requestBody.setAttachments(getAttachments());
-            }
-
-            String bodyParam = String.format("payload=%s", URLEncoder.encode(requestBody.toJson(), UTF8));
-
-            Loggers.SERVER.info("SlackNotificationListener :: Body message will be " + bodyParam);
-
-            httppost.setEntity(new StringEntity(bodyParam));
-            httppost.setHeader("Content-Type", CONTENT_TYPE);
-
-            try {
-                HttpResponse response = client.execute(httppost);
-                this.resultCode = response.getStatusLine().getStatusCode();
-
-                PostMessageResponse resp = new PostMessageResponse();
-
-                if (this.resultCode != HttpStatus.SC_OK) {
-                    String error = EntityUtils.toString(response.getEntity());
-                    resp.setOk(error.equals("ok"));
-                    resp.setError(error);
-                } else {
-                    resp.setOk(true);
-                    this.response = resp;
-                }
-
-                this.content = EntityUtils.toString(response.getEntity());
-
-            } finally {
-                httppost.releaseConnection();
-            }
+        } catch (Exception e) {
+        } finally {
+            httppost.releaseConnection();
         }
     }
 
@@ -392,71 +411,6 @@ public class SlackNotificationImpl implements SlackNotification {
         return attachments;
     }
 
-    private class WebHookPayload {
-        private String channel;
-        private String username;
-        private String text;
-        private String icon_url;
-        private List<Attachment> attachments;
-
-        public String getChannel() {
-            return channel;
-        }
-
-        public void setChannel(String channel) {
-            this.channel = channel;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-
-        public String getText() {
-            return text;
-        }
-
-        public void setText(String text) {
-            this.text = text;
-        }
-
-        public String getIcon_url() {
-            return icon_url;
-        }
-
-        void setIcon_url(String icon_url) {
-            this.icon_url = icon_url;
-        }
-
-        public List<Attachment> getAttachments() {
-            return attachments;
-        }
-
-        void setAttachments(List<Attachment> attachments) {
-            this.attachments = attachments;
-        }
-
-        String toJson() {
-            Gson gson = new Gson();
-            return gson.toJson(this);
-        }
-    }
-
-    public static String convertAttachmentsToJson(List<Attachment> attachments) {
-        Gson gson = new Gson();
-        return gson.toJson(attachments);
-//        XStream xstream = new XStream(new JsonHierarchicalStreamDriver());
-//        xstream.setMode(XStream.NO_REFERENCES);
-//        xstream.alias("build", Attachment.class);
-//        /* For some reason, the items are coming back as "@name" and "@value"
-//         * so strip those out with a regex.
-//         */
-//        return xstream.toXML(attachments).replaceAll("\"@(fallback|text|pretext|color|fields|title|value|short)\": \"(.*)\"", "\"$1\": \"$2\"");
-    }
-
     public Integer getStatus() {
         return this.resultCode;
     }
@@ -542,12 +496,12 @@ public class SlackNotificationImpl implements SlackNotification {
         return "";
     }
 
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
-
     public String getFilename() {
         return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 
     public String getContent() {
@@ -582,6 +536,10 @@ public class SlackNotificationImpl implements SlackNotification {
         this.errorReason = errorReason;
     }
 
+    public String getProxyUsername() {
+        return proxyUsername;
+    }
+
 //	public Integer getEventListBitMask() {
 //		return EventListBitMask;
 //	}
@@ -589,10 +547,6 @@ public class SlackNotificationImpl implements SlackNotification {
 //	public void setTriggerStateBitMask(Integer triggerStateBitMask) {
 //		EventListBitMask = triggerStateBitMask;
 //	}
-
-    public String getProxyUsername() {
-        return proxyUsername;
-    }
 
     public void setProxyUsername(String proxyUsername) {
         this.proxyUsername = proxyUsername;
@@ -719,5 +673,58 @@ public class SlackNotificationImpl implements SlackNotification {
                 TimeUnit.SECONDS.toSeconds(seconds) -
                         TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(seconds))
         );
+    }
+
+    private class WebHookPayload {
+        private String channel;
+        private String username;
+        private String text;
+        private String icon_url;
+        private List<Attachment> attachments;
+
+        public String getChannel() {
+            return channel;
+        }
+
+        public void setChannel(String channel) {
+            this.channel = channel;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+
+        public String getIcon_url() {
+            return icon_url;
+        }
+
+        void setIcon_url(String icon_url) {
+            this.icon_url = icon_url;
+        }
+
+        public List<Attachment> getAttachments() {
+            return attachments;
+        }
+
+        void setAttachments(List<Attachment> attachments) {
+            this.attachments = attachments;
+        }
+
+        String toJson() {
+            Gson gson = new Gson();
+            return gson.toJson(this);
+        }
     }
 }

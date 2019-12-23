@@ -3,14 +3,13 @@ package slacknotifications.teamcity.settings;
 import org.jdom.Element;
 
 class CustomMessageTemplate {
-    private String templateType;
-    private String templateText;
-    private boolean isEnabled;
-
-    private static final String XML_ELEMENT_NAME = "custom-template";
     static final String TYPE = "type";
     static final String TEMPLATE = "template";
     static final String ENABLED = "isEnabled";
+    private static final String XML_ELEMENT_NAME = "custom-template";
+    private String templateType;
+    private String templateText;
+    private boolean isEnabled;
 
     static CustomMessageTemplate create(String templateType, String template, boolean enabled) {
         CustomMessageTemplate t = new CustomMessageTemplate();

@@ -38,8 +38,8 @@ public class SlackNotificationMainConfig implements ChangeListener {
     private static final String PASSWORD = "password";
     private static final String ENABLED = "isEnabled";
     private static final String TEAM_NAME = "teamName";
-
-
+    public final String SINGLE_HOST_REGEX = "^[^./~`'\"]+(?:/.*)?$";
+    public final String HOSTNAME_ONLY_REGEX = "^([^/]+)(?:/.*)?$";
     private final FileWatcher myChangeObserver;
     private final File myConfigDir;
     private final File myConfigFile;
@@ -55,9 +55,6 @@ public class SlackNotificationMainConfig implements ChangeListener {
     private String token;
     private Boolean proxyShortNames = false;
     private boolean enabled = true;
-
-    public final String SINGLE_HOST_REGEX = "^[^./~`'\"]+(?:/.*)?$";
-    public final String HOSTNAME_ONLY_REGEX = "^([^/]+)(?:/.*)?$";
     private SlackNotificationContentConfig content;
     private boolean configFileExists;
 
@@ -231,8 +228,16 @@ public class SlackNotificationMainConfig implements ChangeListener {
         return slacknotificationInfoUrl;
     }
 
+    public void setSlackNotificationInfoUrl(String slacknotificationInfoUrl) {
+        this.slacknotificationInfoUrl = slacknotificationInfoUrl;
+    }
+
     String getSlackNotificationInfoText() {
         return slacknotificationInfoText;
+    }
+
+    public void setSlackNotificationInfoText(String slacknotificationInfoText) {
+        this.slacknotificationInfoText = slacknotificationInfoText;
     }
 
     public boolean getEnabled() {
@@ -243,20 +248,12 @@ public class SlackNotificationMainConfig implements ChangeListener {
         this.enabled = enabled;
     }
 
-    public void setSlackNotificationInfoUrl(String slacknotificationInfoUrl) {
-        this.slacknotificationInfoUrl = slacknotificationInfoUrl;
-    }
-
-    public void setSlackNotificationInfoText(String slacknotificationInfoText) {
-        this.slacknotificationInfoText = slacknotificationInfoText;
+    Boolean getSlackNotificationShowFurtherReading() {
+        return slacknotificationShowFurtherReading;
     }
 
     public void setSlackNotificationShowFurtherReading(Boolean slacknotificationShowFurtherReading) {
         this.slacknotificationShowFurtherReading = slacknotificationShowFurtherReading;
-    }
-
-    Boolean getSlackNotificationShowFurtherReading() {
-        return slacknotificationShowFurtherReading;
     }
 
     public synchronized void save() {

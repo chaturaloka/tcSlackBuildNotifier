@@ -57,11 +57,11 @@ public class SlackNotificationContentConfig {
         this.showElapsedBuildTime = showElapsedBuildTime;
     }
 
-    public Boolean getShowFailureReason(){
+    public Boolean getShowFailureReason() {
         return showFailureReason;
     }
 
-    public void setShowFailureReason(Boolean showFailureReason){
+    public void setShowFailureReason(Boolean showFailureReason) {
         this.showFailureReason = showFailureReason;
     }
 
@@ -113,11 +113,11 @@ public class SlackNotificationContentConfig {
         this.showFunnyQuote = showFunnyQuote;
     }
 
-    public void setFunnyQuoteIconUrl(String funnyQuoteIconUrl) {
-        this.funnyQuoteIconUrl = funnyQuoteIconUrl;
-    }
-
     public String getFunnyQuoteIconUrl() {
         return funnyQuoteIconUrl;
+    }
+
+    public void setFunnyQuoteIconUrl(String funnyQuoteIconUrl) {
+        this.funnyQuoteIconUrl = funnyQuoteIconUrl;
     }
 }
