@@ -1,4 +1,8 @@
-tcSlackBuildNotifier
+# Update: Slack integration is offically available on TeamCity from 2020.1 version.
+
+---
+
+# tcSlackBuildNotifier
 ====================
 
 [![CircleCI](https://circleci.com/gh/subbramanil/tcSlackBuildNotifier/tree/master.svg?style=svg)](https://circleci.com/gh/subbramanil/tcSlackBuildNotifier/tree/master)
